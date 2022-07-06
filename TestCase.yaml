@@ -1,0 +1,42 @@
+
+
+Paddle: jiaxiao01
+
+eval:
+infer:
+export model:
+predict:
+
+data_path:
+    linux_data_path: /ssd1/panyan/data/train_data
+    windows_data_path:
+    mac_data_path: 
+
+
+rec_mv3_none_bilstm_ctc:
+    model_yaml: rec_mv3_none_bilstm_ctc.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_bilstm_ctc_v2.0_train.tar
+    rec_image_shape: 3,32,100
+    rec_algorithm: CRNN
+
+rec_vitstr_none_ce:
+    model_yaml: configs/rec/rec_vitstr_none_ce.yml
+    paddle_train_acc: 0.8089 
+    torch_train_acc: 79.912
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/rec_vitstr_none_ce_train.tar 
+    eval_acc: 0.8093
+    rec_image_shape: 1,224,224
+    rec_algorithm: ViTSTR
+    rec_char_dict_path: ./ppocr/utils/EN_symbol_dict.txt
+
+
+rec_r45_abinet:
+    model_yaml: configs/rec/rec_r45_abinet.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/rec_r45_abinet_train.tar
+    eval_acc: 0.91580
+    rec_image_shape: 3,32,128
+    rec_algorithm: ABINet
+    rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
+
+
+DBnet++: 
