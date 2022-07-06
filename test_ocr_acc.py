@@ -38,9 +38,9 @@ def test_rec_accuracy_get_pretrained_model(yml_name):
     model = TestOcrModelFunction(model=model_name, yml=yml_name)
     model.test_ocr_get_pretrained_model()
 
-@pytest.mark.skip
+# @pytest.mark.skip
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True,False])
+@pytest.mark.parametrize("use_gpu", [True])
 def test_rec_accuracy_eval(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     model = TestOcrModelFunction(model=model_name, yml=yml_name)
@@ -61,24 +61,22 @@ def test_rec_accuracy_export_model(yml_name, use_gpu):
     model.test_ocr_export_model(use_gpu)
 
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [False])
 @pytest.mark.parametrize("enable_mkldnn", [True,False])
 def test_rec_accuracy_predict_mkl(yml_name, use_gpu, enable_mkldnn):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     model = TestOcrModelFunction(model=model_name, yml=yml_name)
-    model.test_ocr_rec_predict(use_gpu, 0, enable_mkldnn)
+    model.test_ocr_rec_predict(False, 0, enable_mkldnn)
 
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
 @pytest.mark.parametrize("use_tensorrt", [True,False])
 def test_rec_accuracy_predict_trt(yml_name, use_gpu, use_tensorrt):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     model = TestOcrModelFunction(model=model_name, yml=yml_name)
-    model.test_ocr_rec_predict(use_gpu, use_tensorrt, 0)
+    model.test_ocr_rec_predict(True, use_tensorrt, 0)
 
-@pytest.mark.skip
+# @pytest.mark.skip
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True,False])
+@pytest.mark.parametrize("use_gpu", [True])
 def test_rec_funtion_train(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     model = TestOcrModelFunction(model=model_name, yml=yml_name)

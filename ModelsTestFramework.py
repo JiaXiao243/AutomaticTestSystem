@@ -95,7 +95,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
 
 
 class TestOcrModelFunction():
-      def __init__(self, model, yml):
+      def __init__(self, model, yml): 
          self.model=model
          self.yaml=yml
 
@@ -103,7 +103,10 @@ class TestOcrModelFunction():
          self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
                
       def test_ocr_train(self, use_gpu):
-          cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0,1; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
+          cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+               cmd=cmd.replace('sed','%sed%')
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
@@ -125,9 +128,10 @@ class TestOcrModelFunction():
 
       def test_ocr_eval(self, use_gpu):
           cmd='cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy' % (self.yaml, use_gpu, self.model)
-          detection_result = subprocess.getstatusoutput(cmd)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
           exit_check_fucntion(exit_code, output, 'eval')
