@@ -7,7 +7,6 @@ import yaml
 import platform
 import os.path
 
-from ModelsTestFramework import TestOcrModel
 from ModelsTestFramework import RepoInit
 from ModelsTestFramework import RepoDataset
 from ModelsTestFramework import TestOcrModelFunction
