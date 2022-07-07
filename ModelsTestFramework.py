@@ -39,15 +39,9 @@ class RepoInit():
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
          logging.info("git clone"+self.repo+"sucessfuly!" )
 
-global mv
-global rm
 class RepoDataset():
       def __init__(self):
          self.config=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
-         global mv
-         global rm
-         mv="mv" 
-         rm="rm"        
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
@@ -62,13 +56,14 @@ class RepoDataset():
             mv="ren"
             rm="del"
             cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
-         elif(sysstr == "mac"):
+         elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; ln -s %s train_data''' % (data_path)
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
          else:
             print ("Other System tasks")
+            exit(1)
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
@@ -107,6 +102,8 @@ class TestOcrModelFunction():
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
                cmd=cmd.replace('sed','%sed%')
+          if(platform.system() == "Darwin"):
+               cmd=cmd.replace('sed -i','sed -i ""')
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]

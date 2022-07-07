@@ -10,7 +10,7 @@ predict:
 data_path:
     linux_data_path: /ssd1/panyan/data/train_data
     windows_data_path: E:\ce_data\PaddleOCR\train_data
-    mac_data_path: 
+    mac_data_path: /Users/paddle/PaddleTest/ce_data/PaddleOCR/train_data 
 
 
 rec_mv3_none_bilstm_ctc:

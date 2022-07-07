@@ -1,4 +1,4 @@
-import pytest
+mport pytest
 import numpy as np
 import subprocess
 import re
@@ -81,3 +81,15 @@ def test_rec_funtion_train(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     model = TestOcrModelFunction(model=model_name, yml=yml_name)
     model.test_ocr_train(use_gpu)
+
+@pytest.mark.mac
+@pytest.mark.parametrize('yml_name', get_model_list())
+def test_rec_funtion_mac(yml_name):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    model = TestOcrModelFunction(model=model_name, yml=yml_name)
+#    model.test_ocr_train(False)
+#    model.test_ocr_get_pretrained_model()
+    model.test_ocr_eval(False)
+#    model.test_ocr_rec_infer(False)
+#    model.test_ocr_export_model(False)
+#    model.test_ocr_rec_predict(False, False, False)
