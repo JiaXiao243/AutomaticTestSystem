@@ -10,6 +10,8 @@ import os
 import yaml
 import os.path
 import platform
+import allure
+import filecmp
 
 rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224' }
 
@@ -47,7 +49,7 @@ class RepoDataset():
             print ("config Linux data_path")
             data_path=self.config["data_path"]["linux_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; find configs/rec -name "*.yml" | grep -v "rec_multi_language_lite_train"  > ../models_list_rec.yaml''' % (data_path) 
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path) 
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
@@ -55,12 +57,12 @@ class RepoDataset():
             print(data_path)
             mv="ren"
             rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s & wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path)
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path)
          else:
             print ("Other System tasks")
             exit(1)
@@ -108,6 +110,9 @@ def  check_infer_metric(category, output):
                           "check rec_scores failed!   real rec_scores is: %s, \
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
         print("*************************************************************************")
+     elif category=='det':
+        status = filecmp.cmp("./metric/predicts_db.txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
+        assert status, "real det_bbox should equal expect det_bbox"
      else:
         pass
 
@@ -133,6 +138,22 @@ def check_predict_metric(category, output):
                           "check rec_scores failed!   real rec_scores is: %s, \
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
           print("*************************************************************************")
+    elif category =='det':
+          for line in output.split('\n'):
+                  if 'img_10.jpg' in  line:
+                      output_det=line
+                      print(output_det)
+                      break
+
+
+          det_bbox=output_det.split('\t')[-1]
+          det_bbox=ast.literal_eval(det_bbox)         
+          print('det_bbox:{}'.format(det_bbox))
+          expect_det_bbox=[[[39.0, 88.0], [147.0, 80.0], [149.0, 103.0], [41.0, 110.0]], [[149.0, 82.0], [199.0, 79.0], [200.0, 98.0], [150.0, 101.0]], [[35.0, 54.0], [97.0, 54.0], [97.0, 78.0], [35.0, 78.0]], [[100.0, 53.0], [141.0, 53.0], [141.0, 79.0], [100.0, 79.0]], [[181.0, 54.0], [204.0, 54.0], [204.0, 73.0], [181.0, 73.0]], [[139.0, 54.0], [187.0, 50.0], [189.0, 75.0], [141.0, 79.0]], [[193.0, 29.0], [253.0, 29.0], [253.0, 48.0], [193.0, 48.0]], [[161.0, 28.0], [200.0, 28.0], [200.0, 48.0], [161.0, 48.0]], [[107.0, 21.0], [161.0, 24.0], [159.0, 49.0], [105.0, 46.0]], [[29.0, 19.0], [107.0, 19.0], [107.0, 46.0], [29.0, 46.0]]]
+
+          with assume: assert np.array(det_bbox) == approx(np.array(expect_det_bbox), abs=2), "check det_bbox failed!  \
+                           real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
+          print("*************************************************************************")
     else:
         pass
 
@@ -145,7 +166,14 @@ class TestOcrModelFunction():
          self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
                
       def test_ocr_train(self, use_gpu):
-          cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
+          # cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
+          if self.category=='rec':
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
+          elif self.category=='det':
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
+          else:
+             pass
+
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
                cmd=cmd.replace('sed','%sed%')
@@ -160,7 +188,7 @@ class TestOcrModelFunction():
       
       def test_ocr_get_pretrained_model(self):
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
-          cmd=self.testcase_yml['cmd']['rec']['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
+          cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.model, self.model)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
                cmd=cmd.replace('rm -rf', 'del')
@@ -181,20 +209,26 @@ class TestOcrModelFunction():
           exit_code = detection_result[0]
           output = detection_result[1]
           exit_check_fucntion(exit_code, output, 'eval')
-          real_metric=metricExtraction('acc', output)
-          expect_metric=self.testcase_yml[self.model]['eval_acc']
+          if self.category=='rec':
+             keyword='acc'
+          else:
+             keyword='hmean'
+            
+          real_metric=metricExtraction(keyword, output)
+          expect_metric=self.testcase_yml[self.model]['eval_'+keyword]
           real_metric=float(real_metric)
           expect_metric=float(expect_metric)
 
-          with assume: assert real_metric == approx(expect_metric, abs=3e-2),\
-                          "check eval_acc failed!   real eval_acc is: %s, \
-                            expect eval_acc is: %s" % (real_metric, expect_metric)
+          # with assume: assert real_metric == approx(expect_metric, abs=3e-2),\
+         #                 "check eval_acc failed!   real eval_acc is: %s, \
+          #                  expect eval_acc is: %s" % (real_metric, expect_metric)
 
       def test_ocr_rec_infer(self, use_gpu):
           # cmd='cd PaddleOCR; python tools/infer_rec.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words/en/word_1.png";' % (self.yaml, use_gpu, self.model)
           cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
+          print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
@@ -216,17 +250,17 @@ class TestOcrModelFunction():
 
       def test_ocr_rec_predict(self, use_gpu, use_tensorrt, enable_mkldnn):
           model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
-          rec_algorithm=model_config['Architecture']['algorithm']
-          print(rec_algorithm)
+          algorithm=model_config['Architecture']['algorithm']
+          print(algorithm)
           if self.category=='rec':
-             rec_image_shape=rec_image_shape_dict[rec_algorithm]
+             rec_image_shape=rec_image_shape_dict[algorithm]
              rec_char_dict_path=self.testcase_yml[self.model]['rec_char_dict_path']
 
              print(rec_image_shape)
           # cmd='cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;' % (self.model, rec_image_shape, rec_algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
-             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, rec_algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
-          else:
-             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='det':
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)

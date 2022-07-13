@@ -7,26 +7,46 @@ data_path:
     mac_data_path: /Users/paddle/PaddleTest/ce_data/PaddleOCR/train_data 
 
 cmd:
+    det:
+       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch  tools/train.py -c %s  -o Train.loader.batch_size_per_card=2 Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir=output/%s'
+       get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;'
+       eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
+       infer: 'cd PaddleOCR; python tools/infer_det.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_en/img_10.jpg" Global.test_batch_size_per_card=1'
+       export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
+       predict: 'cd PaddleOCR; python tools/infer/predict_det.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"%s --det_algorithm=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
     rec:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' 
-       get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' 
+       get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;' 
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_rec.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words/en/word_1.png";'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;'
     table:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
-       get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
+       get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_table.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy;'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --table_model_dir=./models_inference/%s --table_algorithm=TableMaster --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt --table_max_len=480 --image_dir=ppstructure/docs/table/table.jpg --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
 
 
-    model_yaml: rec_mv3_none_bilstm_ctc.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_bilstm_ctc_v2.0_train.tar
-    rec_image_shape: 3,32,100
-    rec_algorithm: CRNN
+
+
+det_r50_db++_icdar15:
+    model_yaml: configs/det/det_r50_db++_icdar15.yml
+    paddle_train_acc: 
+    torch_train_acc: 
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_db_plusplus_icdar15_train.tar
+    eval_hmean: 0.865
+    det_algorithm:  DB++
+
+det_r50_db++_td_tr:
+    model_yaml: configs/det/det_r50_db++_td_tr.yml 
+    paddle_train_acc: 
+    torch_train_acc: 
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_db_plusplus_td_tr_train.tar
+    eval_hmean: 0.895
+    rec_algorithm:  DB++
 
 rec_vitstr_none_ce:
     model_yaml: configs/rec/rec_vitstr_none_ce.yml
