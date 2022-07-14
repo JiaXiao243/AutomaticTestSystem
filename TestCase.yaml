@@ -2,7 +2,7 @@
 
 
 data_path:
-    linux_data_path: /ssd1/panyan/data/train_data
+    linux_data_path: /ssd2/ce_data/PaddleOCR/train_data
     windows_data_path: E:\ce_data\PaddleOCR\train_data
     mac_data_path: /Users/paddle/PaddleTest/ce_data/PaddleOCR/train_data 
 
@@ -22,9 +22,9 @@ cmd:
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;'
     table:
-       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
+       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=5 Global.print_batch_step=1 Train.loader.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;'
-       eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
+       eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Eval.dataset.data_dir=train_data/table/pubtabnet/val Eval.loader.batch_size_per_card=5 Eval.loader.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
        infer: 'cd PaddleOCR; python tools/infer_table.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy;'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --table_model_dir=./models_inference/%s --table_algorithm=TableMaster --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt --table_max_len=480 --image_dir=ppstructure/docs/table/table.jpg --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
@@ -70,5 +70,5 @@ rec_r45_abinet:
 table_master:
    model_yaml:
    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/tablemaster/table_structure_tablemaster_train.tar
+   eval_acc:
 
-DBnet++: 
