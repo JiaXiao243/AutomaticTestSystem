@@ -34,7 +34,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; git clone https://github.com/paddlepaddle/%s.git; cd %s; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple''' % (pid, self.repo, self.repo, self.repo)
+         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git; cd %s; python -m pip install -r requirements.txt''' % (self.repo, self.repo)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
@@ -172,7 +172,7 @@ class TestOcrModelFunction():
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           else:
-             pass
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
