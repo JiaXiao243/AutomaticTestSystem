@@ -142,6 +142,7 @@ def check_predict_metric(category, output):
           print("*************************************************************************")
     elif category =='det':
           allure.attach.file("PaddleOCR/inference_results/det_res_img_10.jpg", attachment_type=allure.attachment_type.JPG)
+          allure.attach.file("PaddleOCR/inference_results/det_results.txt", attachment_type=allure.attachment_type.TEXT)
           for line in output.split('\n'):
                   if 'img_10.jpg' in  line:
                       output_det=line
