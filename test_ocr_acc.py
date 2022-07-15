@@ -6,6 +6,7 @@ import sys
 import yaml
 import platform
 import os.path
+import allure
 
 from ModelsTestFramework import RepoInit
 from ModelsTestFramework import RepoDataset

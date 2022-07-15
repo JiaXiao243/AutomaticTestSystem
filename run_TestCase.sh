@@ -1,11 +1,10 @@
 # rm -rf PaddleOCR/rec_*
-apt-get update
-apt install -y openjdk-8-jdk
+# apt-get update
+# apt install -y openjdk-8-jdk
 python -m pip install -r requirements.txt
 # export CUDA_VISIBLE_DEVICES=0,1
-chmod -R 777 allure
-pwd
 which allure
+rm -rf /usr/bin/allure
 ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 
 python -m pytest -sv test_ocr_acc.py  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
