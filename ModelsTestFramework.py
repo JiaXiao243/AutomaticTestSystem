@@ -111,6 +111,8 @@ def  check_infer_metric(category, output):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
         print("*************************************************************************")
      elif category=='det':
+        allure.attach.file("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", attachment_type=allure.attachment_type.JPG)
+        allure.attach.file("PaddleOCR/checkpoints/det_db/predicts_db.txt", attachment_type=allure.attachment_type.TEXT) 
         status = filecmp.cmp("./metric/predicts_db.txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
         assert status, "real det_bbox should equal expect det_bbox"
      else:
@@ -139,6 +141,7 @@ def check_predict_metric(category, output):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
           print("*************************************************************************")
     elif category =='det':
+          allure.attach.file("PaddleOCR/inference_results/det_res_img_10.jpg", attachment_type=allure.attachment_type.JPG)
           for line in output.split('\n'):
                   if 'img_10.jpg' in  line:
                       output_det=line
