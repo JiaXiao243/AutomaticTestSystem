@@ -1,6 +1,10 @@
 # rm -rf PaddleOCR/rec_*
 # apt-get update
 # apt install -y openjdk-8-jdk
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+apt-get install -y nodejs
+
+
 python -m pip install -r requirements.txt
 # export CUDA_VISIBLE_DEVICES=0,1
 which allure
