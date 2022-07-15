@@ -3,3 +3,4 @@ pytest-assume
 pytest-html
 pytest-timeout
 pytest-repeat
+allure-pytest
