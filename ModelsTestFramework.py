@@ -117,7 +117,6 @@ def  check_infer_metric(category, output, dataset):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
         print("*************************************************************************")
      elif category=='det':
-        with open()
         allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", allure.attachment_type.JPG)
         allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", allure.attachment_type.TEXT)
         status = filecmp.cmp("./metric/predicts_db_"+dataset+".txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
