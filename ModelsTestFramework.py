@@ -95,6 +95,10 @@ def allure_attach(filename, fileformat):
          file_content = f.read()
      allure.attach(file_content, attachment_type=fileformat)
 
+def allure_step(cmd, result):
+    with allure.step("执行指令:\n{}".format(cmd))
+    with allure.step("运行结果:\n{}".format(result))
+
 
 def  check_infer_metric(category, output, dataset):
      if category=='rec':
@@ -197,6 +201,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           log_dir='PaddleOCR/log_'+self.model
           exit_check_fucntion(exit_code, output, 'train', log_dir)
       
@@ -211,6 +216,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           exit_check_fucntion(exit_code, output, 'eval')
 
       def test_ocr_eval(self, use_gpu):
@@ -222,6 +228,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           exit_check_fucntion(exit_code, output, 'eval')
           if self.category=='rec':
              keyword='acc'
@@ -233,9 +240,9 @@ class TestOcrModelFunction():
           real_metric=float(real_metric)
           expect_metric=float(expect_metric)
 
-          # with assume: assert real_metric == approx(expect_metric, abs=3e-2),\
-         #                 "check eval_acc failed!   real eval_acc is: %s, \
-          #                  expect eval_acc is: %s" % (real_metric, expect_metric)
+          with assume: assert real_metric == approx(expect_metric, abs=3e-2),\
+                          "check eval_acc failed!   real eval_acc is: %s, \
+                            expect eval_acc is: %s" % (real_metric, expect_metric)
 
       def test_ocr_rec_infer(self, use_gpu):
           # cmd='cd PaddleOCR; python tools/infer_rec.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words/en/word_1.png";' % (self.yaml, use_gpu, self.model)
@@ -246,8 +253,8 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           exit_check_fucntion(exit_code, output, 'infer')
-
           check_infer_metric(self.category, output, self.dataset)          
 
 
@@ -260,6 +267,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           exit_check_fucntion(exit_code, output, 'export_model')
 
       def test_ocr_rec_predict(self, use_gpu, use_tensorrt, enable_mkldnn):
@@ -281,6 +289,7 @@ class TestOcrModelFunction():
           print(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, result)
           exit_check_fucntion(exit_code, output, 'predict')
           # acc
           # metricExtraction('Predicts', output)
