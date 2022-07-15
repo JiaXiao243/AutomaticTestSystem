@@ -90,13 +90,13 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     assert 'ABORT!!!' not in output, "%s  model failed!   log information:%s" % (mode, output)
     logging.info("train model sucessfuly!" )
 
-def allure_attach(filename, fileformat)
+def allure_attach(filename, fileformat):
      with open(filename, model='rb') as f:
          file_content = f.read()
      allure.attach(file_content, attachment_type=fileformat)
 
 
-def  check_infer_metric(category, output):
+def  check_infer_metric(category, output, dataset):
      if category=='rec':
         metric=metricExtraction('result', output)
         rec_docs=metric.strip().split('\t')[0]
@@ -120,7 +120,7 @@ def  check_infer_metric(category, output):
         with open()
         allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", allure.attachment_type.JPG)
         allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", allure.attachment_type.TEXT)
-        status = filecmp.cmp("./metric/predicts_db.txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
+        status = filecmp.cmp("./metric/predicts_db_"+dataset+".txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
         assert status, "real det_bbox should equal expect det_bbox"
      else:
         pass
@@ -160,7 +160,10 @@ def check_predict_metric(category, output):
           det_bbox=output_det.split('\t')[-1]
           det_bbox=ast.literal_eval(det_bbox)         
           print('det_bbox:{}'.format(det_bbox))
-          expect_det_bbox=[[[39.0, 88.0], [147.0, 80.0], [149.0, 103.0], [41.0, 110.0]], [[149.0, 82.0], [199.0, 79.0], [200.0, 98.0], [150.0, 101.0]], [[35.0, 54.0], [97.0, 54.0], [97.0, 78.0], [35.0, 78.0]], [[100.0, 53.0], [141.0, 53.0], [141.0, 79.0], [100.0, 79.0]], [[181.0, 54.0], [204.0, 54.0], [204.0, 73.0], [181.0, 73.0]], [[139.0, 54.0], [187.0, 50.0], [189.0, 75.0], [141.0, 79.0]], [[193.0, 29.0], [253.0, 29.0], [253.0, 48.0], [193.0, 48.0]], [[161.0, 28.0], [200.0, 28.0], [200.0, 48.0], [161.0, 48.0]], [[107.0, 21.0], [161.0, 24.0], [159.0, 49.0], [105.0, 46.0]], [[29.0, 19.0], [107.0, 19.0], [107.0, 46.0], [29.0, 46.0]]]
+          if dataset='icdar15'
+             expect_det_bbox=[[[39.0, 88.0], [147.0, 80.0], [149.0, 103.0], [41.0, 110.0]], [[149.0, 82.0], [199.0, 79.0], [200.0, 98.0], [150.0, 101.0]], [[35.0, 54.0], [97.0, 54.0], [97.0, 78.0], [35.0, 78.0]], [[100.0, 53.0], [141.0, 53.0], [141.0, 79.0], [100.0, 79.0]], [[181.0, 54.0], [204.0, 54.0], [204.0, 73.0], [181.0, 73.0]], [[139.0, 54.0], [187.0, 50.0], [189.0, 75.0], [141.0, 79.0]], [[193.0, 29.0], [253.0, 29.0], [253.0, 48.0], [193.0, 48.0]], [[161.0, 28.0], [200.0, 28.0], [200.0, 48.0], [161.0, 48.0]], [[107.0, 21.0], [161.0, 24.0], [159.0, 49.0], [105.0, 46.0]], [[29.0, 19.0], [107.0, 19.0], [107.0, 46.0], [29.0, 46.0]]]
+          else:
+             expect_det_bbox= [[[42.0, 89.0], [201.0, 79.0], [202.0, 98.0], [43.0, 108.0]], [[32.0, 56.0], [206.0, 53.0], [207.0, 75.0], [32.0, 78.0]], [[18.0, 22.0], [251.0, 31.0], [250.0, 49.0], [17.0, 41.0]]]
 
           with assume: assert np.array(det_bbox) == approx(np.array(expect_det_bbox), abs=2), "check det_bbox failed!  \
                            real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
@@ -175,7 +178,8 @@ class TestOcrModelFunction():
          self.category=category
          self.testcase_yml=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
          self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
-               
+         self.dataset=self.testcase_yml[self.model]['dataset']
+
       def test_ocr_train(self, use_gpu):
           # cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
           if self.category=='rec':
@@ -245,7 +249,7 @@ class TestOcrModelFunction():
           output = detection_result[1]
           exit_check_fucntion(exit_code, output, 'infer')
 
-          check_infer_metric(self.category, output)          
+          check_infer_metric(self.category, output, self.dataset)          
 
 
       def test_ocr_export_model(self, use_gpu):
@@ -281,4 +285,4 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'predict')
           # acc
           # metricExtraction('Predicts', output)
-          check_predict_metric(self.category, output)
+          check_predict_metric(self.category, output, self.dataset)

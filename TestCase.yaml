@@ -39,6 +39,7 @@ det_r50_db++_icdar15:
     eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_db_plusplus_icdar15_train.tar
     eval_hmean: 0.865
     det_algorithm:  DB++
+    dataset: icdar15
 
 det_r50_db++_td_tr:
     model_yaml: configs/det/det_r50_db++_td_tr.yml 
@@ -46,7 +47,8 @@ det_r50_db++_td_tr:
     torch_train_acc: 
     eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_db_plusplus_td_tr_train.tar
     eval_hmean: 0.895
-    rec_algorithm:  DB++
+    det_algorithm:  DB++
+    dataset: td_tr
 
 rec_vitstr_none_ce:
     model_yaml: configs/rec/rec_vitstr_none_ce.yml
@@ -57,7 +59,7 @@ rec_vitstr_none_ce:
     rec_image_shape: 1,224,224
     rec_algorithm: ViTSTR
     rec_char_dict_path: ./ppocr/utils/EN_symbol_dict.txt
-
+    dataset: data_lmdb_release
 
 rec_r45_abinet:
     model_yaml: configs/rec/rec_r45_abinet.yml
@@ -66,6 +68,7 @@ rec_r45_abinet:
     rec_image_shape: 3,32,128
     rec_algorithm: ABINet
     rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
+    dataset: data_lmdb_release
 
 table_master:
    model_yaml:
