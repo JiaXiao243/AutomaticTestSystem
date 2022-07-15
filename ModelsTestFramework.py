@@ -91,7 +91,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     logging.info("train model sucessfuly!" )
 
 def allure_attach(filename, fileformat):
-     with open(filename, model='rb') as f:
+     with open(filename, mode='rb') as f:
          file_content = f.read()
      allure.attach(file_content, attachment_type=fileformat)
 
@@ -124,7 +124,7 @@ def  check_infer_metric(category, output, dataset):
      else:
         pass
 
-def check_predict_metric(category, output):
+def check_predict_metric(category, output, dataset):
     if category=='rec':
           for line in output.split('\n'):
                   if 'Predicts of' in  line:
