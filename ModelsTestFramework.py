@@ -95,10 +95,10 @@ def allure_attach(filename, fileformat):
          file_content = f.read()
      allure.attach(file_content, attachment_type=fileformat)
 
-def allure_step(cmd, result):
+def allure_step(cmd, output):
     with allure.step("指令指令：{}".format(cmd)):
            pass
-    with allure.step("运行结果：{}".format(result)):
+    with allure.step("运行结果：{}".format(output)):
            pass
 
 
@@ -203,7 +203,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           log_dir='PaddleOCR/log_'+self.model
           exit_check_fucntion(exit_code, output, 'train', log_dir)
       
@@ -218,7 +218,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
 
       def test_ocr_eval(self, use_gpu):
@@ -230,7 +230,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
           if self.category=='rec':
              keyword='acc'
@@ -255,7 +255,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'infer')
           check_infer_metric(self.category, output, self.dataset)          
 
@@ -269,7 +269,7 @@ class TestOcrModelFunction():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'export_model')
 
       def test_ocr_rec_predict(self, use_gpu, use_tensorrt, enable_mkldnn):
@@ -291,7 +291,7 @@ class TestOcrModelFunction():
           print(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
-          allure_step(cmd, result)
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'predict')
           # acc
           # metricExtraction('Predicts', output)
