@@ -90,6 +90,12 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     assert 'ABORT!!!' not in output, "%s  model failed!   log information:%s" % (mode, output)
     logging.info("train model sucessfuly!" )
 
+def allure_attach(filename, fileformat)
+     with open(filename, model='rb') as f:
+         file_content = f.read()
+     allure.attach(file_content, attachment_type=fileformat)
+
+
 def  check_infer_metric(category, output):
      if category=='rec':
         metric=metricExtraction('result', output)
@@ -111,8 +117,9 @@ def  check_infer_metric(category, output):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
         print("*************************************************************************")
      elif category=='det':
-        allure.attach.file("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", attachment_type=allure.attachment_type.JPG)
-        allure.attach.file("PaddleOCR/checkpoints/det_db/predicts_db.txt", attachment_type=allure.attachment_type.TEXT) 
+        with open()
+        allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", allure.attachment_type.JPG)
+        allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", allure.attachment_type.TEXT)
         status = filecmp.cmp("./metric/predicts_db.txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
         assert status, "real det_bbox should equal expect det_bbox"
      else:
@@ -141,8 +148,8 @@ def check_predict_metric(category, output):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
           print("*************************************************************************")
     elif category =='det':
-          allure.attach.file("PaddleOCR/inference_results/det_res_img_10.jpg", attachment_type=allure.attachment_type.JPG)
-          allure.attach.file("PaddleOCR/inference_results/det_results.txt", attachment_type=allure.attachment_type.TEXT)
+          allure_attach("PaddleOCR/inference_results/det_res_img_10.jpg", allure.attachment_type.JPG)
+          allure_attach("PaddleOCR/inference_results/det_results.txt", allure.attachment_type.TEXT)
           for line in output.split('\n'):
                   if 'img_10.jpg' in  line:
                       output_det=line
