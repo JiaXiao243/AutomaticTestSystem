@@ -96,7 +96,7 @@ def allure_attach(filename, fileformat):
      allure.attach(file_content, attachment_type=fileformat)
 
 def allure_step(cmd, result):
-    with allure.step("指令指令：{}".format(cmd):
+    with allure.step("指令指令：{}".format(cmd)):
            pass
     with allure.step("运行结果：{}".format(result)):
            pass
