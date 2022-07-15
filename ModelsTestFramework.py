@@ -96,8 +96,8 @@ def allure_attach(filename, fileformat):
      allure.attach(file_content, attachment_type=fileformat)
 
 def allure_step(cmd, result):
-    with allure.step("执行指令:\n{}".format(cmd))
-    with allure.step("运行结果:\n{}".format(result))
+    with allure.step(cmd)
+    with allure.step(result)
 
 
 def  check_infer_metric(category, output, dataset):
