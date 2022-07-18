@@ -35,6 +35,8 @@ class RepoInit():
          print("This is Repo Init!")
          pid = os.getpid()
          cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git; cd %s; python -m pip install -r requirements.txt''' % (self.repo, self.repo)
+         if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
