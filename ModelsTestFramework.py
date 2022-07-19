@@ -104,6 +104,11 @@ def allure_step(cmd, output):
     #       pass
 
 
+def readfile(filename):
+    with open(filename, 'r',encoding='utf-8') as f
+        text = f.readlines()
+    return text
+
 def  check_infer_metric(category, output, dataset):
      if category=='rec':
         metric=metricExtraction('result', output)
@@ -128,8 +133,10 @@ def  check_infer_metric(category, output, dataset):
         allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", 'checkpoints/det_db/det_results/img_10.jpg', allure.attachment_type.JPG)
         allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", 'checkpoints/det_db/predicts_db.txt', allure.attachment_type.TEXT)
         allure_attach("./metric/predicts_db_"+dataset+".txt", "./metric/predicts_db_"+dataset+".txt", allure.attachment_type.TEXT)
-        status = filecmp.cmp("./metric/predicts_db_"+dataset+".txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
-        assert status, "real det_bbox should equal expect det_bbox"
+        # status = filecmp.cmp("./metric/predicts_db_"+dataset+".txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
+        real_det_bbox=readfile("PaddleOCR/checkpoints/det_db/predicts_db.txt")
+        expect_det_bbox=readfile("./metric/predicts_db_"+dataset+".txt")
+        assert real_det_bbox==expect_det_bbox, "real det_bbox should equal expect det_bbox"
      else:
         pass
 
