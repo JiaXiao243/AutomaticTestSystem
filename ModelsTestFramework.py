@@ -105,7 +105,7 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, 'r',encoding='utf-8') as f
+    with open(filename, 'r',encoding='utf-8') as f:
         text = f.readlines()
     return text
 
