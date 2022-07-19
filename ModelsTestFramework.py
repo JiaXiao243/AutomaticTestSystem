@@ -125,8 +125,9 @@ def  check_infer_metric(category, output, dataset):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
         print("*************************************************************************")
      elif category=='det':
-        allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", name='checkpoints/det_db/det_results/img_10.jpg', allure.attachment_type.JPG)
-        allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", name='checkpoints/det_db/predicts_db.txt', allure.attachment_type.TEXT)
+        allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", 'checkpoints/det_db/det_results/img_10.jpg', allure.attachment_type.JPG)
+        allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", 'checkpoints/det_db/predicts_db.txt', allure.attachment_type.TEXT)
+        allure_attach("./metric/predicts_db_"+dataset+".txt", "./metric/predicts_db_"+dataset+".txt", allure.attachment_type.TEXT)
         status = filecmp.cmp("./metric/predicts_db_"+dataset+".txt", "PaddleOCR/checkpoints/det_db/predicts_db.txt")
         assert status, "real det_bbox should equal expect det_bbox"
      else:
@@ -155,8 +156,8 @@ def check_predict_metric(category, output, dataset):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
           print("*************************************************************************")
     elif category =='det':
-          allure_attach("PaddleOCR/inference_results/det_res_img_10.jpg", name='inference_results/det_res_img_10.jpg', allure.attachment_type.JPG)
-          allure_attach("PaddleOCR/inference_results/det_results.txt", name='inference_results/det_results.txt', allure.attachment_type.TEXT)
+          allure_attach("PaddleOCR/inference_results/det_res_img_10.jpg", 'inference_results/det_res_img_10.jpg', allure.attachment_type.JPG)
+          allure_attach("PaddleOCR/inference_results/det_results.txt", 'inference_results/det_results.txt', allure.attachment_type.TEXT)
           for line in output.split('\n'):
                   if 'img_10.jpg' in  line:
                       output_det=line
