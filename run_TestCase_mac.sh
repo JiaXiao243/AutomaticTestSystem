@@ -1,4 +1,5 @@
-
+# export HOMEBREW_BOTTLE_DOMAIN=''
+# brew install allure
 python -m pip install -r requirements.txt
 which allure
 rm -rf /usr/bin/allure
