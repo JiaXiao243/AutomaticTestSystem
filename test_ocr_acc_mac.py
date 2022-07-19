@@ -23,6 +23,18 @@ def get_model_list():
          result.append(line.strip('\n'))
     return result
 
+def get_use_gpu():
+    result = [True, False]
+    if(platform.system() == "Darwin"):
+               result =[False]
+    return result
+
+def get_use_trt():
+    result = [True, False]
+    if(platform.system() == "Darwin"):
+            result =[False]
+    return result
+
 def setup_module():
     """
     """
@@ -42,9 +54,10 @@ def test_rec_accuracy_get_pretrained_model(yml_name):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_get_pretrained_model()
 
+@pytest.mark.skip()
 @allure.story('eval')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
+@pytest.mark.parametrize("use_gpu",[False])
 def test_rec_accuracy_eval(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -62,7 +75,7 @@ def test_rec_accuracy_eval(yml_name, use_gpu):
 
 @allure.story('infer')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True,False])
+@pytest.mark.parametrize("use_gpu", [False])
 def test_rec_accuracy_infer(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -79,7 +92,7 @@ def test_rec_accuracy_infer(yml_name, use_gpu):
 
 @allure.story('export_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True,False])
+@pytest.mark.parametrize("use_gpu", [False])
 def test_rec_accuracy_export_model(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -96,7 +109,7 @@ def test_rec_accuracy_export_model(yml_name, use_gpu):
 
 @allure.story('predict')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("enable_mkldnn", [True, False])
+@pytest.mark.parametrize("enable_mkldnn", [False])
 def test_rec_accuracy_predict_mkl(yml_name, enable_mkldnn):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if enable_mkldnn==True:
@@ -111,26 +124,10 @@ def test_rec_accuracy_predict_mkl(yml_name, enable_mkldnn):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_rec_predict(False, 0, enable_mkldnn)
 
-@allure.story('predict')
-@pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_tensorrt", [False])
-def test_rec_accuracy_predict_trt(yml_name, use_tensorrt):
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    if use_tensorrt==True:
-       hardware='_tensorRT'
-    else:
-       hardware='_GPU'
-    allure.dynamic.title(model_name+hardware+'_predict')
-    allure.dynamic.description('预测库预测')
-    r = re.search('/(.*)/', yml_name)
-    category=r.group(1)
-    print(category)
-    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_ocr_rec_predict(True, use_tensorrt, 0)
-
+@pytest.mark.skip()
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
+@pytest.mark.parametrize("use_gpu", [False])
 def test_rec_funtion_train(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
