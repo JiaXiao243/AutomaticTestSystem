@@ -218,7 +218,7 @@ class TestOcrModelFunction():
           log_dir='PaddleOCR/log_'+self.model
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
-      def test_ocr_train_acc(self, use_gpu):
+      def test_ocr_train_acc(self):
           # if self.category=='rec':
           if self.model=='rec_vitstr_none_ce':
               data1=getdata('log/rec/'+self.model+'_paddle.log', 'loss:', ', avg_reader_cost')
