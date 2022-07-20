@@ -219,13 +219,16 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
       def test_ocr_train_acc(self, use_gpu):
-          if self.category=='rec':
+          # if self.category=='rec':
+          if self.model=='rec_vitstr_none_ce':
               data1=getdata('log/rec/'+self.model+'_paddle.log', 'loss:', ', avg_reader_cost')
               data2=getdata('log/rec/'+self.model+'_torch.log', 'tensor\(', ', device=')
               allure.attach.file('log/rec/'+self.model+'_paddle.log', name=self.model+'_paddle.log',  attachment_type=allure.attachment_type.TEXT)
               allure.attach.file('log/rec/'+self.model+'_torch.log', name=self.model+'_torch.log', attachment_type=allure.attachment_type.TEXT)
-          plot_paddle_torc_loss(data1, data2, self.model)          
-          allure.attach.file('paddle_torch_train_loss.png', name='paddle_torch_train_loss.png', attachment_type=allure.attachment_type.PNG)
+              plot_paddle_torc_loss(data1, data2, self.model)          
+              allure.attach.file('paddle_torch_train_loss.png', name='paddle_torch_train_loss.png', attachment_type=allure.attachment_type.PNG)
+          else:
+              pass
 
       def test_ocr_get_pretrained_model(self):
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
