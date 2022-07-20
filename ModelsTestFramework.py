@@ -94,7 +94,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     logging.info("train model sucessfuly!" )
 
 def allure_attach(filename, name, fileformat):
-     with open(filename, mode='rb') as f:
+     with open(filename, mode='r', encoding='utf-8') as f:
          file_content = f.read()
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
