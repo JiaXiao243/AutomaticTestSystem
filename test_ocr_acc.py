@@ -143,3 +143,16 @@ def test_rec_funtion_train(yml_name, use_gpu):
     category=r.group(1)
     print(category)
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_train(use_gpu)
+
+@allure.story('train')
+@pytest.mark.parametrize('yml_name', get_model_list())
+def test_rec_accuracy_train(yml_name):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    allure.dynamic.title(model_name+'_train_convergence')
+    allure.dynamic.description('训练收敛性')
+    r = re.search('/(.*)/', yml_name)
+    category=r.group(1)
+    print(category)
+    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_train_acc()

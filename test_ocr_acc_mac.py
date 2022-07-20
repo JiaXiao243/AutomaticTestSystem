@@ -124,7 +124,6 @@ def test_rec_accuracy_predict_mkl(yml_name, enable_mkldnn):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_rec_predict(False, 0, enable_mkldnn)
 
-@pytest.mark.skip()
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [False])
@@ -140,3 +139,18 @@ def test_rec_funtion_train(yml_name, use_gpu):
     category=r.group(1)
     print(category)
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_train(use_gpu)
+
+def test_rec_accuracy_train(yml_name, use_gpu):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    if use_gpu==True:
+       hardware='_GPU'
+    else:
+       hardware='_CPU'
+    allure.dynamic.title(model_name+hardware+'_train')
+    allure.dynamic.description('训练')
+    r = re.search('/(.*)/', yml_name)
+    category=r.group(1)
+    print(category)
+    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_train_accuracy(use_gpu)
