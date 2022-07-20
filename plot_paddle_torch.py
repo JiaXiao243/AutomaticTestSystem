@@ -11,13 +11,13 @@ def getdata(filename, delimiter1, delimiter2):
 #          pattern=re.compile('loss:(.+), ') 
           result=pattern.findall(line)
           if len(result)>0:
-              print(float(result[0]))
+              # print(float(result[0]))
               data.append(float(result[0]))
     return data
 
 
 def plot_paddle_loss(data, model):
-    ydata=data
+    ydata=data[:30000]
     xdata=list(range(0,len(ydata)))
     # plot the data
     fig = plt.figure()
@@ -42,6 +42,7 @@ def plot_paddle_loss(data, model):
 
 
 def plot_paddle_torch_loss(data1, data2, model):
+    ydata1=data1
     xdata1=list(range(0,len(ydata1)))
     ydata2=data2
     xdata2=list(range(0,len(ydata2)))
@@ -69,7 +70,7 @@ def plot_paddle_torch_loss(data1, data2, model):
 
 if __name__ == '__main__':
     data1=getdata('rec_vitstr_none_ce.log', 'loss:', ', avg_reader_cost')
-    data2=getdata('vitstr_torch.log', 'tensor\(', ', device=')
+    data2=getdata('vitstr_torch.log', 'tensor\\(', ', device=')
 
     plot_paddle_torc_lossh(data1, data2, 'rec_vitstr_none_ce')
 #    plot(data2, 'rec')
