@@ -221,7 +221,7 @@ class TestOcrModelFunction():
       def test_ocr_train_acc(self, use_gpu):
           if self.category=='rec':
               data1=getdata('log/rec/'+self.model+'_paddle.log', 'loss:', ', avg_reader_cost')
-              data2=getdata('log/rec/'self.model+'_torch.log', 'tensor\(', ', device=')
+              data2=getdata('log/rec/'+self.model+'_torch.log', 'tensor\(', ', device=')
               allure.attach.file('log/rec/'+self.model+'_paddle.log', name=self.model+'_paddle.log',  attachment_type=allure.attachment_type.TEXT)
               allure.attach.file('log/rec/'+self.model+'_torch.log', name=self.model+'_torch.log', attachment_type=allure.attachment_type.TEXT)
           plot_paddle_torc_loss(data1, data2, self.model)          
