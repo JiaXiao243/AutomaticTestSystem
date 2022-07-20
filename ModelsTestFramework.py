@@ -225,7 +225,7 @@ class TestOcrModelFunction():
               data2=getdata('log/rec/'+self.model+'_torch.log', 'tensor\(', ', device=')
               allure.attach.file('log/rec/'+self.model+'_paddle.log', name=self.model+'_paddle.log',  attachment_type=allure.attachment_type.TEXT)
               allure.attach.file('log/rec/'+self.model+'_torch.log', name=self.model+'_torch.log', attachment_type=allure.attachment_type.TEXT)
-              plot_paddle_torc_loss(data1, data2, self.model)          
+              plot_paddle_torch_loss(data1, data2, self.model)          
               allure.attach.file('paddle_torch_train_loss.png', name='paddle_torch_train_loss.png', attachment_type=allure.attachment_type.PNG)
           else:
               pass
