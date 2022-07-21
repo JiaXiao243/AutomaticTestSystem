@@ -101,7 +101,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     logging.info("train model sucessfuly!" )
 
 def allure_attach(filename, name, fileformat):
-     with open(filename, mode='r', encoding='unicode_escape') as f:
+     with open(filename, mode='r', encoding='gbk') as f:
          file_content = f.read()
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
@@ -113,7 +113,7 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, 'r',encoding='unicode_escape') as f:
+    with open(filename, 'r',encoding='gbk') as f:
         text = f.readlines()
     return text
 
