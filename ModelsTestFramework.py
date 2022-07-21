@@ -1,5 +1,5 @@
 #-*- coding : utf-8-*-
-
+# coding:unicode_escape
 import pytest
 from pytest_assume.plugin import assume
 from pytest import approx
@@ -101,7 +101,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     logging.info("train model sucessfuly!" )
 
 def allure_attach(filename, name, fileformat):
-     with open(filename, mode='r', encoding='utf-8') as f:
+     with open(filename, mode='r', encoding='unicode_escape') as f:
          file_content = f.read()
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
@@ -113,7 +113,7 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, 'r',encoding='utf-8') as f:
+    with open(filename, 'r',encoding='unicode_escape') as f:
         text = f.readlines()
     return text
 
