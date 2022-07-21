@@ -277,9 +277,16 @@ class TestOcrModelFunction():
             
           real_metric=metricExtraction(keyword, output)
           expect_metric=self.testcase_yml[self.model]['eval_'+keyword]
+          
+          # attach 
+          body="expect_"+keyword": "+expect_metric
+          allure.attach(body, name='expect_metric', allure.attachment_type.TEXT)
+          body="real_"+keyword": "+real_metric
+          allure.attach(body, name='real_metric', allure.attachment_type.TEXT)
+          
+          # assert
           real_metric=float(real_metric)
           expect_metric=float(expect_metric)
-
           with assume: assert real_metric == approx(expect_metric, abs=3e-2),\
                           "check eval_acc failed!   real eval_acc is: %s, \
                             expect eval_acc is: %s" % (real_metric, expect_metric)
