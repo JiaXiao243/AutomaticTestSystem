@@ -279,9 +279,9 @@ class TestOcrModelFunction():
           
           # attach 
           body="expect_"+keyword+": "+expect_metric
-          allure.attach(body, name='expect_metric', allure.attachment_type.TEXT)
+          allure.attach(body, 'expect_metric', allure.attachment_type.TEXT)
           body="real_"+keyword+": "+real_metric
-          allure.attach(body, name='real_metric', allure.attachment_type.TEXT)
+          allure.attach(body, 'real_metric', allure.attachment_type.TEXT)
           
           # assert
           real_metric=float(real_metric)
