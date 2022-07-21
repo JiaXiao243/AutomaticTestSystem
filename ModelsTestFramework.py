@@ -278,7 +278,7 @@ class TestOcrModelFunction():
           expect_metric=self.testcase_yml[self.model]['eval_'+keyword]
           
           # attach 
-          body="expect_"+keyword+": "+expect_metric
+          body="expect_"+keyword+": "+str(expect_metric)
           allure.attach(body, 'expect_metric', allure.attachment_type.TEXT)
           body="real_"+keyword+": "+real_metric
           allure.attach(body, 'real_metric', allure.attachment_type.TEXT)
