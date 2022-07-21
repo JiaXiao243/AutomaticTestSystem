@@ -15,6 +15,8 @@ import platform
 import allure
 import filecmp
 from plot_paddle_torch import *
+import chardet
+
 
 rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224' }
 
@@ -100,8 +102,14 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     assert 'ABORT!!!' not in output, "%s  model failed!   log information:%s" % (mode, output)
     logging.info("train model sucessfuly!" )
 
+def check_charset(file_path):
+    with open(file_path, "rb") as f:
+        data = f.read(4)
+        charset = chardet.detect(data)['encoding']
+    return charset
+
 def allure_attach(filename, name, fileformat):
-     with open(filename, mode='r', encoding='gbk') as f:
+     with open(filename, mode='r', encoding=check_charset(filename)) as f:
          file_content = f.read()
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
@@ -113,7 +121,7 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, 'r',encoding='gbk') as f:
+    with open(filename, 'rb', encoding=check_charset(filename)) as f:
         text = f.readlines()
     return text
 
