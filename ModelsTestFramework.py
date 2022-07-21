@@ -1,4 +1,3 @@
-#-*- coding: utf-8 -*-
 
 import pytest
 from pytest_assume.plugin import assume
@@ -109,7 +108,7 @@ def check_charset(file_path):
     return charset
 
 def allure_attach(filename, name, fileformat):
-     with open(filename, mode='r', encoding=check_charset(filename)) as f:
+     with open(filename, mode='rb') as f:
          file_content = f.read()
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
@@ -121,7 +120,7 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, 'rb', encoding=check_charset(filename)) as f:
+    with open(filename, mode='rb') as f:
         text = f.readlines()
     return text
 
