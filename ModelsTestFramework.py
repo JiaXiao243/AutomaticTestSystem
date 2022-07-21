@@ -1,5 +1,5 @@
-#-*- coding : utf-8-*-
-# coding:unicode_escape
+#-*- coding: utf-8 -*-
+
 import pytest
 from pytest_assume.plugin import assume
 from pytest import approx
