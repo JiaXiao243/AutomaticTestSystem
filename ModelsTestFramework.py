@@ -216,8 +216,11 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
+          elif self.category=='table':
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, self.yaml, use_gpu, self.model)
           else:
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, use_gpu, self.model)
+             pass
+
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
