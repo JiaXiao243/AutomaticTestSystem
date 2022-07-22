@@ -78,7 +78,7 @@ class RepoDataset():
          output=repo_result[1]
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
-         cmd ='wget  -P pretrain_models http://10.21.226.176:8890/duyongkun/SVTR_latest/latest_dygraph/PaddleOCR/output/rec/rec_r45_abinet_train/abinet_vl_pretrained.pdparams'
+         cmd ='wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams'
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
