@@ -145,6 +145,7 @@ def test_ocr_funtion_train(yml_name, use_gpu):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_train(use_gpu)
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
 def test_ocr_accuracy_train(yml_name):
