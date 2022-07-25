@@ -53,7 +53,7 @@ class RepoDataset():
             print ("config Linux data_path")
             data_path=self.config["data_path"]["linux_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path) 
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path) 
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
@@ -61,12 +61,12 @@ class RepoDataset():
             print(data_path)
             mv="ren"
             rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s & wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path)
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams''' % (data_path)
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
          else:
             print ("Other System tasks")
             exit(1)
@@ -76,7 +76,9 @@ class RepoDataset():
          output=repo_result[1]
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
-         cmd ='cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams'
+         cmd ='cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams'
+         if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
