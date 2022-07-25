@@ -5,3 +5,4 @@ pytest-timeout
 pytest-repeat
 allure-pytest
 matplotlib
+chardet
