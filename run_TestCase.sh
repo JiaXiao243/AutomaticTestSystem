@@ -1,8 +1,14 @@
 # rm -rf PaddleOCR/rec_*
 # curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-apt-get update
-apt-get install -y nodejs
-apt install -y openjdk-8-jdk
+# ubuntu
+# apt-get update
+# apt-get install -y nodejs
+# apt install -y openjdk-8-jdk
+
+# centos
+yum update -y
+yum install -y nodejs
+yum install -y java-1.8.0-openjdk.x86_6
 
 python -m pip install -r requirements.txt
 # export CUDA_VISIBLE_DEVICES=0,1
