@@ -15,8 +15,8 @@ import allure
 import filecmp
 from plot_paddle_torch import *
 import chardet
-import _locale
 
+rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224' }
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
