@@ -46,6 +46,9 @@ def plot_paddle_torch_loss(data1, data2, model):
     xdata1=list(range(0,len(ydata1)))
     ydata2=data2
     xdata2=list(range(0,len(ydata2)))
+    ydata1=data1[:len(data2)]
+    xdata1=list(range(0,len(ydata1)))
+
     # plot the data
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
