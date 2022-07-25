@@ -16,9 +16,6 @@ import filecmp
 from plot_paddle_torch import *
 import chardet
 import _locale
-_locale._getdefaultlocale = (lambda *args: ['zh_CN', 'utf8'])
-
-rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224' }
 
 
 def metricExtraction(keyword, output):
