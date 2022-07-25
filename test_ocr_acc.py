@@ -113,7 +113,7 @@ def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
 
 @allure.story('predict')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_tensorrt", [False])
+@pytest.mark.parametrize("use_tensorrt", [True, False])
 def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_tensorrt==True:
