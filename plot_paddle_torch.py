@@ -15,6 +15,20 @@ def getdata(filename, delimiter1, delimiter2):
               data.append(float(result[0]))
     return data
 
+def getdata_custom(filename, delimiter1, delimiter2):
+    data=[]
+    i=1
+    with open(filename,'rt') as f:
+       for line in f:
+          pattern=re.compile(delimiter1+'(.+)'+delimiter2)
+#          pattern=re.compile('loss:(.+), ')
+          result=pattern.findall(line)
+          if len(result)>0  and i%5==0:
+              print(float(result[0]))
+              data.append(float(result[0]))
+          i=i+1
+
+    return data
 
 def plot_paddle_loss(data, model):
     ydata=data[:30000]

@@ -244,6 +244,14 @@ class TestOcrModelFunction():
               allure.attach.file('log/rec/'+self.model+'_torch.log', name=self.model+'_torch.log', attachment_type=allure.attachment_type.TEXT)
               plot_paddle_torch_loss(data1, data2, self.model)          
               allure.attach.file('paddle_torch_train_loss.png', name='paddle_torch_train_loss.png', attachment_type=allure.attachment_type.PNG)
+          elif self.model=='rec_r45_abinet':
+              data1=getdata_custom('log/rec/'+self.model+'_paddle.log', 'loss:', ', avg_reader_cost')
+              data2=getdata('log/rec/'+self.model+'_torch.log', 'loss =', ',  smooth')
+              
+              allure.attach.file('log/rec/'+self.model+'_paddle.log', name=self.model+'_paddle.log',  attachment_type=allure.attachment_type.TEXT)
+              allure.attach.file('log/rec/'+self.model+'_torch.log', name=self.model+'_torch.log', attachment_type=allure.attachment_type.TEXT)
+              plot_paddle_torch_loss(data1, data2, self.model)
+              allure.attach.file('paddle_torch_train_loss.png', name='paddle_torch_train_loss.png', attachment_type=allure.attachment_type.PNG)
           else:
               pass
 
