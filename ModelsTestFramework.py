@@ -76,7 +76,7 @@ class RepoDataset():
          output=repo_result[1]
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
-         cmd ='wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams'
+         cmd ='cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams'
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
@@ -223,6 +223,7 @@ class TestOcrModelFunction():
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
                cmd=cmd.replace('sed','%sed%')
+               cmd=cmd.replace('export','set')
           if(platform.system() == "Darwin"):
                cmd=cmd.replace('sed -i','sed -i ""')
           print(cmd)
