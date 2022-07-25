@@ -24,7 +24,7 @@ def getdata_custom(filename, delimiter1, delimiter2):
 #          pattern=re.compile('loss:(.+), ')
           result=pattern.findall(line)
           if len(result)>0  and i%5==0:
-              print(float(result[0]))
+             # print(float(result[0]))
               data.append(float(result[0]))
           i=i+1
 
