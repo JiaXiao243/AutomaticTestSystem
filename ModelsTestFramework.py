@@ -28,7 +28,13 @@ def metricExtraction(keyword, output):
           # rec_docs=output_rec_list[0].split(',')[0].strip("'")
           # rec_scores=output_rec_list[0].split(',')[1]
           # rec_scores=float(rec_scores)
-
+def platformAdapter(cmd):
+    if (platform.system() == "Windows"):
+            cmd=cmd.replace(';','&')
+            cmd=cmd.replace('sed','%sed%')
+    if (platform.system() == "Darwin"):
+            cmd=cmd.replace('sed -i','sed -i ""')
+   
 
 
 class RepoInit():
@@ -76,9 +82,9 @@ class RepoDataset():
          output=repo_result[1]
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
-         cmd ='cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams'
-         if(platform.system() == "Windows"):
-               cmd=cmd.replace(';','&')
+         cmd ='''cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams; sed -i '/config.enable_tensorrt_engine/i\               config.collect_shape_range_info(shape_file)' PaddleOCR/tools/infer
+sed -i '/use_calib_mode=False/a\                config.enable_tuned_tensorrt_dynamic_shape(shape_file, True)' PaddleOCR/tools/infer'''
+         platformAdapter(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
