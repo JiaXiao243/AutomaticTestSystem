@@ -88,7 +88,14 @@ class RepoDataset():
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
-         assert exit_code == 0, "configure failed!   log information:%s" % output
+         assert exit_code == 0, "pretrain_models configure failed!   log information:%s" % output
+         if (platform.system() == "Windows") or (platform.system() == 'Linux':
+            cmd='''cd PaddleOCR; sed -i '/config.enable_tensorrt_engine/i\                config.collect_shape_range_info("shape_range_info.pbtxt")' ./tools/infer/utility.py; sed -i '/use_calib_mode=False/a\                config.enable_tuned_tensorrt_dynamic_shape("shape_range_info.pbtxt", True)' ./tools/infer/utility.py'''
+            cmd=platformAdapter(cmd)
+            repo_result=subprocess.getstatusoutput(cmd)
+            exit_code=repo_result[0]
+            output=repo_result[1]
+            assert exit_code == 0, "tensorRT dynamic shape configure  failed!   log information:%s" % output
 
 
 def exit_check_fucntion(exit_code, output, mode, log_dir=''):
