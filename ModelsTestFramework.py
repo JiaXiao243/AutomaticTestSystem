@@ -34,6 +34,7 @@ def platformAdapter(cmd):
             cmd=cmd.replace('sed','%sed%')
     if (platform.system() == "Darwin"):
             cmd=cmd.replace('sed -i','sed -i ""')
+    return cmd
    
 
 
