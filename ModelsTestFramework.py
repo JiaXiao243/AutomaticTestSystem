@@ -22,6 +22,7 @@ def metricExtraction(keyword, output):
     for line in output.split('\n'):
             if keyword in  line:
                   output_rec=line
+                  break
     metric=output_rec.split(':')[-1]
     print(metric)
     return metric
@@ -165,8 +166,20 @@ def  check_infer_metric(category, output, dataset):
         real_det_bbox=readfile("PaddleOCR/checkpoints/det_db/predicts_db.txt")
         expect_det_bbox=readfile("./metric/predicts_db_"+dataset+".txt")
         assert real_det_bbox==expect_det_bbox, "real det_bbox should equal expect det_bbox"
-     else:
-        pass
+     elif category =='table':
+          real_metric=metricExtraction('result', output)
+          with open("./metric/infer_table.txt", mode='w', encoding='utf-8') as file_obj:
+               file_obj.write(real_metric)
+          print("table_result:{}".format(real_metric))
+          # allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
+          allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
+          allure_attach("./metric/infer_table.txt", "./metric/infer_table.txt", allure.attachment_type.TEXT)
+
+          real_table=real_metric
+          expect_table=readfile("./metric/infer_table.txt")
+          assert real_table==expect_table, "real table should equal expect table"
+     else:    
+          pass
 
 def check_predict_metric(category, output, dataset):
     if category=='rec':
@@ -199,7 +212,6 @@ def check_predict_metric(category, output, dataset):
                       print(output_det)
                       break
 
-
           det_bbox=output_det.split('\t')[-1]
           det_bbox=ast.literal_eval(det_bbox)         
           print('det_bbox:{}'.format(det_bbox))
@@ -211,8 +223,20 @@ def check_predict_metric(category, output, dataset):
           with assume: assert np.array(det_bbox) == approx(np.array(expect_det_bbox), abs=2), "check det_bbox failed!  \
                            real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
           print("*************************************************************************")
+    elif category =='table':
+          real_metric=metricExtraction('result', output)
+          # with open("./metric/predicts_table.txt", mode='w', encoding='utf-8') as file_obj:
+          #     file_obj.write(real_metric)
+          print("table_result:{}".format(real_metric))
+          allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
+          allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
+          allure_attach("./metric/predicts_table.txt", "./metric/predicts_table.txt", allure.attachment_type.TEXT)
+          
+          real_table=real_metric
+          expect_table=readfile("./metric/predicts_table.txt")
+          assert real_table==expect_table, "real table should equal expect table"
     else:
-        pass
+          pass
 
 class TestOcrModelFunction():
       def __init__(self, model, yml, category): 
@@ -230,7 +254,7 @@ class TestOcrModelFunction():
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           elif self.category=='table':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, self.yaml, use_gpu, self.model)
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           else:
              pass
 
@@ -358,6 +382,9 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='table':
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
+
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
