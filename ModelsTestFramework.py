@@ -322,7 +322,7 @@ class TestOcrModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
-          if self.category=='rec':
+          if self.category=='rec' or self.category=='table':
              keyword='acc'
           else:
              keyword='hmean'
