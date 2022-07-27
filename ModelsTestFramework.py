@@ -134,8 +134,8 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, mode='rb') as f:
-        text = f.readlines()
+    with open(filename, mode='r', encoding='utf-8') as f:
+        text = f.readline()
     return text
 
 def  check_infer_metric(category, output, dataset):
@@ -168,15 +168,19 @@ def  check_infer_metric(category, output, dataset):
         assert real_det_bbox==expect_det_bbox, "real det_bbox should equal expect det_bbox"
      elif category =='table':
           real_metric=metricExtraction('result', output)
-          with open("./metric/infer_table.txt", mode='w', encoding='utf-8') as file_obj:
-               file_obj.write(real_metric)
-          print("table_result:{}".format(real_metric))
+          # with open("./metric/infer_table.txt", mode='w', encoding='utf-8') as file_obj:
+          #     file_obj.write(real_metric)
+          # print("table_result:{}".format(real_metric))
           # allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
           allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
           allure_attach("./metric/infer_table.txt", "./metric/infer_table.txt", allure.attachment_type.TEXT)
 
           real_table=real_metric
           expect_table=readfile("./metric/infer_table.txt")
+          print(len(real_table))
+          print("expect_table:{}".format(expect_table))
+          print(len(expect_table))
+
           assert real_table==expect_table, "real table should equal expect table"
      else:    
           pass
@@ -234,6 +238,9 @@ def check_predict_metric(category, output, dataset):
           
           real_table=real_metric
           expect_table=readfile("./metric/predicts_table.txt")
+          print(len(real_table))
+          print("expect_table:{}".format(expect_table))
+          print(len(expect_table))
           assert real_table==expect_table, "real table should equal expect table"
     else:
           pass
