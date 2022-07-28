@@ -20,9 +20,10 @@ rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,22
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
-            if (keyword in  line) and ('best_accuracy' not in line):
+            if (keyword+':' in  line) and ('best_accuracy' not in line):
                   output_rec=line
                   break
+    print(output_rec)
     metric=output_rec.split(':')[-1]
     print(metric)
     return metric
