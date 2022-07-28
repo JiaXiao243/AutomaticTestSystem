@@ -73,5 +73,5 @@ rec_r45_abinet:
 table_master:
    model_yaml:
    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/tablemaster/table_structure_tablemaster_train.tar
-   eval_acc: 0.77
+   eval_acc: 0.811999998376
    dataset: pubtabnet
