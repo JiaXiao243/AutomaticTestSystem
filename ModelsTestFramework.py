@@ -20,7 +20,7 @@ rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,22
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
-            if keyword in  line:
+            if (keyword in  line) and ('best_accuracy' not in line):
                   output_rec=line
                   break
     metric=output_rec.split(':')[-1]
@@ -29,6 +29,8 @@ def metricExtraction(keyword, output):
           # rec_docs=output_rec_list[0].split(',')[0].strip("'")
           # rec_scores=output_rec_list[0].split(',')[1]
           # rec_scores=float(rec_scores)
+
+
 def platformAdapter(cmd):
     if (platform.system() == "Windows"):
             cmd=cmd.replace(';','&')
