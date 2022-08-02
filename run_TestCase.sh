@@ -10,18 +10,19 @@ yum update -y
 yum install -y nodejs
 yum install -y java-1.8.0-openjdk.x86_6
 yum install -y java-1.8.0-openjdk-devel.x86_64
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.332.b09-1.el7_9.x86_64
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.342.b07-1.el7_9.x86_64
 export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
-
-python -m pip install -r requirements.txt
-# export CUDA_VISIBLE_DEVICES=0,1
-which allure
+export PATH=/usr/bin/allure:$PATH
 rm -rf /usr/bin/allure
 ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
+python -m pip install -r requirements.txt
 
-python -m pytest -sv test_ocr_acc.py  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
+# export CUDA_VISIBLE_DEVICES=0,1
+which allure
+
+python -m pytest -sv test_ocr_acc.py::test_ocr_accuracy_predict_trt  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 cp environment/environment.properties_linux ./result 
 mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
