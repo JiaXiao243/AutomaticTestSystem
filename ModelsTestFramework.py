@@ -20,18 +20,14 @@ rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,22
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
-            if (keyword+':' in  line) and ('best_accuracy' not in line):
+            if keyword in  line:
                   output_rec=line
-                  break
-    print(output_rec)
     metric=output_rec.split(':')[-1]
     print(metric)
     return metric
           # rec_docs=output_rec_list[0].split(',')[0].strip("'")
           # rec_scores=output_rec_list[0].split(',')[1]
           # rec_scores=float(rec_scores)
-
-
 def platformAdapter(cmd):
     if (platform.system() == "Windows"):
             cmd=cmd.replace(';','&')
@@ -55,6 +51,50 @@ class RepoInit():
          output=repo_result[1]
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
          logging.info("git clone"+self.repo+"sucessfuly!" )
+
+
+class RepoInit3D():
+      def __init__(self, repo):
+         self.repo=repo
+         print("This is Repo Init!")
+         pid = os.getpid()
+         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip uninstall -y paddle3d; python -m pip install .''' % (self.repo, self.repo)
+         if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
+         logging.info("git clone"+self.repo+"sucessfuly!" )
+
+class RepoDataset3D():
+      def __init__(self):
+         sysstr = platform.system()
+         if(sysstr =="Linux"):
+            print ("config Linux data_path")
+            cmd='''cd Paddle3D; rm -rf datasets; mkdir datasets; cd datasets; ln -s /ssd2/jiaxiao01/data/kitti/KITTI KITTI;'''
+
+         elif(sysstr == "Windows"):
+            print ("config windows data_path")
+            data_path=self.config["data_path"]["windows_data_path"]
+            print(data_path)
+            mv="ren"
+            rm="del"
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
+         elif(sysstr == "Darwin"):
+            print ("config mac data_path")
+            data_path=self.config["data_path"]["mac_data_path"]
+            print(data_path)
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
+         else:
+            print ("Other System tasks")
+            exit(1)
+         print(cmd)
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         assert exit_code == 0, "configure failed!   log information:%s" % output
+
 
 class RepoDataset():
       def __init__(self):
@@ -104,6 +144,7 @@ class RepoDataset():
 
 def exit_check_fucntion(exit_code, output, mode, log_dir=''):
     print(output)
+    allure.attach(output, 'output.log', allure.attachment_type.TEXT)
     assert exit_code == 0, " %s  model pretrained failed!   log information:%s" % (mode, output)
     assert 'Error' not in output, "%s  model failed!   log information:%s" % (mode, output)
     if 'ABORT!!!' in output:
@@ -130,15 +171,15 @@ def allure_attach(filename, name, fileformat):
      allure.attach(file_content, name=name, attachment_type=fileformat)
 
 def allure_step(cmd, output):
-    with allure.step("指令指令：{}".format(cmd)):
+    with allure.step("运行指令：{}".format(cmd)):
            pass
     # with allure.step("运行结果：{}".format(output)):
     #       pass
 
 
 def readfile(filename):
-    with open(filename, mode='r', encoding='utf-8') as f:
-        text = f.readline()
+    with open(filename, mode='rb') as f:
+        text = f.readlines()
     return text
 
 def  check_infer_metric(category, output, dataset):
@@ -169,26 +210,8 @@ def  check_infer_metric(category, output, dataset):
         real_det_bbox=readfile("PaddleOCR/checkpoints/det_db/predicts_db.txt")
         expect_det_bbox=readfile("./metric/predicts_db_"+dataset+".txt")
         assert real_det_bbox==expect_det_bbox, "real det_bbox should equal expect det_bbox"
-     elif category =='table':
-          real_metric=metricExtraction('result', output)
-          table_bbox=real_metric.split("'</html>'],")[0]
-          print("table_bbox:{}".format(table_bbox))
-          # with open("./metric/infer_table.txt", mode='w', encoding='utf-8') as file_obj:
-          #     file_obj.write(real_metric)
-          # print("table_result:{}".format(real_metric))
-          # allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
-          allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
-          allure_attach("./metric/infer_table.txt", "./metric/infer_table.txt", allure.attachment_type.TEXT)
-
-          real_table=real_metric
-          expect_table=readfile("./metric/infer_table.txt")
-          print(len(real_table))
-          print("expect_table:{}".format(expect_table))
-          print(len(expect_table))
-
-          # assert real_table==expect_table, "real table should equal expect table"
-     else:    
-          pass
+     else:
+        pass
 
 def check_predict_metric(category, output, dataset):
     if category=='rec':
@@ -221,6 +244,7 @@ def check_predict_metric(category, output, dataset):
                       print(output_det)
                       break
 
+
           det_bbox=output_det.split('\t')[-1]
           det_bbox=ast.literal_eval(det_bbox)         
           print('det_bbox:{}'.format(det_bbox))
@@ -232,24 +256,8 @@ def check_predict_metric(category, output, dataset):
           with assume: assert np.array(det_bbox) == approx(np.array(expect_det_bbox), abs=2), "check det_bbox failed!  \
                            real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
           print("*************************************************************************")
-    elif category =='table':
-          real_metric=metricExtraction('result', output)
-          table_bbox=real_metric.split("]")[0]
-          pattern=re.compile('\[\[.+\]\]')
-          real_table=pattern.findall(real_metric)[0]
-          # print("table_bbox:{}".format(table_bbox))
-          # with open("./metric/predicts_table.txt", mode='w', encoding='utf-8') as file_obj:
-          #     file_obj.write(real_metric)
-          allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
-          allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
-          allure_attach("./metric/predicts_table.txt", "./metric/predicts_table.txt", allure.attachment_type.TEXT)
-          
-          real_table=real_metric
-          expect_metric=readfile("./metric/predicts_table.txt")
-          # expect_table=pattern.findall(expect_metric)[0]
-          # assert real_table==expect_table, "real table should equal expect table"
     else:
-          pass
+        pass
 
 class TestOcrModelFunction():
       def __init__(self, model, yml, category): 
@@ -267,7 +275,7 @@ class TestOcrModelFunction():
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           elif self.category=='table':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, self.yaml, use_gpu, self.model)
           else:
              pass
 
@@ -335,7 +343,7 @@ class TestOcrModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
-          if self.category=='rec' or self.category=='table':
+          if self.category=='rec':
              keyword='acc'
           else:
              keyword='hmean'
@@ -395,9 +403,6 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
-          elif self.category=='table':
-             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
-
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
@@ -409,3 +414,62 @@ class TestOcrModelFunction():
           # acc
           # metricExtraction('Predicts', output)
           check_predict_metric(self.category, output, self.dataset)
+
+
+class Test3DModelFunction():
+      def __init__(self, model, yml):
+         self.model=model
+         self.yaml=yml
+
+      def test_3D_train(self, use_gpu):
+          cmd='cd Paddle3D; export CUDA_VISIBLE_DEVICES=0; sed -i s!iters: 70000!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.model, self.yaml)
+
+
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+               cmd=cmd.replace('sed','%sed%')
+               cmd=cmd.replace('export','set')
+          if(platform.system() == "Darwin"):
+               cmd=cmd.replace('sed -i','sed -i ""')
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          log_dir='PaddleOCR/log_'+self.model
+          exit_check_fucntion(exit_code, output, 'train', log_dir)
+
+      def test_3D_get_pretrained_model(self):
+          cmd='cd Paddle3D; mkdir smoke; cd smoke; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams; cd ..'
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+               cmd=cmd.replace('rm -rf', 'del')
+               cmd=cmd.replace('mv','ren')
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'eval')
+
+      def test_3D_eval(self, use_gpu):
+          cmd='cd Paddle3D; python tools/evaluate.py --config configs/smoke/smoke_dla34_no_dcn_iter70000.yml --num_workers 2 --model smoke/model.pdparams --batch_size 1'
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'eval')
+                                                                                
+      def test_3D_export_model(self, use_gpu):
+          cmd='cd Paddle3D; python tools/export.py --config configs/smoke/smoke_dla34_no_dcn_iter70000.yml --model smoke/model.pdparams'
+          print(cmd)
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'export_model') 
