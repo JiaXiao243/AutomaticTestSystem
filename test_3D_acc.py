@@ -106,6 +106,8 @@ def test_3D_funtion_train(yml_name, use_gpu):
        hardware='_GPU'
     else:
        hardware='_CPU'
+    allure.dynamic.title(model_name+hardware+'_train')
+    allure.dynamic.description('训练')
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_train(use_gpu)
 
