@@ -34,5 +34,5 @@ cd Paddle3D
 commit=`git rev-parse HEAD`
 cd ..
 echo 'Paddle3D_commit='$commit >> ./result/environment.properties
-allure generate ./result/ -o ./report_test/ --clean
+allure generate ./result/ -o ./report_3D/ --clean
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys

@@ -422,7 +422,7 @@ class Test3DModelFunction():
          self.yaml=yml
 
       def test_3D_train(self, use_gpu):
-          cmd='cd Paddle3D; export CUDA_VISIBLE_DEVICES=0; sed -i s!iters: 70000!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.model, self.yaml)
+          cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=0; sed -i s!iters: 70000!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.model, self.yaml)
 
 
           if(platform.system() == "Windows"):
@@ -453,6 +453,17 @@ class Test3DModelFunction():
           exit_check_fucntion(exit_code, output, 'eval')
 
       def test_3D_eval(self, use_gpu):
+          cmd='cd Paddle3D; python tools/evaluate.py --config configs/smoke/smoke_dla34_no_dcn_iter70000.yml --num_workers 2 --model smoke/model.pdparams'
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'eval')
+
+      def test_3D_eval_bs1(self, use_gpu):
           cmd='cd Paddle3D; python tools/evaluate.py --config configs/smoke/smoke_dla34_no_dcn_iter70000.yml --num_workers 2 --model smoke/model.pdparams --batch_size 1'
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
