@@ -26,5 +26,13 @@ which allure
 python -m pytest -sv test_3D_acc.py  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 cp environment/environment.properties_linux ./result 
 mv ./result/environment.properties_linux ./result/environment.properties
+unset GREP_OPTIONS
+python -c 'import paddle;print("paddle_version={}".format(paddle.__version__))' >> ./result/environment.properties
+python -c 'import paddle;print("paddle_commit={}".format(paddle.version.commit))' >> ./result/environment.properties
+
+cd Paddle3D
+commit=`git rev-parse HEAD`
+cd ..
+echo 'Paddle3D_commit='$commit >> ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
