@@ -79,6 +79,8 @@ def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
     model.test_3D_eval_bs1(use_gpu)
 
 
+@allure.story('export_model')
+@pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_export_model(yml_name, use_gpu):
     if sys.platform == 'darwin' and use_gpu==True:

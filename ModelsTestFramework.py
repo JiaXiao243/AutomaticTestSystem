@@ -422,7 +422,7 @@ class Test3DModelFunction():
          self.yaml=yml
 
       def test_3D_train(self, use_gpu):
-          cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=0; sed -i s!iters: 70000!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.model, self.yaml)
+          cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=4; sed -i s!iters: 70000!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.model, self.yaml)
 
 
           if(platform.system() == "Windows"):
