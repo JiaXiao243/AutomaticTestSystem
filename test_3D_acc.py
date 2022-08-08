@@ -16,7 +16,7 @@ from ModelsTestFramework import Test3DModelFunction
 def get_model_list():
     import sys
     result = []
-    with open('models_list_3D.yaml') as f:
+    with open('models_list_3D_all.yaml') as f:
       lines = f.readlines()
       for line in lines:
          r = re.search('/(.*)/', line)
@@ -26,8 +26,8 @@ def get_model_list():
 def setup_module():
     """
     """
-    RepoInit3D(repo='Paddle3D')
-    RepoDataset3D()
+    # RepoInit3D(repo='Paddle3D')
+    # RepoDataset3D()
 
 
 @allure.story('get_pretrained_model')
@@ -94,6 +94,23 @@ def test_3D_accuracy_export_model(yml_name, use_gpu):
     allure.dynamic.description('模型动转静')
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_export_model(use_gpu)
+
+@allure.story('predict')
+@pytest.mark.parametrize('yml_name', get_model_list())
+@pytest.mark.parametrize("use_gpu", [True])
+def test_3D_accuracy_predict_python(yml_name, use_gpu):
+    if sys.platform == 'darwin':
+        pytest.skip("mac skip tensorRT predict")
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    if use_gpu==True:
+       hardware='_GPU'
+    else:
+       hardware='_CPU'
+    allure.dynamic.title(model_name+hardware+'_predict')
+    allure.dynamic.description('预测库python预测')
+    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    model.test_3D_predict(use_gpu)
+
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())

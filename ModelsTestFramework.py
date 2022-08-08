@@ -72,7 +72,7 @@ class RepoDataset3D():
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
-            cmd='''cd Paddle3D; rm -rf datasets; mkdir datasets; cd datasets; ln -s /ssd2/jiaxiao01/data/kitti/KITTI KITTI;'''
+            cmd='''cd Paddle3D; rm -rf datasets; ln -s /ssd2/jiaxiao01/data/Paddle3D datasets;'''
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
@@ -429,7 +429,7 @@ class Test3DModelFunction():
          self.yaml=yml
 
       def test_3D_train(self, use_gpu):
-          cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=4; sed -i s!iters: 70000!iters: 200!g %s; sed -i s!iters: 296960!iters: 200!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.yaml, self.model, self.yaml)
+          cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=4; sed -i "/iters/d" %s; sed -i "1i\iters: 200"  %s ; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.yaml, self.model, self.yaml)
 
 
           if(platform.system() == "Windows"):
@@ -447,10 +447,20 @@ class Test3DModelFunction():
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
       def test_3D_get_pretrained_model(self):
+          print("*****model is*****:{}".format(self.model))
           if self.model=='smoke_dla34_no_dcn_iter70000':
-              cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_iter70000; cd smoke_dla34_no_dcn_iter70000; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
+             cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_iter70000; cd smoke_dla34_no_dcn_iter70000; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
+          elif self.model=='smoke_hrnet18_no_dcn_iter70000':
+             cmd='cd Paddle3D; mkdir %s; cd %s; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_hrnet18_no_dcn_kitti/model.pdparams' % (self.model, self.model)
+
           elif self.model=='pointpillars_kitti_car_xyres16' or self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
              cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/pointpillar/%s/model.pdparams' % (self.model, self.model, self.model)
+          elif self.model=='kitti_centerpoint_pillars_016voxel':
+             cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_016voxel_kitti/model.pdparams'% (self.model, self.model)
+          elif self.model=='nuscenes_centerpoint_pillars_02voxel_10sweep':
+             cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams' % (self.model, self.model)
+          elif self.model=='squeezesegv3_rangenet21_semantickitti' or self.model=='squeezesegv3_rangenet53_semantickitti': 
+             cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/squeezesegv3/%s/model.pdparams' % (self.model, self.model, self.model)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
                cmd=cmd.replace('rm -rf', 'del')
@@ -485,7 +495,11 @@ class Test3DModelFunction():
           exit_check_fucntion(exit_code, output, 'eval')
                                                                                 
       def test_3D_export_model(self, use_gpu):
-          cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams' % (self.yaml,  self.model)
+          if self.model=='squeezesegv3_rangenet21_semantickitti' or self.model=='squeezesegv3_rangenet53_semantickitti':
+            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams --input_shape 64 1024' % (self.yaml,  self.model)
+          else:
+            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams' % (self.yaml,  self.model)
+
           print(cmd)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
@@ -496,15 +510,21 @@ class Test3DModelFunction():
           exit_check_fucntion(exit_code, output, 'export_model') 
 
       def test_3D_predict(self, use_gpu):
+          infer_image='datasets/KITTI/kitti_train_gt_database/Car/1000_Car_0.bin'
           if self.model=='pointpillars_kitti_car_xyres16':
               infer_image='datasets/KITTI/kitti_train_gt_database/Car/1000_Car_0.bin' 
           elif  self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
               infer_image='datasets/KITTI/kitti_train_gt_database/Cyclist/100_Cyclist_0.bin'
  
-          if self.model=='smoke_dla34_no_dcn_iter70000':
+          if self.model=='smoke_dla34_no_dcn_iter70000' or self.model=='smoke_hrnet18_no_dcn_iter70000':
               cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_iter70000; cd smoke_dla34_no_dcn_iter70000; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
           elif self.model=='pointpillars_kitti_car_xyres16' or self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
               cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/pointpillars.pdmodel --params_file exported_model/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (infer_image)
+          elif self.model=='kitti_centerpoint_pillars_016voxel' or self.model=='nuscenes_centerpoint_pillars_02voxel_10sweep':
+              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/centerpoint.pdmodel --params_file exported_model/centerpoint.pdiparams --lidar_file %s --num_point_dim 5' % (infer_image)
+          else:
+              cmd='echo "not supported"'
+           
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
