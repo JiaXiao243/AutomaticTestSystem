@@ -76,16 +76,10 @@ class RepoDataset3D():
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
-            data_path=self.config["data_path"]["windows_data_path"]
-            print(data_path)
-            mv="ren"
-            rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
+            cmd='''cd Paddle3D & rd /s /q datasets & mklink /j datasets E:\ce_data\Paddle3D'''
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
-            data_path=self.config["data_path"]["mac_data_path"]
-            print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
+            cmd='''cd PaddleOCR; rm -rf datasets; ln -s /Users/paddle/PaddleTest/ce_data/Paddle3D datasets'''
          else:
             print ("Other System tasks")
             exit(1)
