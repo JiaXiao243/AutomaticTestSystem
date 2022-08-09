@@ -32,6 +32,8 @@ def platformAdapter(cmd):
     if (platform.system() == "Windows"):
             cmd=cmd.replace(';','&')
             cmd=cmd.replace('sed','%sed%')
+            cmd=cmd.replace('rm -rf','rd /s /q')
+            cmd=cmd.replace('export','set')
     if (platform.system() == "Darwin"):
             cmd=cmd.replace('sed -i','sed -i ""')
     return cmd
@@ -425,23 +427,16 @@ class Test3DModelFunction():
       def test_3D_train(self, use_gpu):
           cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=0; sed -i "/iters/d" %s; sed -i "1i\iters: 200"  %s ; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.yaml, self.model, self.yaml)
 
-
-          if(platform.system() == "Windows"):
-               cmd=cmd.replace(';','&')
-               cmd=cmd.replace('sed','%sed%')
-               cmd=cmd.replace('export','set')
-          if(platform.system() == "Darwin"):
-               cmd=cmd.replace('sed -i','sed -i ""')
+          cmd=platformAdapter(cmd)
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
           allure_step(cmd, output)
-          log_dir='PaddleOCR/log_'+self.model
+          log_dir='Paddle3D/log_'+self.model
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
       def test_3D_get_pretrained_model(self):
-          print("*****model is*****:{}".format(self.model))
           if self.model=='smoke_dla34_no_dcn_iter70000':
              cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_iter70000; cd smoke_dla34_no_dcn_iter70000; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
           elif self.model=='smoke_hrnet18_no_dcn_iter70000':
