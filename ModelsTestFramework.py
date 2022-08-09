@@ -496,9 +496,9 @@ class Test3DModelFunction():
                                                                                 
       def test_3D_export_model(self, use_gpu):
           if self.model=='squeezesegv3_rangenet21_semantickitti' or self.model=='squeezesegv3_rangenet53_semantickitti':
-            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams --input_shape 64 1024' % (self.yaml,  self.model)
+            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams --input_shape 64 1024 --save_dir ./exported_model/%s' % (self.yaml, self.model, self.model)
           else:
-            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams' % (self.yaml,  self.model)
+            cmd='cd Paddle3D; python tools/export.py --config %s --model %s/model.pdparams --save_dir ./exported_model/%s' % (self.yaml, self.model, self.model)
 
           print(cmd)
           if(platform.system() == "Windows"):
@@ -509,19 +509,22 @@ class Test3DModelFunction():
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'export_model') 
 
-      def test_3D_predict(self, use_gpu):
-          infer_image='datasets/KITTI/kitti_train_gt_database/Car/1000_Car_0.bin'
-          if self.model=='pointpillars_kitti_car_xyres16':
-              infer_image='datasets/KITTI/kitti_train_gt_database/Car/1000_Car_0.bin' 
-          elif  self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
-              infer_image='datasets/KITTI/kitti_train_gt_database/Cyclist/100_Cyclist_0.bin'
+      def test_3D_predict_python(self, use_gpu):
+          infer_image='datasets/KITTI/training/velodyne/000000.bin'
+          #if self.model=='pointpillars_kitti_car_xyres16':
+          #    infer_image='datasets/KITTI/kitti_train_gt_database/Car/1000_Car_0.bin' 
+          # elif  self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
+          #    infer_image='datasets/KITTI/kitti_train_gt_database/Cyclist/100_Cyclist_0.bin'
  
           if self.model=='smoke_dla34_no_dcn_iter70000' or self.model=='smoke_hrnet18_no_dcn_iter70000':
-              cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_iter70000; cd smoke_dla34_no_dcn_iter70000; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
-          elif self.model=='pointpillars_kitti_car_xyres16' or self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
-              cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/pointpillars.pdmodel --params_file exported_model/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (infer_image)
+             infer_image='datasets/KITTI/training/image_2/000000.png'
+             cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu' % (self.model, self.model, infer_image)
+          elif self.model=='pointpillars_kitti_car_xyres16':
+             cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (self.model, self.model, infer_image)
+          elif self.model=='pointpillars_kitti_cyclist_pedestrian_xyres16':
+              cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.model, self.model, infer_image)
           elif self.model=='kitti_centerpoint_pillars_016voxel' or self.model=='nuscenes_centerpoint_pillars_02voxel_10sweep':
-              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/centerpoint.pdmodel --params_file exported_model/centerpoint.pdiparams --lidar_file %s --num_point_dim 5' % (infer_image)
+              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 5' % (self.model, self.model, infer_image)
           else:
               cmd='echo "not supported"'
            

@@ -26,8 +26,8 @@ def get_model_list():
 def setup_module():
     """
     """
-    # RepoInit3D(repo='Paddle3D')
-    # RepoDataset3D()
+    RepoInit3D(repo='Paddle3D')
+    RepoDataset3D()
 
 
 @allure.story('get_pretrained_model')
@@ -109,7 +109,7 @@ def test_3D_accuracy_predict_python(yml_name, use_gpu):
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库python预测')
     model = Test3DModelFunction(model=model_name, yml=yml_name)
-    model.test_3D_predict(use_gpu)
+    model.test_3D_predict_python(use_gpu)
 
 
 @allure.story('train')

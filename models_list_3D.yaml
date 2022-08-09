@@ -1,1 +1,1 @@
-configs/pointpillars/pointpillars_kitti_car_xyres16.yml
+configs/smoke/smoke_dla34_no_dcn_iter70000.yml
