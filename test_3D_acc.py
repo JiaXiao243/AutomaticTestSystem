@@ -43,10 +43,8 @@ def test_3D_accuracy_get_pretrained_model(yml_name):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_eval(yml_name, use_gpu):
-    if sys.platform == 'darwin' or sys.platform == 'win32':
+    if sys.platform == 'darwin':
         pytest.skip("mac/windows skip eval")
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
 
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -63,8 +61,6 @@ def test_3D_accuracy_eval(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
-    if sys.platform == 'darwin' or sys.platform == 'win32':
-        pytest.skip("mac/windows skip eval")
     if sys.platform == 'darwin' and use_gpu==True:
         pytest.skip("mac skip GPU")
 
