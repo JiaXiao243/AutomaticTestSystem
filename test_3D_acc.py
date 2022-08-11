@@ -43,7 +43,11 @@ def test_3D_accuracy_get_pretrained_model(yml_name):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_eval(yml_name, use_gpu):
-    if sys.platform == 'darwin':
+    r = re.search('/(.*)/', yml_name)
+    category=r.group(1)
+    if (category=='smoke') or (category='centpoint'):
+        pytest.skip("not suporrted  eval when bs >1")
+    if sys.platform == 'darwin':     
         pytest.skip("mac/windows skip eval")
 
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
@@ -95,6 +99,11 @@ def test_3D_accuracy_export_model(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_predict_python(yml_name, use_gpu):
+    r = re.search('/(.*)/', yml_name)
+    category=r.group(1)
+    if (category=='squeezesegv3'):
+        pytest.skip("not suporrted  predict")
+
     if sys.platform == 'darwin':
         pytest.skip("mac skip tensorRT predict")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
