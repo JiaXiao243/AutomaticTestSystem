@@ -437,9 +437,9 @@ class Test3DModelFunction():
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
       def test_3D_get_pretrained_model(self):
-          if self.model=='smoke_dla34_no_dcn':
-             cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn; cd smoke_dla34_no_dcn; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
-          elif self.model=='smoke_hrnet18_no_dcn':
+          if self.model=='smoke_dla34_no_dcn_kitti':
+             cmd='cd Paddle3D; mkdir smoke_dla34_no_dcn_kitti; cd smoke_dla34_no_dcn_kitti; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_dla34_no_dcn_kitti/model.pdparams;'
+          elif self.model=='smoke_hrnet18_no_dcn_kitti':
              cmd='cd Paddle3D; mkdir %s; cd %s; wget https://paddle3d.bj.bcebos.com/models/smoke/smoke_hrnet18_no_dcn_kitti/model.pdparams' % (self.model, self.model)
 
           elif self.model=='pointpillars_xyres16_kitti_car' or self.model=='pointpillars_xyres16_kitti_cyclist_pedestrian':
@@ -466,6 +466,8 @@ class Test3DModelFunction():
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           print(cmd)
+          if (self.model=='smoke_dla34_no_dcn_kitti') or (self.model=='smoke_hrnet18_no_dcn_kitti') or (self.model=='centerpoint_pillars_016voxel_kitti') or (self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep') 
+               cmd='not supported for eval when bs >1' 
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
@@ -505,7 +507,7 @@ class Test3DModelFunction():
           # elif  self.model=='pointpillars_xyres16_kitti_cyclist_pedestrian':
           #    infer_image='datasets/KITTI/kitti_train_gt_database/Cyclist/100_Cyclist_0.bin'
  
-          if self.model=='smoke_dla34_no_dcn' or self.model=='smoke_hrnet18_no_dcn':
+          if self.model=='smoke_dla34_no_dcn_kitti' or self.model=='smoke_hrnet18_no_dcn_kitti':
              infer_image='datasets/KITTI/training/image_2/000000.png'
              cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu' % (self.model, self.model, infer_image)
           elif self.model=='pointpillars_xyres16_kitti_car':
