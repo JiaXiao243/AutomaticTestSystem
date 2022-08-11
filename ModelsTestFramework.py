@@ -74,7 +74,7 @@ class RepoDataset3D():
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
-            cmd='''cd Paddle3D; rm -rf datasets; ln -s /ssd2/jiaxiao01/data/Paddle3D datasets;'''
+            cmd='''cd Paddle3D; rm -rf datasets; ln -s /ssd2/ce_data/Paddle3D datasets;'''
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
