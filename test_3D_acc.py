@@ -45,7 +45,7 @@ def test_3D_accuracy_get_pretrained_model(yml_name):
 def test_3D_accuracy_eval(yml_name, use_gpu):
     r = re.search('/(.*)/', yml_name)
     category=r.group(1)
-    if (category=='smoke') or (category='centpoint'):
+    if (category=='smoke') or (category=='centpoint'):
         pytest.skip("not suporrted  eval when bs >1")
     if sys.platform == 'darwin':     
         pytest.skip("mac/windows skip eval")
