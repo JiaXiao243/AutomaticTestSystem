@@ -23,7 +23,7 @@ python -m pip install -r requirements.txt
 # export CUDA_VISIBLE_DEVICES=0,1
 which allure
 rm -rf result
-rm -rf report_3D
+rm -rf report_test
 
 python -m pytest -sv test_3D_acc.py  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 cp environment/environment.properties_linux ./result 
@@ -36,5 +36,5 @@ cd Paddle3D
 commit=`git rev-parse HEAD`
 cd ..
 echo 'Paddle3D_commit='$commit >> ./result/environment.properties
-allure generate ./result/ -o ./report_3D/ --clean
+allure generate ./result/ -o ./report_test/ --clean
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
