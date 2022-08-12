@@ -515,7 +515,7 @@ class Test3DModelFunction():
           elif self.model=='pointpillars_xyres16_kitti_cyclist_pedestrian':
               cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.model, self.model, infer_image)
           elif self.model=='centerpoint_pillars_016voxel_kitti' or self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep':
-              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 2' % (self.model, self.model, infer_image)
+              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.model, self.model, infer_image)
           else:
               cmd='echo "not supported"'
            
