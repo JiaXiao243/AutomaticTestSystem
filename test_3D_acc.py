@@ -96,7 +96,7 @@ def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
 @allure.story('export_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
- def test_3D_accuracy_export_model(yml_name, use_gpu):
+def test_3D_accuracy_export_model(yml_name, use_gpu):
      model_name=os.path.splitext(os.path.basename(yml_name))[0]
      hardware=get_hardware()
      allure.dynamic.title(model_name+hardware+'_export_model')
