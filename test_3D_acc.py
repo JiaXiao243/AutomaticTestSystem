@@ -43,6 +43,17 @@ def setup_module():
     RepoInit3D(repo='Paddle3D')
     RepoDataset3D()
 
+@allure.story('train')
+@pytest.mark.parametrize('yml_name', get_model_list())
+@pytest.mark.parametrize("use_gpu", [True])
+def test_3D_funtion_train(yml_name, use_gpu):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    hardware=get_hardware()
+    allure.dynamic.title(model_name+hardware+'_train')
+    allure.dynamic.description('训练')
+
+    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    model.test_3D_train(use_gpu)
 
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
@@ -69,6 +80,18 @@ def test_3D_accuracy_eval(yml_name, use_gpu):
         pytest.skip("mac/windows skip eval")
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_eval(use_gpu)
+
+@allure.story('eval')
+@pytest.mark.parametrize('yml_name', get_model_list())
+@pytest.mark.parametrize("use_gpu", [True])
+def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    hardware=get_hardware()
+    allure.dynamic.title(model_name+hardware+'_eval_bs1')
+    allure.dynamic.description('模型评估')
+
+    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    model.test_3D_eval_bs1(use_gpu)
 
 @allure.story('export_model')
  @pytest.mark.parametrize('yml_name', get_model_list())
@@ -113,15 +136,3 @@ def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_predict_python(use_gpu, True)
 
-@allure.story('train')
-@pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
-def test_3D_funtion_train(yml_name, use_gpu):
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    hardware=get_hardware()
-    allure.dynamic.title(model_name+hardware+'_train')
-    allure.dynamic.description('训练')
-    
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
-    model.test_3D_train(use_gpu)
-    
