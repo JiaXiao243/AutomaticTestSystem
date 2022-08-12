@@ -469,7 +469,7 @@ class Test3DModelFunction():
                cmd=cmd.replace(';','&')
           print(cmd)
           if (self.model=='smoke_dla34_no_dcn_kitti') or (self.model=='smoke_hrnet18_no_dcn_kitti') or (self.model=='centerpoint_pillars_016voxel_kitti') or (self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep'): 
-               cmd='not supported for eval when bs >1' 
+               cmd='echo "not supported for eval when bs >1"' 
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]

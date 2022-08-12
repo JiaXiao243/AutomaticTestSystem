@@ -57,31 +57,41 @@ def test_3D_accuracy_get_pretrained_model(yml_name):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_eval(yml_name, use_gpu):
-    category=get_category(yml_name)
-    if (category=='smoke') or (category=='centpoint'):
-        pytest.skip("not suporrted  eval when bs >1")
-    if sys.platform == 'darwin':     
-        pytest.skip("mac/windows skip eval")
-
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     hardware=get_hardware()
     allure.dynamic.title(model_name+hardware+'_eval')
     allure.dynamic.description('模型评估')
+    
+    category=get_category(yml_name)
+    if (category=='smoke') or (category=='centerpoint'):
+        pytest.skip("not suporrted  eval when bs >1")
+    if sys.platform == 'darwin':
+        pytest.skip("mac/windows skip eval")
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_eval(use_gpu)
 
+@allure.story('export_model')
+ @pytest.mark.parametrize('yml_name', get_model_list())
+ @pytest.mark.parametrize("use_gpu", [True])
+ def test_3D_accuracy_export_model(yml_name, use_gpu):
+     model_name=os.path.splitext(os.path.basename(yml_name))[0]
+     hardware=get_hardware()
+     allure.dynamic.title(model_name+hardware+'_export_model')
+     allure.dynamic.description('模型动转静')
 
-@allure.story('eval')
+     model = Test3DModelFunction(model=model_name, yml=yml_name)
+     model.test_3D_export_model(use_gpu)
+
+
+@allure.story('predict')
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
-
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     hardware=get_hardware()
-    allure.dynamic.title(model_name+hardware+'_eval_bs1')
-    allure.dynamic.description('模型评估')
+    allure.dynamic.title(model_name+hardware+'_predict')
+    allure.dynamic.description('预测库python预测')
+
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_predict_python(use_gpu, False)
 
@@ -89,15 +99,17 @@ def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    hardware='TensorRT'
+    allure.dynamic.title(model_name+hardware+'_predict')
+    allure.dynamic.description('预测库python预测')
+    
     category=get_category(yml_name)
     if (category=='pointpillars') or (category=='centpoint'):
         pytest.skip("not supoorted for tensorRT predict")
     if sys.platform == 'darwin':
         pytest.skip("mac skip tensorRT predict")
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    hardware='TensorRT'
-    allure.dynamic.title(model_name+hardware+'_predict')
-    allure.dynamic.description('预测库python预测')
+    
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_predict_python(use_gpu, True)
 
@@ -105,15 +117,11 @@ def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_funtion_train(yml_name, use_gpu):
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    if use_gpu==True:
-       hardware='_GPU'
-    else:
-       hardware='_CPU'
+    hardware=get_hardware()
     allure.dynamic.title(model_name+hardware+'_train')
     allure.dynamic.description('训练')
+    
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_train(use_gpu)
-
+    
