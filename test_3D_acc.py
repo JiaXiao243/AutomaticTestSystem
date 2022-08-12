@@ -123,12 +123,12 @@ def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
 @pytest.mark.parametrize("use_gpu", [True])
 def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    hardware='TensorRT'
+    hardware='_TensorRT'
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库python预测')
     
     category=get_category(yml_name)
-    if (category=='pointpillars') or (category=='centpoint'):
+    if (category=='pointpillars') or (category=='centerpoint'):
         pytest.skip("not supoorted for tensorRT predict")
     if sys.platform == 'darwin':
         pytest.skip("mac skip tensorRT predict")
