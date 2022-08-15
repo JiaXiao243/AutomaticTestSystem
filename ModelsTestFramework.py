@@ -513,7 +513,7 @@ class Test3DModelFunction():
              infer_image='datasets/KITTI/training/image_2/000000.png'
              cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu' % (self.model, self.model, infer_image)
              if (use_trt==True):
-                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --collect_dynamic_shape_info --dynamic_shape_file %s/shape_info.txt; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s  --use_trt --dynamic_shape_file %s/shape_info.txt;' % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)
+                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --collect_dynamic_shape_info --dynamic_shape_file %s/shape_info.txt; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu --use_trt --dynamic_shape_file %s/shape_info.txt;' % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)
                 
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s' % (self.model, self.model, infer_image)
