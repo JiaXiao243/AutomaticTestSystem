@@ -231,6 +231,8 @@ def  check_infer_metric(category, output, dataset):
            print(len(expect_table))
 
            # assert real_table==expect_table, "real table should equal expect table"
+     elif category =='sr':
+          allure_attach("PaddleOCR/infer_result/sr_word_52.png", 'infer_result/sr_word_52.png', allure.attachment_type.PNG)
      else:
            pass
 
@@ -293,6 +295,8 @@ def check_predict_metric(category, output, dataset):
            expect_metric=readfile("./metric/predicts_table.txt")
            # expect_table=pattern.findall(expect_metric)[0]
            # assert real_table==expect_table, "real table should equal expect table"
+    elif category =='sr':
+          allure_attach("PaddleOCR/infer_result/sr_word_52.png", 'infer_result/sr_word_52.png', allure.attachment_type.PNG)
     else:
         pass
 
