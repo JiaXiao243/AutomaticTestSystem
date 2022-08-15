@@ -18,7 +18,7 @@ import chardet
 import paddle
 
 
-rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224' }
+rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224', 'VisionLAN':'3,64,256' }
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
@@ -352,10 +352,10 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'eval')
           if self.category=='rec':
              keyword='acc'
-          elif (self.category=='det') or (self.category=='table')::
-             keyword='hmean':
+          elif (self.category=='det') or (self.category=='table'):
+             keyword='hmean'
           elif self.category=='sr':
-             keyword='psnr_avg':
+             keyword='psnr_avg'
           else:
              pass
       
@@ -416,7 +416,7 @@ class TestOcrModelFunction():
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='sr':
-             sr_image_shape=3,32,128
+             sr_image_shape=3,32,256
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
          
 
