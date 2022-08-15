@@ -273,6 +273,8 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
+          elif self.category=='sr':
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.model, self.yaml, use_gpu, self.model)
           elif self.category=='table':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, self.yaml, use_gpu, self.model)
           else:
@@ -348,10 +350,15 @@ class TestOcrModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
-          if self.category=='rec' or self.category=='sr':
+          if self.category=='rec':
              keyword='acc'
+          elif (self.category=='det') or (self.category=='table')::
+             keyword='hmean':
+          elif self.category=='sr':
+             keyword='psnr_avg':
           else:
-             keyword='hmean'
+             pass
+      
             
           real_metric=metricExtraction(keyword, output)
           expect_metric=self.testcase_yml[self.model]['eval_'+keyword]
@@ -408,6 +415,11 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='sr':
+             sr_image_shape=3,32,128
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
+         
+
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
