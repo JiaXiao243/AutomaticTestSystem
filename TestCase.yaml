@@ -20,14 +20,14 @@ cmd:
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_rec.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words/en/word_1.png";'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
-       predict: 'cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;'
+       predict: 'cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s --use_space_char=False;'
     sr:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_sr.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words_en/word_52.png";'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
-       predict: 'cd PaddleOCR; python tools/infer/predict_sr.py --image_dir="./doc/imgs_words_en/word_52.png" --sr_model_dir="./models_inference/"%s --sr_image_shape=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;'
+       predict: 'cd PaddleOCR; mkdir infer_result; python tools/infer/predict_sr.py --image_dir="./doc/imgs_words_en/word_52.png" --sr_model_dir="./models_inference/"%s --sr_image_shape=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s --use_space_char=False;'
     table:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=500 Global.print_batch_step=1 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Train.dataset.data_dir=train_data/table/pubtabnet/val Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl] Eval.dataset.data_dir=train_data/table/pubtabnet/val Eval.loader.batch_size_per_card=10 Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
@@ -83,7 +83,7 @@ rec_r45_visionlan:
     eval_acc: 0.90
     rec_image_shape: '3,64,256'
     rec_algorithm: VisionLAN
-    rec_char_dict_path: ./ppocr/utils/dict90.txt
+    rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
     dataset: data_lmdb_release
 
 sr_tsrn_transformer_strock:
@@ -92,8 +92,7 @@ sr_tsrn_transformer_strock:
     eval_psnr_avg: 19.28
     eval_ssim_avg: 0.6560 
     sr_image_shape: 3,32,128
-    rec_algorithm: Gestalt
-    rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
+    sr_algorithm: Gestalt
     dataset: LMDBDataSetSR
 
 table_master:
