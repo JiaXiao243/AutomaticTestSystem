@@ -422,9 +422,10 @@ class TestOcrModelFunction():
 
 
 class Test3DModelFunction():
-      def __init__(self, model, yml):
+      def __init__(self, model, yml, category):
          self.model=model
          self.yaml=yml
+         self.catedory=catedory
 
       def test_3D_train(self, use_gpu):
           cmd='cd Paddle3D; rm -rf output; export CUDA_VISIBLE_DEVICES=0; sed -i "/iters/d" %s; sed -i "1i\iters: 200"  %s ; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py --config %s --num_workers 2 --log_interval 50 --save_interval 5000' % (self.yaml,  self.yaml, self.model, self.yaml)
@@ -516,14 +517,24 @@ class Test3DModelFunction():
                 cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --collect_dynamic_shape_info --dynamic_shape_file %s/shape_info.txt; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu --use_trt --dynamic_shape_file %s/shape_info.txt;' % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)   
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s' % (self.model, self.model, infer_image)
+
           elif self.model=='pointpillars_xyres16_kitti_car':
              cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (self.model, self.model, infer_image)
+             if (paddle.is_compiled_with_cuda()==False):
+                cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (self.category, self.model, self.model, infer_image)
+
           elif self.model=='pointpillars_xyres16_kitti_cyclist_pedestrian':
-              cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.model, self.model, infer_image)
+             cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.model, self.model, infer_image)
+             if (paddle.is_compiled_with_cuda()==False):
+                cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.category, self.model, self.model, infer_image)
+
           elif self.model=='centerpoint_pillars_016voxel_kitti' or self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep':
-              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.model, self.model, infer_image)
+             cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.model, self.model, infer_image)
+             if (paddle.is_compiled_with_cuda()==False):
+                cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.category, self.model, self.model, infer_image)
+
           else:
-              cmd='echo "not supported"'
+             cmd='echo "not supported"'
            
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')

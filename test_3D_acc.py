@@ -49,7 +49,9 @@ def test_3D_accuracy_get_pretrained_model(yml_name):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     allure.dynamic.title(model_name+'_get_pretrained_model')
     allure.dynamic.description('获取预训练模型')
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+
+    category=get_category(yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_get_pretrained_model()
 
 @allure.story('eval')
@@ -66,7 +68,7 @@ def test_3D_accuracy_eval(yml_name, use_gpu):
         pytest.skip("not suporrted  eval when bs >1")
     if sys.platform == 'darwin':
         pytest.skip("mac/windows skip eval")
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_eval(use_gpu)
 
 @allure.story('eval')
@@ -77,8 +79,9 @@ def test_3D_accuracy_eval_bs1(yml_name, use_gpu):
     hardware=get_hardware()
     allure.dynamic.title(model_name+hardware+'_eval_bs1')
     allure.dynamic.description('模型评估')
-
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+   
+    category=get_category(yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_eval_bs1(use_gpu)
 
 @allure.story('export_model')
@@ -89,8 +92,9 @@ def test_3D_accuracy_export_model(yml_name, use_gpu):
      hardware=get_hardware()
      allure.dynamic.title(model_name+hardware+'_export_model')
      allure.dynamic.description('模型动转静')
-
-     model = Test3DModelFunction(model=model_name, yml=yml_name)
+    
+     category=get_category(yml_name)
+     model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
      model.test_3D_export_model(use_gpu)
 
 
@@ -106,7 +110,7 @@ def test_3D_accuracy_predict_python(yml_name, use_gpu):
     category=get_category(yml_name)
     if (category=='squeezesegv3'):
         pytest.skip("not supoorted for python predict")
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_predict_python(use_gpu, False)
 
 @allure.story('predict')
@@ -126,7 +130,8 @@ def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
     if sys.platform == 'darwin':
         pytest.skip("mac skip tensorRT predict")
     
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    category=get_category(yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_predict_python(use_gpu, True)
 
 @allure.story('train')
@@ -138,5 +143,6 @@ def test_3D_funtion_train(yml_name, use_gpu):
     allure.dynamic.title(model_name+hardware+'_train')
     allure.dynamic.description('训练')
 
-    model = Test3DModelFunction(model=model_name, yml=yml_name)
+    category=get_category(yml_name)
+    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_train(use_gpu)
