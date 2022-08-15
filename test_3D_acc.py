@@ -103,6 +103,9 @@ def test_3D_accuracy_predict_python(yml_name, use_gpu):
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库python预测')
 
+    category=get_category(yml_name)
+    if (category=='squeezesegv3'):
+        pytest.skip("not supoorted for python predict")
     model = Test3DModelFunction(model=model_name, yml=yml_name)
     model.test_3D_predict_python(use_gpu, False)
 
@@ -115,8 +118,10 @@ def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库python预测')
     
+    if (paddle.is_compiled_with_cuda()==False):
+        pytest.skip("CPU not supported for tensorRT predict")
     category=get_category(yml_name)
-    if (category=='pointpillars') or (category=='centerpoint'):
+    if (category=='pointpillars') or (category=='centerpoint') or (category=='squeezesegv3'):
         pytest.skip("not supoorted for tensorRT predict")
     if sys.platform == 'darwin':
         pytest.skip("mac skip tensorRT predict")
