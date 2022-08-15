@@ -22,14 +22,18 @@ rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,22
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
-            if keyword in  line:
+            if (keyword+':' in  line) and ('best_accuracy' not in line):
                   output_rec=line
+                  break
+    print(output_rec)
     metric=output_rec.split(':')[-1]
     print(metric)
     return metric
           # rec_docs=output_rec_list[0].split(',')[0].strip("'")
           # rec_scores=output_rec_list[0].split(',')[1]
           # rec_scores=float(rec_scores)
+
+
 def platformAdapter(cmd):
     if (platform.system() == "Windows"):
             cmd=cmd.replace(';','&')
@@ -177,8 +181,8 @@ def allure_step(cmd, output):
 
 
 def readfile(filename):
-    with open(filename, mode='rb') as f:
-        text = f.readlines()
+    with open(filename, mode='r', encoding='utf-8') as f:
+         text = f.readline()
     return text
 
 def  check_infer_metric(category, output, dataset):
@@ -209,8 +213,26 @@ def  check_infer_metric(category, output, dataset):
         real_det_bbox=readfile("PaddleOCR/checkpoints/det_db/predicts_db.txt")
         expect_det_bbox=readfile("./metric/predicts_db_"+dataset+".txt")
         assert real_det_bbox==expect_det_bbox, "real det_bbox should equal expect det_bbox"
+     elif category =='table':
+           real_metric=metricExtraction('result', output)
+           table_bbox=real_metric.split("'</html>'],")[0]
+           print("table_bbox:{}".format(table_bbox))
+           # with open("./metric/infer_table.txt", mode='w', encoding='utf-8') as file_obj:
+           #     file_obj.write(real_metric)
+           # print("table_result:{}".format(real_metric))
+           # allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
+           allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
+           allure_attach("./metric/infer_table.txt", "./metric/infer_table.txt", allure.attachment_type.TEXT)
+
+           real_table=real_metric
+           expect_table=readfile("./metric/infer_table.txt")
+           print(len(real_table))
+           print("expect_table:{}".format(expect_table))
+           print(len(expect_table))
+
+           # assert real_table==expect_table, "real table should equal expect table"
      else:
-        pass
+           pass
 
 def check_predict_metric(category, output, dataset):
     if category=='rec':
@@ -255,6 +277,22 @@ def check_predict_metric(category, output, dataset):
           with assume: assert np.array(det_bbox) == approx(np.array(expect_det_bbox), abs=2), "check det_bbox failed!  \
                            real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
           print("*************************************************************************")
+    elif category =='table':
+           real_metric=metricExtraction('result', output)
+           table_bbox=real_metric.split("]")[0]
+           pattern=re.compile('\[\[.+\]\]')
+           real_table=pattern.findall(real_metric)[0]
+           # print("table_bbox:{}".format(table_bbox))
+           # with open("./metric/predicts_table.txt", mode='w', encoding='utf-8') as file_obj:
+           #     file_obj.write(real_metric)
+           allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
+           allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
+           allure_attach("./metric/predicts_table.txt", "./metric/predicts_table.txt", allure.attachment_type.TEXT)
+
+           real_table=real_metric
+           expect_metric=readfile("./metric/predicts_table.txt")
+           # expect_table=pattern.findall(expect_metric)[0]
+           # assert real_table==expect_table, "real table should equal expect table"
     else:
         pass
 
@@ -276,7 +314,7 @@ class TestOcrModelFunction():
           elif self.category=='sr':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.model, self.yaml, use_gpu, self.model)
           elif self.category=='table':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, self.yaml, use_gpu, self.model)
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           else:
              pass
 
@@ -350,7 +388,7 @@ class TestOcrModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
-          if self.category=='rec':
+          if self.category=='rec' or self.category=='table':
              keyword='acc'
           elif (self.category=='det') or (self.category=='table'):
              keyword='hmean'
@@ -415,8 +453,10 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='det':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='table':
+              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='sr':
-             sr_image_shape=3,32,256
+             sr_image_shape=self.testcase_yml[self.model]['sr_image_shape']
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
          
 
