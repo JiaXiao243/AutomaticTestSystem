@@ -31,9 +31,9 @@ cmd:
     kie/vi_layoutxlm:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
-       eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./output/%s/best_accuracy'
-       infer: 'cd PaddleOCR; python tools/infer_vqa_token_ser.py -c %s -o Global.use_gpu=%s -o Architecture.Backbone.checkpoints=./output/%s/best_accuracy Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False'
-       export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./output/%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
+       eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./%s/best_accuracy'
+       infer: 'cd PaddleOCR; python tools/infer_vqa_token_ser.py -c %s -o Global.use_gpu=%s -o Architecture.Backbone.checkpoints=./%s/best_accuracy Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False'
+       export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python ppstructure/vqa/predict_vqa_token_ser.py --vqa_algorithm=LayoutXLM --ser_model_dir=./models_inference/%s --image_dir=./ppstructure/docs/vqa/input/zh_val_42.jpg --ser_dict_path=./train_data/XFUND/class_list_xfun.txt --vis_font_path=./doc/fonts/simfang.ttf --ocr_order_method="tb-yx" --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
 
     table:
