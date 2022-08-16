@@ -98,6 +98,11 @@ def test_ocr_accuracy_export_model(yml_name, use_gpu):
        hardware='_CPU'
     allure.dynamic.title(model_name+hardware+'_export_model')
     allure.dynamic.description('模型动转静')
+
+    if (model_name=='re_vi_layoutxlm_xfund_zh'):
+        pytest.skip("not supported")
+       
+       
     r = re.search('/(.*)/', yml_name)
     category=r.group(1)
     print(category)
@@ -117,6 +122,10 @@ def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
        hardware='_CPU'
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库预测')
+
+    if (model_name=='re_vi_layoutxlm_xfund_zh'):
+        pytest.skip("not supported")
+
     r = re.search('/(.*)/', yml_name)
     category=r.group(1)
     print(category)
@@ -136,6 +145,10 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
        hardware='_GPU'
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库预测')
+
+    if (model_name=='re_vi_layoutxlm_xfund_zh'):
+        pytest.skip("not supported")
+
     r = re.search('/(.*)/', yml_name)
     category=r.group(1)
     print(category)
