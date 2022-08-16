@@ -233,6 +233,11 @@ def  check_infer_metric(category, output, dataset):
            # assert real_table==expect_table, "real table should equal expect table"
      elif category =='sr':
           allure_attach("PaddleOCR/infer_result/sr_word_52.png", 'infer_result/sr_word_52.png', allure.attachment_type.PNG)
+     elif category=='kie/vi_layoutxlm':
+          if os.path.exists('./output/ser/xfund_zh/res/zh_val_0_ser.jpg'):
+             allure_attach("PaddleOCR/output/ser/xfund_zh/res/zh_val_0_ser.jpg", './output/output/ser/xfund_zh/res/zh_val_0_ser.jpg', allure.attachment_type.JPG)
+          if os.path.exists('./output/re/xfund_zh/with_gt/zh_val_0_ser_re.jpg'):
+             allure_attach("PaddleOCR/output/re/xfund_zh/with_gt/zh_val_0_ser_re.jpg", './output/re/xfund_zh/with_gt/zh_val_0_ser_re.jpg', allure.attachment_type.JPG)
      else:
            pass
 
@@ -413,6 +418,10 @@ class TestOcrModelFunction():
 
       def test_ocr_rec_infer(self, use_gpu):
           cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
+          if (self.model=='re_vi_layoutxlm_xfund_zh'):
+             cmd=cmd.replace('infer_vqa_token_ser','infer_vqa_token_ser_re')
+             cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
+
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           print(cmd)
