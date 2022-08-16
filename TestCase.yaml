@@ -89,8 +89,8 @@ rec_r45_visionlan:
 sr_tsrn_transformer_strock:
     model_yaml: configs/sr/sr_tsrn_transformer_strock.yml
     eval_pretrained_model: https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar
-    eval_psnr_avg: 19.28
-    eval_ssim_avg: 0.6560 
+    eval_psnr_avg: 20.383493
+    eval_ssim_avg: 0.707989 
     sr_image_shape: 3,32,128
     sr_algorithm: Gestalt
     dataset: LMDBDataSetSR
