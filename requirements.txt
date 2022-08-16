@@ -6,3 +6,4 @@ pytest-repeat
 allure-pytest
 matplotlib
 chardet
+pyyaml
