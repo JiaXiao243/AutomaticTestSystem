@@ -26,8 +26,8 @@ def get_model_list():
 def setup_module():
     """
     """
-    # RepoInit(repo='PaddleOCR')
-    # RepoDataset()
+    RepoInit(repo='PaddleOCR')
+    RepoDataset()
 
 
 @allure.story('get_pretrained_model')
