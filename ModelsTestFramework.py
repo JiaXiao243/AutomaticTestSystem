@@ -51,7 +51,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt''' % (self.repo, self.repo)
+         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/vqa/requirements.txt; git clone -b develop https://github.com/paddlepaddle/PaddleNLP.git --depth 1; cd PaddleNLP; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -310,17 +310,10 @@ class TestOcrModelFunction():
          self.dataset=self.testcase_yml[self.model]['dataset']
 
       def test_ocr_train(self, use_gpu):
-          # cmd='cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch --log_dir=log_%s  tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
           if self.category=='rec':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml,  self.model, self.yaml, use_gpu, self.model)
-          elif self.category=='det':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
-          elif self.category=='sr':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.model, self.yaml, use_gpu, self.model)
-          elif self.category=='table':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
           else:
-             pass
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
 
 
           if(platform.system() == "Windows"):
@@ -367,6 +360,8 @@ class TestOcrModelFunction():
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
           if self.category=='table':
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model) 
+          elif self.category=='kie/vi_layoutxlm':
+              cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.model)  
           else:
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.model, self.model)
           
@@ -394,7 +389,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'eval')
           if self.category=='rec' or self.category=='table':
              keyword='acc'
-          elif (self.category=='det') or (self.category=='table'):
+          elif (self.category=='det') or (self.category=='table') or (self.category=='kie/vi_layoutxlm'):
              keyword='hmean'
           elif self.category=='sr':
              keyword='psnr_avg'
@@ -419,7 +414,6 @@ class TestOcrModelFunction():
                             expect eval_acc is: %s" % (real_metric, expect_metric)
 
       def test_ocr_rec_infer(self, use_gpu):
-          # cmd='cd PaddleOCR; python tools/infer_rec.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_words/en/word_1.png";' % (self.yaml, use_gpu, self.model)
           cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
@@ -433,7 +427,6 @@ class TestOcrModelFunction():
 
 
       def test_ocr_export_model(self, use_gpu):
-          # cmd='cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;' % (self.yaml, use_gpu, self.model, self.model)
           cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (self.yaml, use_gpu, self.model, self.model) 
           print(cmd)
           if(platform.system() == "Windows"):
@@ -462,6 +455,9 @@ class TestOcrModelFunction():
           elif self.category=='sr':
              sr_image_shape=self.testcase_yml[self.model]['sr_image_shape']
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='kie/vi_layoutxlm':
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
+        
          
 
           if(platform.system() == "Windows"):

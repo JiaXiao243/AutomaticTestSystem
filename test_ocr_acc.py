@@ -16,7 +16,7 @@ from ModelsTestFramework import TestOcrModelFunction
 def get_model_list():
     import sys
     result = []
-    with open('models_list.yaml') as f:
+    with open('models_list_kie.yaml') as f:
       lines = f.readlines()
       for line in lines:
          r = re.search('/(.*)/', line)
@@ -26,8 +26,8 @@ def get_model_list():
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleOCR')
-    RepoDataset()
+    # RepoInit(repo='PaddleOCR')
+    # RepoDataset()
 
 
 @allure.story('get_pretrained_model')
