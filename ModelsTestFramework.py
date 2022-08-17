@@ -103,7 +103,7 @@ class RepoInitSpeech():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -117,17 +117,8 @@ class RepoDatasetSpeech():
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
-            cmd='''cd Paddle3D; rm -rf datasets; ln -s /ssd2/ce_data/Paddle3D datasets;'''
+            cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump;'''
 
-         elif(sysstr == "Windows"):
-            print ("config windows data_path")
-            cmd='''cd Paddle3D & rd /s /q datasets & mklink /j datasets E:\ce_data\Paddle3D'''
-         elif(sysstr == "Darwin"):
-            print ("config mac data_path")
-            cmd='''cd PaddleOCR; rm -rf datasets; ln -s /Users/paddle/PaddleTest/ce_data/Paddle3D datasets'''
-         else:
-            print ("Other System tasks")
-            exit(1)
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
@@ -643,3 +634,48 @@ class Test3DModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'predict')
+
+
+class TestSpeechModelFunction():
+      def __init__(self, model=''):
+         self.model=model
+         self.testcase_yml=yaml.load(open('TestCaseSpeech.yaml','rb'), Loader=yaml.Loader)
+
+      def test_speech_cli(cmd):
+          cmd=platformAdapter(cmd)
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'cli')
+
+      def test_speech_get_pretrained_model(self):
+          cmd=self.testcase_yml[self.model]['get_pretrained_model']    
+          cmd=platformAdapter(cmd)
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'get_pretrained_model')
+
+      def test_speech_train(self):
+          cmd=self.testcase_yml[self.model]['train'] 
+          cmd=platformAdapter(cmd)
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'train')
+
+      def test_speech_synthesize_e2e(self):
+          cmd=self.testcase_yml[self.model]['synthesize_e2e'] 
+          cmd=platformAdapter(cmd)
+          print(cmd)
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'synthesize_e2e')
