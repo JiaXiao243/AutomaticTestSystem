@@ -39,17 +39,17 @@ def setup_module():
 
 @allure.story('paddle_speech_cli')
 @pytest.mark.parametrize('cmd', get_model_list('speech_cli_list.txt'))
-def test_speech_accuracy_cli(cmd):
+def test_Speech_accuracy_cli(cmd):
     allure.dynamic.title('paddle_speech_cli')
     allure.dynamic.description('paddle_speech_cli')
 
-    model = TestSpeechModelFunction()
+    model = TestSpeechModelFunction(model=model_name)
     model.test_speech_cli(cmd)
 
 
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('model_name', get_model_list())
-def test_speech_accuracy_get_pretrained_model(model_name):
+def test_Speech_accuracy_get_pretrained_model(model_name):
     allure.dynamic.title(model_name+'_get_pretrained_model')
     allure.dynamic.description('获取预训练模型')
 
@@ -59,23 +59,20 @@ def test_speech_accuracy_get_pretrained_model(model_name):
 @allure.story('synthesize_e2e')
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
-def test_speech_accuracy_eval(yml_name, use_gpu):
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    hardware=get_hardware()
-    allure.dynamic.title(model_name+hardware+'_eval')
+def test_Speech_accuracy_eval(model_name):
+    allure.dynamic.title(model_name+'_synthesize_e2e')
     allure.dynamic.description('模型评估')
     
     model = TestSpeechModelFunction(model=model_name)
     model.test_speech_synthesize_e2e()
 
+
 @allure.story('train')
 @pytest.mark.parametrize('model_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
-def test_speech_funtion_train(model_name, use_gpu):
-    hardware=get_hardware()
-    allure.dynamic.title(model_name+hardware+'_train')
+def test_Speech_funtion_train(model_name, use_gpu):
+    allure.dynamic.title(model_name+'_train')
     allure.dynamic.description('训练')
 
     model = TestSpeechModelFunction(model=model_name)
     model.test_speech_train()
-
