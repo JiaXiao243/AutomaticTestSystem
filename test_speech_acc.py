@@ -50,7 +50,7 @@ def test_Speech_accuracy_get_pretrained_model(model_name):
     model.test_speech_get_pretrained_model()
 
 @allure.story('synthesize_e2e')
-@pytest.mark.parametrize('yml_name', get_model_list())
+@pytest.mark.parametrize('model_name', get_model_list())
 def test_speech_accuracy_synthesize_e2e(model_name):
     allure.dynamic.title(model_name+'_synthesize_e2e')
     allure.dynamic.description('模型评估')
