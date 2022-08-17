@@ -24,13 +24,6 @@ def get_model_list(filename='models_list_speech.yaml'):
     return result
 
 
-def get_hardware():
-    if (paddle.is_compiled_with_cuda()==True):
-       hardware='_GPU'
-    else:
-       hardware='_CPU'
-    return hardware
-
 def setup_module():
     """
     """
@@ -59,7 +52,7 @@ def test_Speech_accuracy_get_pretrained_model(model_name):
 @allure.story('synthesize_e2e')
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
-def test_Speech_accuracy_eval(model_name):
+def test_speech_accuracy_synthesize_e2e(model_name):
     allure.dynamic.title(model_name+'_synthesize_e2e')
     allure.dynamic.description('模型评估')
     
