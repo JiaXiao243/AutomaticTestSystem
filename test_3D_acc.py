@@ -8,7 +8,8 @@ import platform
 import os.path
 import allure
 import paddle
-
+import random
+import os
 
 from ModelsTestFramework import RepoInit3D
 from ModelsTestFramework import RepoDataset3D
@@ -23,6 +24,9 @@ def get_model_list():
       for line in lines:
          r = re.search('/(.*)/', line)
          result.append(line.strip('\n'))
+    ci_flag=os.environ.get('ci_flag',0)
+    if ci_flag==1:
+       result = random.sample(result, 2)
     return result
 
 def get_category(yml_name):
