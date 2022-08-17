@@ -51,7 +51,6 @@ def test_Speech_accuracy_get_pretrained_model(model_name):
 
 @allure.story('synthesize_e2e')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
 def test_speech_accuracy_synthesize_e2e(model_name):
     allure.dynamic.title(model_name+'_synthesize_e2e')
     allure.dynamic.description('模型评估')
@@ -62,7 +61,6 @@ def test_speech_accuracy_synthesize_e2e(model_name):
 
 @allure.story('train')
 @pytest.mark.parametrize('model_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
 def test_Speech_funtion_train(model_name, use_gpu):
     allure.dynamic.title(model_name+'_train')
     allure.dynamic.description('训练')
