@@ -98,6 +98,44 @@ class RepoDataset3D():
          assert exit_code == 0, "configure failed!   log information:%s" % output
 
 
+class RepoInitSpeech():
+      def __init__(self, repo):
+         self.repo=repo
+         print("This is Repo Init!")
+         pid = os.getpid()
+         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
+         if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
+         logging.info("git clone"+self.repo+"sucessfuly!" )
+
+class RepoDatasetSpeech():
+      def __init__(self):
+         sysstr = platform.system()
+         if(sysstr =="Linux"):
+            print ("config Linux data_path")
+            cmd='''cd Paddle3D; rm -rf datasets; ln -s /ssd2/ce_data/Paddle3D datasets;'''
+
+         elif(sysstr == "Windows"):
+            print ("config windows data_path")
+            cmd='''cd Paddle3D & rd /s /q datasets & mklink /j datasets E:\ce_data\Paddle3D'''
+         elif(sysstr == "Darwin"):
+            print ("config mac data_path")
+            cmd='''cd PaddleOCR; rm -rf datasets; ln -s /Users/paddle/PaddleTest/ce_data/Paddle3D datasets'''
+         else:
+            print ("Other System tasks")
+            exit(1)
+         print(cmd)
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         assert exit_code == 0, "configure failed!   log information:%s" % output
+
+
+
 class RepoDataset():
       def __init__(self):
          self.config=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
@@ -466,6 +504,8 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
         
          
+          if self.model=='SLANet':
+              cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (use_gpu, use_tensorrt, enable_mkldnn)
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')

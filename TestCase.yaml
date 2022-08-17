@@ -34,7 +34,7 @@ cmd:
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./%s/'
        infer: 'cd PaddleOCR; python tools/infer_vqa_token_ser.py -c %s -o Global.use_gpu=%s -o Architecture.Backbone.checkpoints=./%s/ Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Architecture.Backbone.checkpoints=./%s/ Global.save_inference_dir=./models_inference/%s;'
-       predict: 'cd PaddleOCR; python ppstructure/vqa/predict_vqa_token_ser.py --vqa_algorithm=LayoutXLM --ser_model_dir=./models_inference/%s --image_dir=./ppstructure/docs/vqa/input/zh_val_42.jpg --ser_dict_path=./train_data/XFUND/class_list_xfun.txt --vis_font_path=./doc/fonts/simfang.ttf --ocr_order_method="tb-yx" --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
+       predict: 'cd PaddleOCR; python ppstructure/vqa/predict_vqa_token_ser.py --vqa_algorithm=LayoutXLM --ser_model_dir=./models_inference/%s --image_dir=./ppstructure/docs/vqa/input/zh_val_42.jpg --ser_dict_path=./train_data/XFUND/class_list_xfun.txt --vis_font_path=./doc/fonts/simfang.ttf --ocr_order_method="tb-yx" --shape_info_filename="shape.txt" --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
 
     table:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=500 Global.print_batch_step=1 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Train.dataset.data_dir=train_data/table/pubtabnet/val Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl] Eval.dataset.data_dir=train_data/table/pubtabnet/val Eval.loader.batch_size_per_card=10 Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
@@ -43,7 +43,7 @@ cmd:
        infer: 'cd PaddleOCR; python tools/infer_table.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy;'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --table_model_dir=./models_inference/%s --table_algorithm=TableMaster --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt --table_max_len=480 --image_dir=ppstructure/docs/table/table.jpg --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
-
+       predict_SLANet: 'mkdir inference && cd inference;wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.tar && tar xf ch_PP-OCRv3_det_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.tar && tar xf ch_PP-OCRv3_rec_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_infer.tar && tar xf ch_ppstructure_mobile_v2.0_SLANet_infer.tar; cd ..; python ppstructure/table/predict_table.py --det_model_dir=inference/ch_PP-OCRv3_det_slim_infer --rec_model_dir=inference/ch_PP-OCRv3_rec_slim_infer --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt--table_char_dict_path=./ppocr/utils/dict/table_structure_dict_ch.txt --image_dir=ppstructure/docs/table/table.jpg --output=./output/table --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
 
 
 
