@@ -19,7 +19,7 @@ from ModelsTestFramework import TestSpeechModelFunction
 def get_model_list(filename='models_list_speech.yaml'):
     import sys
     result = []
-    with open(filename, mode='rb') as f:
+    with open(filename, encoding=’gbk’) as f:
       lines = f.readlines()
       for line in lines:
          result.append(line.strip('\n'))
