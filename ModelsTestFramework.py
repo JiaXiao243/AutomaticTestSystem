@@ -345,7 +345,7 @@ class TestOcrModelFunction():
 
       def test_ocr_train(self, use_gpu):
           if self.category=='rec':
-             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.model, self.yaml, use_gpu, self.model)
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml,, self.yaml, use_gpu, self.model)
           else:
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
 
