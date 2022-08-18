@@ -117,7 +117,7 @@ class RepoDatasetSpeech():
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
-            cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump;'''
+            cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump; wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav'''
 
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
@@ -314,19 +314,19 @@ def check_predict_metric(category, output, dataset):
                            real det_bbox is: %s, expect det_bbox is: %s" % (det_bbox, expect_det_bbox)
           print("*************************************************************************")
     elif category =='table':
-           real_metric=metricExtraction('result', output)
-           table_bbox=real_metric.split("]")[0]
-           pattern=re.compile('\[\[.+\]\]')
-           real_table=pattern.findall(real_metric)[0]
+           # real_metric=metricExtraction('result', output)
+           # table_bbox=real_metric.split("]")[0]
+           # pattern=re.compile('\[\[.+\]\]')
+           # real_table=pattern.findall(real_metric)[0]
            # print("table_bbox:{}".format(table_bbox))
            # with open("./metric/predicts_table.txt", mode='w', encoding='utf-8') as file_obj:
            #     file_obj.write(real_metric)
            allure_attach("PaddleOCR/output/table.jpg", './output/table.jpg', allure.attachment_type.JPG)
-           allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
-           allure_attach("./metric/predicts_table.txt", "./metric/predicts_table.txt", allure.attachment_type.TEXT)
+           # allure.attach(real_metric, 'real_table_result', allure.attachment_type.TEXT)
+          # allure_attach("./metric/predicts_table.txt", "./metric/predicts_table.txt", allure.attachment_type.TEXT)
 
-           real_table=real_metric
-           expect_metric=readfile("./metric/predicts_table.txt")
+           # real_table=real_metric
+           # expect_metric=readfile("./metric/predicts_table.txt")
            # expect_table=pattern.findall(expect_metric)[0]
            # assert real_table==expect_table, "real table should equal expect table"
     elif category =='sr':
@@ -495,8 +495,8 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
         
          
-          if self.model=='SLANet':
-              cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (use_gpu, use_tensorrt, enable_mkldnn)
+          # if self.model=='SLANet':
+          #    cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (use_gpu, use_tensorrt, enable_mkldnn)
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
@@ -641,7 +641,7 @@ class TestSpeechModelFunction():
          self.model=model
          self.testcase_yml=yaml.load(open('TestCaseSpeech.yaml','rb'), Loader=yaml.Loader)
 
-      def test_speech_cli(cmd):
+      def test_speech_cli(self, cmd):
           cmd=platformAdapter(cmd)
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)

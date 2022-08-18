@@ -21,6 +21,7 @@ def get_model_list(filename='models_list_speech.yaml'):
     result = []
     with open(filename) as f:
       lines = f.readlines()
+      result=lines
     return result
 
 
@@ -36,7 +37,8 @@ def test_Speech_accuracy_cli(cmd):
     allure.dynamic.title('paddle_speech_cli')
     allure.dynamic.description('paddle_speech_cli')
 
-    model = TestSpeechModelFunction(model=model_name)
+    model = TestSpeechModelFunction()
+    print(cmd)
     model.test_speech_cli(cmd)
 
 
