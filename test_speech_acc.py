@@ -21,7 +21,8 @@ def get_model_list(filename='models_list_speech.yaml'):
     result = []
     with open(filename) as f:
       lines = f.readlines()
-      result=lines
+      for line in lines:
+         result.append(line.strip('\n'))
     return result
 
 
@@ -63,7 +64,7 @@ def test_speech_accuracy_synthesize_e2e(model_name):
 
 @allure.story('train')
 @pytest.mark.parametrize('model_name', get_model_list())
-def test_Speech_funtion_train(model_name, use_gpu):
+def test_speech_funtion_train(model_name):
     allure.dynamic.title(model_name+'_train')
     allure.dynamic.description('训练')
 
