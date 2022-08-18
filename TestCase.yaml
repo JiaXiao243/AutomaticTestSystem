@@ -40,7 +40,7 @@ cmd:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=500 Global.print_batch_step=1 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Train.dataset.data_dir=train_data/table/pubtabnet/val Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl] Eval.dataset.data_dir=train_data/table/pubtabnet/val Eval.loader.batch_size_per_card=10 Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Eval.dataset.data_dir=train_data/table/pubtabnet/val Eval.loader.batch_size_per_card=10 Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]'
-       infer: 'cd PaddleOCR; python tools/infer_table.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy;'
+       infer: 'cd PaddleOCR; python tools/infer_table.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy -o  Global.infer_img=ppstructure/docs/table/table.jpg;'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
        predict: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --table_model_dir=./models_inference/%s --table_algorithm=TableMaster --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt --table_max_len=480 --image_dir=ppstructure/docs/table/table.jpg --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
        predict_SLANet: 'mkdir inference && cd inference;wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.tar && tar xf ch_PP-OCRv3_det_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.tar && tar xf ch_PP-OCRv3_rec_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_infer.tar && tar xf ch_ppstructure_mobile_v2.0_SLANet_infer.tar; cd ..; python ppstructure/table/predict_table.py --det_model_dir=inference/ch_PP-OCRv3_det_slim_infer --rec_model_dir=inference/ch_PP-OCRv3_rec_slim_infer --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt--table_char_dict_path=./ppocr/utils/dict/table_structure_dict_ch.txt --image_dir=ppstructure/docs/table/table.jpg --output=./output/table --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
@@ -118,7 +118,13 @@ re_vi_layoutxlm_xfund_zh:
     dataset: SimpleDataSet
 
 table_master:
-   model_yaml:
+   model_yaml: configs/table/table_master.yml
    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/tablemaster/table_structure_tablemaster_train.tar
    eval_acc: 0.811999998376
+   dataset: pubtabnet
+
+SLANet:
+   model_yaml: configs/table/SLANet.yml
+   eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
+   eval_acc: 0.795999998408
    dataset: pubtabnet
