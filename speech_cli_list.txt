@@ -31,10 +31,8 @@ paddlespeech tts --am fastspeech2_mix --voc hifigan_aishell3 --lang mix --input 
 paddlespeech tts --am fastspeech2_mix --voc pwgan_csmsc --lang mix --input "我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN." --spk_id 175 --output mix_spk175_pwgan.wav
 paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input "我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN." --spk_id 175 --output mix_spk175.wav
 paddlespeech st --input ./en.wav
-wget -c https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav
 paddlespeech vector --task spk --input 85236145389.wav
 echo -e "1 欢迎光临。\n2 谢谢惠顾。" | paddlespeech tts
-echo -e "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job
 paddlespeech vector --task spk --input vec.job
 echo -e "demo3 85236145389.wav \n demo4 85236145389.wav" | paddlespeech vector --task spk
 paddlespeech asr --input ./zh.wav | paddlespeech text --task punc
