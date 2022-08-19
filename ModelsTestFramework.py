@@ -118,7 +118,8 @@ class RepoDatasetSpeech():
          if(sysstr =="Linux"):
             print ("config Linux data_path")
             cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump; cd ../../../..; wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav'''
-
+         else:
+            cmd='wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav'
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
