@@ -496,8 +496,8 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
         
          
-          # if self.model=='SLANet':
-          #    cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (use_gpu, use_tensorrt, enable_mkldnn)
+          if self.model=='SLANet':
+              cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
