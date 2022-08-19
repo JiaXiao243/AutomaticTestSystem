@@ -11,7 +11,6 @@ paddlespeech asr --model deepspeech2online_wenetspeech --input ./zh.wav
 paddlespeech asr --model deepspeech2online_aishell --input ./zh.wav
 paddlespeech asr --model deepspeech2offline_librispeech --lang en --input ./en.wav
 paddlespeech asr --model conformer_online_wenetspeech --num_decoding_left_chunks 3 --input ./zh.wav
-paddlespeech asr --model deepspeech2online_wenetspeech --input test_long_audio_01.wav -y
 paddlespeech tts --input "你好，欢迎使用百度飞桨深度学习框架！"
 paddlespeech tts --am speedyspeech_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
 paddlespeech tts --voc mb_melgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
