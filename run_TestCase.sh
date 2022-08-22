@@ -27,4 +27,5 @@ echo 'exit_code:'$?
 cp environment/environment.properties_linux ./result 
 mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
+exit $exit_code
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
