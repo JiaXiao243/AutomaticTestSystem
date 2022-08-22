@@ -57,6 +57,7 @@ class RepoInit():
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
+         print(output)
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
          logging.info("git clone"+self.repo+"sucessfuly!" )
 
@@ -459,7 +460,7 @@ class TestOcrModelFunction():
       def test_ocr_rec_infer(self, use_gpu):
           cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
-             cmd=cmd.replace('infer_vqa_token_ser','infer_vqa_token_ser_re')
+             cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
 
           if(platform.system() == "Windows"):
