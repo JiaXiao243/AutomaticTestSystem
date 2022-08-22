@@ -337,12 +337,13 @@ def check_predict_metric(category, output, dataset):
 
 class TestOcrModelFunction():
       def __init__(self, model='', yml='', category=''): 
-         self.model=model
-         self.yaml=yml
-         self.category=category
-         self.testcase_yml=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
-         self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
-         self.dataset=self.testcase_yml[self.model]['dataset']
+          if model !='':
+             self.model=model
+             self.yaml=yml
+             self.category=category
+             self.testcase_yml=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
+             self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
+             self.dataset=self.testcase_yml[self.model]['dataset']
 
       def test_ocr_cli(self, cmd):
           cmd=platformAdapter(cmd)
