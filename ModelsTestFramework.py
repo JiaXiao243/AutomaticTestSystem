@@ -51,7 +51,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt; git clone -b develop https://github.com/paddlepaddle/PaddleNLP.git --depth 1; cd PaddleNLP; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install . ; python -m pip install -r ppstructure/kie/requirements.txt; git clone -b develop https://github.com/paddlepaddle/PaddleNLP.git --depth 1; cd PaddleNLP; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -336,13 +336,22 @@ def check_predict_metric(category, output, dataset):
         pass
 
 class TestOcrModelFunction():
-      def __init__(self, model, yml, category): 
+      def __init__(self, model='', yml='', category=''): 
          self.model=model
          self.yaml=yml
          self.category=category
          self.testcase_yml=yaml.load(open('TestCase.yaml','rb'), Loader=yaml.Loader)
          self.tar_name=os.path.splitext(os.path.basename(self.testcase_yml[self.model]['eval_pretrained_model']))[0]
          self.dataset=self.testcase_yml[self.model]['dataset']
+
+      def test_ocr_cli(self, cmd):
+          cmd=platformAdapter(cmd)
+          print(cmd)
+          cmd_result = subprocess.getstatusoutput(cmd)
+          exit_code = cmd_result[0]
+          output = cmd_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'cli')
 
       def test_ocr_train(self, use_gpu):
           if self.category=='rec':
@@ -645,9 +654,9 @@ class TestSpeechModelFunction():
       def test_speech_cli(self, cmd):
           cmd=platformAdapter(cmd)
           print(cmd)
-          detection_result = subprocess.getstatusoutput(cmd)
-          exit_code = detection_result[0]
-          output = detection_result[1]
+          cmd_result = subprocess.getstatusoutput(cmd)
+          exit_code = cmd_result[0]
+          output = cmd_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'cli')
 
