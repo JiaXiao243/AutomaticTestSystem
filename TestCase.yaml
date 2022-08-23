@@ -45,6 +45,14 @@ cmd:
        predict: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --table_model_dir=./models_inference/%s --table_algorithm=TableMaster --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt --table_max_len=480 --image_dir=ppstructure/docs/table/table.jpg --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
        predict_SLANet_ch: 'mkdir inference && cd inference;wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.tar && tar xf ch_PP-OCRv3_det_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.tar && tar xf ch_PP-OCRv3_rec_slim_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_infer.tar && tar xf ch_ppstructure_mobile_v2.0_SLANet_infer.tar; cd ..; python ppstructure/table/predict_table.py --det_model_dir=inference/ch_PP-OCRv3_det_slim_infer --rec_model_dir=inference/ch_PP-OCRv3_rec_slim_infer --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt--table_char_dict_path=./ppocr/utils/dict/table_structure_dict_ch.txt --image_dir=ppstructure/docs/table/table.jpg --output=./output/table --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
        predict_SLANet: 'cd PaddleOCR; python ppstructure/table/predict_structure.py --image_dir=ppstructure/docs/table/table.jpg --table_model_dir=./models_inference/%s --table_char_dict_path=./ppocr/utils/dict/table_structure_dict.txt --table_max_len=488 --vis_font_path=./doc/fonts/simfang.ttf --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
+    picodet/legacy_model/application/layout_analysis:
+       train: 'cd PaddleDetection; python tools/train.py -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml --eval -o epoch=1 use_gpu=%s'
+       get_pretrained_model: 'cd PaddleDetection; mkdir pretrained_model; cd pretrained_model; wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_layout.pdparams; cd ..'
+       eval: 'cd PaddleDetection; python tools/eval.py -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml -o weights=pretrained_model/picodet_lcnet_x1_0_layout -o use_gpu=%s'
+       infer: 'cd PaddleDetection; python tools/infer.py -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml -o weights=pretrained_model/picodet_lcnet_x1_0_layout.pdparams --infer_img=docs/images/layout.jpg --output_dir=output_dir/ --draw_threshold=0.5 -o use_gpu=%s'
+       export_model: 'cd PaddleDetection; python tools/export_model.py -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml -o weights=pretrained_model/picodet_lcnet_x1_0_layout --output_dir=output_inference/ -o use_gpu=%s'
+       predict: 'cd PaddleDetection; python deploy/python/infer.py --model_dir=output_inference/picodet_lcnet_x1_0_layout/ --image_file=docs/images/layout.jpg --device=%s'
+       slim: '--slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
 
 
 det_r50_db++_icdar15:
@@ -125,6 +133,18 @@ table_master:
 
 SLANet:
    model_yaml: configs/table/SLANet.yml
+   eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
+   eval_acc: 0.795999998408
+   dataset: pubtabnet
+
+picodet_lcnet_x1_0_layout:
+   model_yaml: configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml
+   eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
+   eval_acc: 0.795999998408
+   dataset: pubtabnet
+
+picodet_lcnet_x2_5_layout:
+   model_yaml: configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml
    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
    eval_acc: 0.795999998408
    dataset: pubtabnet
