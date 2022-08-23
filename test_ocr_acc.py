@@ -54,7 +54,7 @@ def test_ocr_accuracy_get_pretrained_model(yml_name):
 
 @allure.story('eval')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
+@pytest.mark.parametrize("use_gpu", [True, False])
 def test_ocr_accuracy_eval(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -162,7 +162,7 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
+@pytest.mark.parametrize("use_gpu", [True, False])
 def test_ocr_funtion_train(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
