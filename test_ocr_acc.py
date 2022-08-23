@@ -13,7 +13,7 @@ from ModelsTestFramework import RepoDataset
 from ModelsTestFramework import TestOcrModelFunction
 
 
-def get_model_list(filename='models_list_layout.yaml'):
+def get_model_list(filename='models_list.yaml'):
     import sys
     result = []
     with open(filename) as f:
