@@ -56,11 +56,6 @@ def test_ocr_accuracy_get_pretrained_model(yml_name):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_ocr_accuracy_eval(yml_name, use_gpu):
-    if sys.platform == 'darwin' or sys.platform == 'win32':
-        pytest.skip("mac/windows skip eval")
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
-
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
        hardware='_GPU'
@@ -169,8 +164,6 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True])
 def test_ocr_funtion_train(yml_name, use_gpu):
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
        hardware='_GPU'
@@ -184,18 +177,3 @@ def test_ocr_funtion_train(yml_name, use_gpu):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_train(use_gpu)
 
-@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
-@allure.story('train')
-@pytest.mark.parametrize('yml_name', get_model_list())
-def test_ocr_accuracy_train(yml_name):
-    if sys.platform == 'darwin' or sys.platform == 'win32':
-        pytest.skip("mac/windows skip convergence plot")
-
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
-    allure.dynamic.title(model_name+'_train_convergence')
-    allure.dynamic.description('训练收敛性')
-    r = re.search('/(.*)/', yml_name)
-    category=r.group(1)
-    print(category)
-    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_ocr_train_acc()
