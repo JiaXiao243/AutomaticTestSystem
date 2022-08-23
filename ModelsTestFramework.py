@@ -51,7 +51,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install . ; python -m pip install -r ppstructure/kie/requirements.txt; git clone -b develop https://github.com/paddlepaddle/PaddleNLP.git --depth 1; cd PaddleNLP; python -m pip install -r requirements.txt; python -m pip install .; cd ..; git clone -b develop https://github.com/paddlepaddle/PaddleClas.git --depth 1; cd PaddleClas; python -m pip install -r requirements.txt; python -m pip install .; python -m pip install yacs''' % (self.repo, self.repo)
+         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install . ; python -m pip install -r ppstructure/kie/requirements.txt; git clone -b develop https://github.com/paddlepaddle/PaddleNLP.git --depth 1; cd PaddleNLP; python -m pip install -r requirements.txt; python -m pip install .; cd ..; git clone -b develop https://github.com/paddlepaddle/PaddleClas.git --depth 1; cd PaddleClas; python -m pip install -r requirements.txt; python -m pip install .; cd ..; python -m pip install yacs; git clone -b develop https://github.com/paddlepaddle/PaddleDetection.git --depth 1; cd PaddleDeteciton; python -m pip install -r requirements.txt; cd ..; cd PaddleOCR; python -m pip install -r ppstructure/recovery/requirements.txt; mkdir inference && cd inference; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar && tar xf en_PP-OCRv3_det_infer.tar; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar && tar xf en_PP-OCRv3_rec_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar && tar xf en_ppstructure_mobile_v2.0_SLANet_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_infer.tar && tar xf picodet_lcnet_x1_0_fgd_layout_infer.tar; cd ..''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -358,6 +358,10 @@ class TestOcrModelFunction():
       def test_ocr_train(self, use_gpu):
           if self.category=='rec':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, use_gpu, self.model)
+          elif self.category=='picodet/legacy_model/application/layout_analysis':
+             cmd=self.testcase_yml['cmd'][self.category]['train'] % (use_gpu)
+             if self.model=='picodet_lcnet_x2_5_layout':
+                cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           else:
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, use_gpu, self.model)
 
@@ -406,6 +410,8 @@ class TestOcrModelFunction():
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
           if (self.category=='table') or (self.category=='kie/vi_layoutxlm'):
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
+          elif self.category=='picodet/legacy_model/application/layout_analysis':
+              cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (use_gpu)
           else: 
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.model, self.model)
           
@@ -422,7 +428,12 @@ class TestOcrModelFunction():
 
       def test_ocr_eval(self, use_gpu):
           # cmd='cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy' % (self.yaml, use_gpu, self.model)
-          cmd=self.testcase_yml['cmd'][self.category]['eval'] % (self.yaml, use_gpu, self.model) 
+          if self.category=='picodet/legacy_model/application/layout_analysis':
+              cmd=self.testcase_yml['cmd'][self.category]['eval'] % (use_gpu)
+              if self.model=='picodet_lcnet_x2_5_layout':
+                 cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
+          else:
+              cmd=self.testcase_yml['cmd'][self.category]['eval'] % (self.yaml, use_gpu, self.model) 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           print(cmd)
@@ -458,11 +469,15 @@ class TestOcrModelFunction():
                             expect eval_acc is: %s" % (real_metric, expect_metric)
 
       def test_ocr_rec_infer(self, use_gpu):
-          cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
+          if self.category=='picodet/legacy_model/application/layout_analysis':
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (use_gpu)
+              if self.model=='picodet_lcnet_x2_5_layout':
+                 cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
+          else:
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
-
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           print(cmd)
@@ -475,7 +490,12 @@ class TestOcrModelFunction():
 
 
       def test_ocr_export_model(self, use_gpu):
-          cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (self.yaml, use_gpu, self.model, self.model) 
+          if self.category=='picodet/legacy_model/application/layout_analysis':
+              cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (use_gpu)
+              if self.model=='picodet_lcnet_x2_5_layout':
+                 cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
+          else:
+              cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (self.yaml, use_gpu, self.model, self.model) 
           print(cmd)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
@@ -505,6 +525,12 @@ class TestOcrModelFunction():
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='kie/vi_layoutxlm':
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
+          elif self.category=='picodet/legacy_model/application/layout_analysis':
+             if use_gpu==True:
+                 use_gpu='gpu'
+             else:
+                 use_gpu='cpu'
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (use_gpu)
         
          
           if self.model=='SLANet':
@@ -521,6 +547,17 @@ class TestOcrModelFunction():
           # acc
           # metricExtraction('Predicts', output)
           check_predict_metric(self.category, output, self.dataset)
+      
+      def test_ocr_predict_recovery(self, use_gpu):
+          cmd='cd PaddleOCR; python ppstructure/predict_system.py --image_dir=./ppstructure/docs/table/1.png --det_model_dir=inference/en_PP-OCRv3_det_infer --rec_model_dir=inference/en_PP-OCRv3_rec_infer --rec_char_dict_path=./ppocr/utils/en_dict.txt --table_model_dir=inference/en_ppstructure_mobile_v2.0_SLANet_infer --table_char_dict_path=./ppocr/utils/dict/table_structure_dict.txt --layout_model_dir=inference/picodet_lcnet_x1_0_fgd_layout_infer --layout_dict_path=./ppocr/utils/dict/layout_dict/layout_publaynet_dict.txt --vis_font_path=./doc/fonts/simfang.ttf --recovery=True --save_pdf=False --output=./output/'
+          print(cmd)
+          if(platform.system() == "Windows"):
+               cmd=cmd.replace(';','&')
+          detection_result = subprocess.getstatusoutput(cmd)
+          exit_code = detection_result[0]
+          output = detection_result[1]
+          allure_step(cmd, output)
+          exit_check_fucntion(exit_code, output, 'predict_recovery')
 
 
 class Test3DModelFunction():

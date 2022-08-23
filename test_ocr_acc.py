@@ -13,7 +13,7 @@ from ModelsTestFramework import RepoDataset
 from ModelsTestFramework import TestOcrModelFunction
 
 
-def get_model_list(filename='models_list.yaml'):
+def get_model_list(filename='models_list_layout.yaml'):
     import sys
     result = []
     with open(filename) as f:
@@ -74,9 +74,6 @@ def test_ocr_accuracy_eval(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True,False])
 def test_ocr_accuracy_infer(yml_name, use_gpu):
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
-
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
        hardware='_GPU'
@@ -94,8 +91,6 @@ def test_ocr_accuracy_infer(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_gpu", [True,False])
 def test_ocr_accuracy_export_model(yml_name, use_gpu):
-    if sys.platform == 'darwin' and use_gpu==True:
-        pytest.skip("mac skip GPU")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
        hardware='_GPU'
@@ -118,8 +113,6 @@ def test_ocr_accuracy_export_model(yml_name, use_gpu):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("enable_mkldnn", [True, False])
 def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
-    if sys.platform == 'darwin' and enable_mkldnn==True:
-        pytest.skip("mac skip mkldnn predict")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if enable_mkldnn==True:
        hardware='_mkldnn'
@@ -141,8 +134,6 @@ def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
 @pytest.mark.parametrize('yml_name', get_model_list())
 @pytest.mark.parametrize("use_tensorrt", [True, False])
 def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
-    if sys.platform == 'darwin':
-        pytest.skip("mac skip tensorRT predict")
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_tensorrt==True:
        hardware='_tensorRT'
@@ -159,6 +150,18 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
     print(category)
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_rec_predict(True, use_tensorrt, 0)
+
+def test_ocr_accuracy_predict_recovery(yml_name):
+    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+    hardware='_GPU'
+    allure.dynamic.title(model_name+hardware+'_predict_recovery')
+    allure.dynamic.description('预测库预测')
+
+    r = re.search('/(.*)/', yml_name)
+    category=r.group(1)
+    print(category)
+    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_rec_predict_recovery(True)
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
