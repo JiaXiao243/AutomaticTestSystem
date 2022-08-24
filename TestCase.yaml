@@ -111,16 +111,16 @@ sr_tsrn_transformer_strock:
     sr_algorithm: Gestalt
     dataset: LMDBDataSetSR
 
-ser_vi_layoutxlm_xfund_zh:
-    model_yaml: configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar
+ser_vi_layoutxlm_xfund_zh_udml:
+    model_yaml: configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
     eval_hmean: 0.9038
     algorithm: LayoutXML
     dataset: SimpleDataSet
 
-re_vi_layoutxlm_xfund_zh:
-    model_yaml: configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/pplayout/re_LayoutXLM_xfun_zh.tar
+re_vi_layoutxlm_xfund_zh_udml:
+    model_yaml: configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
     eval_hmean: 0.7483
     algorithm: LayoutXML
     dataset: SimpleDataSet
