@@ -13,7 +13,7 @@ from ModelsTestFramework import RepoDataset
 from ModelsTestFramework import TestOcrModelFunction
 
 
-def get_model_list(filename='models_list.yaml'):
+def get_model_list(filename='models_list_layout.yaml'):
     import sys
     result = []
     with open(filename) as f:
@@ -151,16 +151,12 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_rec_predict(True, use_tensorrt, 0)
 
-def test_ocr_accuracy_predict_recovery(yml_name):
-    model_name=os.path.splitext(os.path.basename(yml_name))[0]
+def test_ocr_accuracy_predict_recovery():
     hardware='_GPU'
-    allure.dynamic.title(model_name+hardware+'_predict_recovery')
+    allure.dynamic.title('layout'+hardware+'_predict_recovery')
     allure.dynamic.description('预测库预测')
 
-    r = re.search('/(.*)/', yml_name)
-    category=r.group(1)
-    print(category)
-    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model = TestOcrModelFunction()
     model.test_ocr_rec_predict_recovery(True)
 
 @allure.story('train')
