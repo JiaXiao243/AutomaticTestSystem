@@ -73,6 +73,7 @@ class RepoInit3D():
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
+         print(output)
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
          logging.info("git clone"+self.repo+"sucessfuly!" )
 
