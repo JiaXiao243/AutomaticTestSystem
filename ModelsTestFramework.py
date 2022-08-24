@@ -137,7 +137,7 @@ class RepoDataset():
             print ("config Linux data_path")
             data_path=self.config["data_path"]["linux_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path) 
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data;cd ..; cd PaddleDetection; rm -rf dataset; ln -s %s dataset''' % (data_path, data_path) 
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
@@ -145,12 +145,12 @@ class RepoDataset():
             print(data_path)
             mv="ren"
             rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s''' % (data_path)
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s; cd PaddleDetection; rd /s /q dataset; mklink /j dataset %s''' % (data_path, data_path)
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
             print(data_path)
-            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data''' % (data_path)
+            cmd='''cd PaddleOCR; rm -rf train_data; ln -s %s train_data; cd PaddleDetection; rm -rf dataset; ln -s %s dataset''' % (data_path, data_path)
          else:
             print ("Other System tasks")
             exit(1)
