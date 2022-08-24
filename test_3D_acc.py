@@ -25,7 +25,7 @@ def get_model_list():
          r = re.search('/(.*)/', line)
          result.append(line.strip('\n'))
     ci_flag=os.environ.get('ci_flag',0)
-    if ci_flag==1:
+    if ci_flag=='1':
        result = random.sample(result, 2)
     return result
 
