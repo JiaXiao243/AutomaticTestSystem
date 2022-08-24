@@ -157,7 +157,7 @@ def test_ocr_accuracy_predict_recovery():
     allure.dynamic.description('预测库预测')
 
     model = TestOcrModelFunction()
-    model.test_ocr_rec_predict_recovery(True)
+    model.test_ocr_predict_recovery(True)
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
