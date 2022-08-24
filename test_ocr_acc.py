@@ -13,7 +13,7 @@ from ModelsTestFramework import RepoDataset
 from ModelsTestFramework import TestOcrModelFunction
 
 
-def get_model_list(filename='models_list_layout.yaml'):
+def get_model_list(filename='models_list.yaml'):
     import sys
     result = []
     with open(filename) as f:
@@ -54,7 +54,7 @@ def test_ocr_accuracy_get_pretrained_model(yml_name):
 
 @allure.story('eval')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True, False])
+@pytest.mark.parametrize("use_gpu", [True])
 def test_ocr_accuracy_eval(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
@@ -161,7 +161,7 @@ def test_ocr_accuracy_predict_recovery():
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
-@pytest.mark.parametrize("use_gpu", [True, False])
+@pytest.mark.parametrize("use_gpu", [True])
 def test_ocr_funtion_train(yml_name, use_gpu):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     if use_gpu==True:
