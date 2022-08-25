@@ -125,7 +125,7 @@ def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
     hardware='_TensorRT'
     allure.dynamic.title(model_name+hardware+'_predict')
     allure.dynamic.description('预测库python预测')
-    
+    pytest.skip("not supported for tensorRT predict") 
     if (paddle.is_compiled_with_cuda()==False):
         pytest.skip("CPU not supported for tensorRT predict")
     category=get_category(yml_name)
