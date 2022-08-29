@@ -7,3 +7,4 @@ allure-pytest
 matplotlib
 chardet
 pyyaml
+paddleclas
