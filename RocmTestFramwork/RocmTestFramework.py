@@ -22,8 +22,22 @@ import re
 import ast
 import logging
 import os
+import allure
 
 logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
+
+def allure_step(cmd, output):
+    with allure.step("运行指令：{}".format(cmd)):
+           pass
+
+def get_model_list(filename='models_list.yaml'):
+    import sys
+    result = []
+    with open(filename) as f:
+      lines = f.readlines()
+      for line in lines:
+         result.append(line.strip('\n'))
+    return result
 
 def dependency_install(package):
     exit_code=1
@@ -35,6 +49,8 @@ def dependency_install(package):
 
 
 def exit_check_fucntion(exit_code, output, mode, log_dir=''):
+    if exit_code == 0:
+       allure.attach(output, 'output.log', allure.attachment_type.TEXT)
     assert exit_code == 0, " %s  model pretrained failed!   log information:%s" % (mode, output)
     assert 'Error' not in output, "%s  model failed!   log information:%s" % (mode, output)
     if 'ABORT!!!' in output:
@@ -63,7 +79,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple''' % (pid, self.repo, self.repo, self.repo)
+         cmd='''ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple;''' % (pid, self.repo, self.repo, self.repo)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
@@ -136,9 +152,10 @@ class TestClassModel():
           clas_result = subprocess.getstatusoutput(cmd)
           exit_code = clas_result[0]
           output = clas_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train')
 
-      def test_get_pretrained_model(self):
+      def test_class_get_pretrained_model(self):
           """
           get pretrained model
           """
@@ -150,6 +167,7 @@ class TestClassModel():
           clas_result = subprocess.getstatusoutput(cmd)
           exit_code = clas_result[0]
           output = clas_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'downlooad')
      
      
@@ -161,22 +179,24 @@ class TestClassModel():
           clas_result=subprocess.getstatusoutput(cmd)
           exit_code=clas_result[0]
           output=clas_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'export_model')
 
 
-      def test_class_predict(self, expect_id, expect_score):
+      def test_class_predict(self):
           """
           class predict 
           """
           cmd_gpu='cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=True -o Global.use_tensorrt=False -o Global.enable_mkldnn=False' % self.model
           cmd_cpu='cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=False -o Global.use_tensorrt=False -o Global.enable_mkldnn=False' % self.model
-          for cmd in [cmd_gpu, cmd_cpu]:
+          for cmd in [cmd_gpu]:
               clas_result=subprocess.getstatusoutput(cmd)
               exit_code=clas_result[0]
               output=clas_result[1]
               # check exit_code
               exit_check_fucntion(exit_code, output, 'predict')
-             
+              allure_step(cmd, output)
+              ''' 
               # check class_id and class_score 
               for line in output.split('\n'):
                   if 'class id(s)' in line:
@@ -192,7 +212,7 @@ class TestClassModel():
               with assume: assert clas_id == expect_id, "check clas_id failed!   real clas_id is: %s, expect clas_id is: %s" % (clas_id, expect_id)
               with assume: assert clas_score == approx(expect_score, abs=2e-2), "check class_score failed!   real class_score is: %s, expect class_score is: %s" % (clas_score,expect_score)
               print("*************************************************************************")
-
+              '''
 
 class TestOcrModel():
       def __init__(self, model, yaml):
