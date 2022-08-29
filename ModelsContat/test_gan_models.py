@@ -24,7 +24,6 @@ from RocmTestFramework import TestGanModel
 from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
 from RocmTestFramework import RepoDataset
-from RocmTestFramework import CustomInstruction
 from RocmTestFramework import clean_process
 from RocmTestFramework import get_model_list
 
