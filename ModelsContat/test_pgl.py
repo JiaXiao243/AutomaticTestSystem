@@ -2,9 +2,14 @@ import pytest
 import numpy as np
 import subprocess
 import re
+import allure
 
 from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
+
+def allure_step(cmd, output):
+    with allure.step("运行指令：{}".format(cmd)):
+           pass
 
 def custom_instruction(cmd, model):
          repo_result=subprocess.getstatusoutput(cmd)
@@ -14,32 +19,41 @@ def custom_instruction(cmd, model):
          allure.attach(output, model+'.log', allure.attachment_type.TEXT)
          assert exit_code == 0, " %s  failed!   log information:%s" % (model, output)
 
-def get_case_list(dir_path=''):
-    cmd='cd %s; `find . -maxdepth 1 -name "test_*.py" | sort `' % (dir_path)
+def set_case_list(dir_path=''):
+    cmd='cd %s; find . -maxdepth 1 -name "test_*.py" | sort ' % (dir_path)
+    print(cmd)
     repo_result=subprocess.getstatusoutput(cmd)
     exit_code=repo_result[0]
     output=repo_result[1]
     result=output
-   
+    print(result[0])
+    return result
 
+def get_case_list(filename='models_list.yaml'):
+    import sys
+    result = []
+    with open(filename) as f:
+      lines = f.readlines()
+      for line in lines:
+         result.append(line.strip('\n'))
     return result
 
 
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleScience')
+    RepoInit(repo='PGL')
 
 
 def teardown_module():
     """
     """
-    RepoRemove(repo='PGL')
+#    RepoRemove(repo='PGL')
 
 
 @allure.story('API')
-@pytest.mark.parametrize('case_name', get_case_list('PGL/tests'))
-def test_science_api(case_name):
+@pytest.mark.parametrize('case_name', get_case_list('pgl_api.txt'))
+def test_pgl_api(case_name):
     cmd='cd PGL/tests; python -m pytest -sv %s' % (case_name)
-    custom_instruction(cmd)
+    custom_instruction(cmd, case_name)
 

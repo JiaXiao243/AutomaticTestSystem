@@ -13,7 +13,6 @@ import os.path
 import platform
 import allure
 import filecmp
-from plot_paddle_torch import *
 import chardet
 import paddle
 

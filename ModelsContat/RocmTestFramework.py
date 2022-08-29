@@ -78,7 +78,7 @@ class RepoInit():
       def __init__(self, repo):
          self.repo=repo
          print("This is Repo Init!")
-         cmd='''git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt''' % (self.repo, self.repo)
+         cmd='''git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt; export PYTHONPATH=$PWD:$PYTHONPATH''' % (self.repo, self.repo)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
@@ -311,7 +311,7 @@ class TestSegModel():
          self.yaml=yaml
 
       def test_seg_train(self):
-          cmd='cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; rm -rf log; export CUDA_VISIBLE_DEVICES=0,1,2,3; python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s --do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50' % (self.yaml, self.model, self.yaml, self.model)
+          cmd='cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; rm -rf log; export CUDA_VISIBLE_DEVICES=0,1,2,3; python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50' % (self.yaml, self.model, self.yaml, self.model)
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
