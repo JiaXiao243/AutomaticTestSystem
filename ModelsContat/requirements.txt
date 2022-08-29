@@ -10,4 +10,3 @@ pyyaml
 paddleclas
 paddlenlp
 h5py
-paddlegan
