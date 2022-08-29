@@ -21,11 +21,8 @@ python -m pip install -r requirements.txt
 
 # export CUDA_VISIBLE_DEVICES=0,1
 which allure
-
 python -m pytest -sv $1  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 echo 'exit_code:'$?
-cp environment/environment.properties_linux ./result 
-mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
 exit $exit_code
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
