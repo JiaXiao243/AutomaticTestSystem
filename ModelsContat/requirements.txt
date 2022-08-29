@@ -8,3 +8,6 @@ matplotlib
 chardet
 pyyaml
 paddleclas
+paddlenlp
+h5py
+paddlegan

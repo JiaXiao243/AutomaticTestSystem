@@ -85,29 +85,7 @@ class RepoInit():
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
          logging.info("git clone"+self.repo+"sucessfuly!" )
 
-class RepoInitSummer():
-      def __init__(self, repo):
-         self.repo=repo
-         print("This is Repo Init!")
-         pid = os.getpid() 
-         cmd='''ps aux | grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; git clone https://github.com/summer243/%s.git; cd %s; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple''' % (pid, self.repo, self.repo, self.repo)
-         repo_result=subprocess.getstatusoutput(cmd)
-         exit_code=repo_result[0]
-         output=repo_result[1]
-         assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
-         logging.info("git clone"+self.repo+"sucessfuly!" )
 
-class RepoInitCustom():
-      def __init__(self, repo):
-         self.repo=repo
-         print("This is Repo Init!")
-         pid = os.getpid()
-         cmd='''ps aux | grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; git clone https://github.com/PaddlePaddle/%s.git;'''% (pid, self.repo, self.repo)
-         repo_result=subprocess.getstatusoutput(cmd)
-         exit_code=repo_result[0]
-         output=repo_result[1]
-         assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
-         logging.info("git clone"+self.repo+"sucessfuly!" )
 
 class RepoRemove():
       def __init__(self, repo):
@@ -310,6 +288,7 @@ class TestDetectionDygraphModel():
           exit_code = detection_result[0]
           output = detection_result[1]
           log_dir='PaddleDetection/log_'+self.model
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
 class TestDetectionStaticModel():
@@ -323,6 +302,7 @@ class TestDetectionStaticModel():
           exit_code = detection_result[0]
           output = detection_result[1]
           log_dir='PaddleDetection/static/log_'+self.model
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
 
@@ -339,6 +319,7 @@ class TestSegModel():
           exit_code = detection_result[0]
           output = detection_result[1]
           log_dir='PaddleSeg/log_'+self.model
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train', log_dir)
 
       def test_seg_eval(self):
@@ -346,6 +327,7 @@ class TestSegModel():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
 
 
@@ -360,13 +342,16 @@ class TestGanModel():
           gan_result = subprocess.getstatusoutput(cmd)
           exit_code = gan_result[0]
           output = gan_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train')
+         
 
       def test_gan_eval(self, cmd):
           print(cmd)
           repo_result=subprocess.getstatusoutput(cmd)
           exit_code=repo_result[0]
           output=repo_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'eval')
 
 class TestNlpModel():
@@ -378,6 +363,7 @@ class TestNlpModel():
           repo_result=subprocess.getstatusoutput(cmd)
           exit_code=repo_result[0]
           output=repo_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train')
 
 
@@ -404,6 +390,7 @@ class TestRecModel():
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
+          allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'train')
 
 class TestVideoModel():
