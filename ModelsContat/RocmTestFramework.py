@@ -78,7 +78,7 @@ class RepoInit():
       def __init__(self, repo):
          self.repo=repo
          print("This is Repo Init!")
-         cmd='''git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple;''' % (self.repo, self.repo)
+         cmd='''git clone https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt''' % (self.repo, self.repo)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
