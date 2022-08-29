@@ -3,9 +3,17 @@ import numpy as np
 import subprocess
 import re
 
-from RocmTestFramework import custom_instruction
 from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
+
+
+def custom_instruction(cmd, model):
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         allure_step(cmd, output)
+         allure.attach(output, model+'.log', allure.attachment_type.TEXT)
+         assert exit_code == 0, " %s  failed!   log information:%s" % (model, output)
 
 def get_case_list(dir_path=''):
     cmd='cd %s; `find . -maxdepth 1 -name "test_*.py" | sort `' % (dir_path)

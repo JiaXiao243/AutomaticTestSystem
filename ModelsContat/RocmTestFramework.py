@@ -108,15 +108,13 @@ class RepoDataset():
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
          
-class CustomInstruction():
-      def __init__(self, cmd, model, mode):
-         self.cmd=cmd
-         self.model=model
-         self.mode=mode
-         repo_result=subprocess.getstatusoutput(self.cmd)
+def custom_instruction(cmd, model):
+         repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
-         assert exit_code == 0, "%s of %s failed!   log information:%s" % (self.mode, self.model, output)
+         allure_step(cmd, output)
+         allure.attach(output, model+'.log', allure.attachment_type.TEXT)
+         assert exit_code == 0, " %s  failed!   log information:%s" % (model, output)
 
 
 class TestClassModel():

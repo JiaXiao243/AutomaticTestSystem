@@ -36,7 +36,7 @@ def setup_module():
 def teardown_module():
     """
     """
-#    RepoRemove(repo='PaddleClas')
+    RepoRemove(repo='PaddleClas')
 
 def setup_function():
     clean_process()

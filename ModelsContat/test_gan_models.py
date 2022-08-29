@@ -48,9 +48,11 @@ def teardown_module():
     """
     """
     RepoRemove(repo='PaddleGAN')
+
+
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list('gan_model_list.yaml'))
-def test_class_funtion_train(yml_name):
+def test_gan_funtion_train(yml_name):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     hardware='_GPU'
     allure.dynamic.title(model_name+hardware+'_train')

@@ -50,7 +50,7 @@ def teardown_module():
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list('detection_model_list.yaml'))
-def test_class_funtion_train(yml_name):
+def test_detection_funtion_train(yml_name):
     model_name=os.path.splitext(os.path.basename(yml_name))[0]
     hardware='_GPU'
     allure.dynamic.title(model_name+hardware+'_train')

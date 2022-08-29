@@ -19,7 +19,7 @@ import subprocess
 import re
 
 from RocmTestFramework import TestRecModel
-from RocmTestFramework import RepoInitCustom
+from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
 from RocmTestFramework import RepoDataset
 from RocmTestFramework import clean_process
@@ -28,7 +28,7 @@ from RocmTestFramework import clean_process
 def setup_module():
     """
     """
-    RepoInitCustom(repo='PaddleRec')
+    RepoInit(repo='PaddleRec')
 
 def teardown_module():
     """
