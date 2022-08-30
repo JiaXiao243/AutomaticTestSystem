@@ -408,7 +408,7 @@ class TestOcrModelFunction():
 
       def test_ocr_get_pretrained_model(self):
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
-          if (self.category=='table') or (self.category=='kie/vi_layoutxlm'):
+          if (self.category=='table') or (self.category=='kie/vi_layoutxlm') or (self.category=='e2e'):
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
           elif self.category=='picodet/legacy_model/application/layout_analysis':
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model']
@@ -530,7 +530,7 @@ class TestOcrModelFunction():
           elif self.category=='sr':
              sr_image_shape=self.testcase_yml[self.model]['sr_image_shape']
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, sr_image_shape, use_gpu, use_tensorrt, enable_mkldnn)
-          elif self.category=='kie/vi_layoutxlm':
+          elif (self.category=='kie/vi_layoutxlm') or (self.category=='e2e'):
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='picodet/legacy_model/application/layout_analysis':
              if use_gpu==True:
@@ -538,7 +538,6 @@ class TestOcrModelFunction():
              else:
                  use_gpu='cpu'
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (use_gpu)
-        
          
           if self.model=='SLANet':
               cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
