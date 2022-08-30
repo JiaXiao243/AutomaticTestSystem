@@ -4,7 +4,7 @@ import subprocess
 import re
 import allure
 
-from RocmTestFramework import RepoInit
+from RocmTestFramework import RepoInitTag
 from RocmTestFramework import RepoRemove
 
 def allure_step(cmd, output):
@@ -42,7 +42,7 @@ def get_case_list(filename='models_list.yaml'):
 def setup_module():
     """
     """
-    RepoInit(repo='PGL')
+    RepoInitTag(repo='PGL', tag='2.2.4')
 
 
 def teardown_module():
