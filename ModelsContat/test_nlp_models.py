@@ -40,7 +40,7 @@ def setup_function():
 
 def test_bert_pretrain():
     model = TestNlpModel(directory='examples/language_model/bert/')
-    cmd='''cd model_zoo/bert/; 
+    cmd='''cd PaddleNLP/model_zoo/bert/; 
            python create_pretraining_data.py --input_file=data/sample_text.txt --output_file=data/training_data.hdf5 --bert_model=bert-base-uncased --max_seq_length=128 --max_predictions_per_seq=20 --masked_lm_prob=0.15 --random_seed=12345 --dupe_factor=5;
            python -m paddle.distributed.launch --gpus "0,1,2,3" run_pretrain.py --model_type bert --model_name_or_path bert-base-uncased --max_predictions_per_seq 20 --batch_size 32  --learning_rate 1e-4  --weight_decay 1e-2 --adam_epsilon 1e-6 --warmup_steps 10000 --num_train_epochs 1 --input_dir data/   --output_dir pretrained_models/ --logging_steps 1  --save_steps 20000 --max_steps 1000000 --device gpu --use_amp False'''
     model.test_nlp_train(cmd=cmd)
