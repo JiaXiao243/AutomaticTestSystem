@@ -59,5 +59,5 @@ def test_pgl_api(case_name):
 
 @allure.story('models')
 @pytest.mark.parametrize('cmd', get_case_list('pgl_models.txt'))
-def test_pgl_api(cmd):
+def test_pgl_models(cmd):
     custom_instruction(cmd)
