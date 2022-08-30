@@ -58,6 +58,8 @@ def test_pgl_api(case_name):
     custom_instruction(cmd, case_name)
 
 @allure.story('models')
-@pytest.mark.parametrize('cmd', get_case_list('pgl_models.txt'))
-def test_pgl_models(cmd):
+@pytest.mark.parametrize('model_cmd', get_case_list('pgl_models.txt'))
+def test_pgl_models(model_cmd):
+    cmd1='cd PGL/examples/citation_benchmark;'
+    cmd= cmd1+model_cmd
     custom_instruction(cmd)
