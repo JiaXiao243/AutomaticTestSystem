@@ -4,8 +4,20 @@ import subprocess
 import re
 import allure
 
-from RocmTestFramework import RepoInitTag
+# from RocmTestFramework import RepoInitTag
 from RocmTestFramework import RepoRemove
+
+class RepoInitTag():
+      def __init__(self, repo, tag):
+         self.repo=repo
+         self.tag=tag
+         print("This is Repo Init!")
+         cmd='''git clone -b %s  https://github.com/PaddlePaddle/%s.git --depth 1; cd %s; python -m pip install --upgrade pip; python -m pip install -r requirements.txt;''' % (self.tag, self.repo, self.repo)
+         repo_result=subprocess.getstatusoutput(cmd)
+         exit_code=repo_result[0]
+         output=repo_result[1]
+         assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
+         logging.info("git clone"+self.repo+"sucessfuly!" )
 
 def allure_step(cmd, output):
     with allure.step("运行指令：{}".format(cmd)):
