@@ -30,16 +30,6 @@ def setup_module():
     RepoInit(repo='PaddleOCR')
     RepoDataset()
 
-@allure.story('paddle_ocr_cli')
-@pytest.mark.parametrize('cmd', get_model_list('ocr_cli_list.txt'))
-def test_Speech_accuracy_cli(cmd):
-    allure.dynamic.title('paddle_ocr_cli')
-    allure.dynamic.description('paddle_ocr_cli')
-
-    model = TestOcrModelFunction()
-    print(cmd)
-    model.test_ocr_cli(cmd)
-
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
 def test_ocr_accuracy_get_pretrained_model(yml_name):
@@ -150,14 +140,6 @@ def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
     print(category)
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_ocr_rec_predict(True, use_tensorrt, 0)
-
-def test_ocr_accuracy_predict_recovery():
-    hardware='_GPU'
-    allure.dynamic.title('layout'+hardware+'_predict_recovery')
-    allure.dynamic.description('预测库预测')
-
-    model = TestOcrModelFunction()
-    model.test_ocr_predict_recovery(True)
 
 @allure.story('train')
 @pytest.mark.parametrize('yml_name', get_model_list())
