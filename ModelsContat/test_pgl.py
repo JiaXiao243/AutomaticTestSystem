@@ -11,7 +11,7 @@ def allure_step(cmd, output):
     with allure.step("运行指令：{}".format(cmd)):
            pass
 
-def custom_instruction(cmd, model):
+def custom_instruction(cmd, model='output'):
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
@@ -57,3 +57,7 @@ def test_pgl_api(case_name):
     cmd='cd PGL/tests; python -m pytest -sv %s' % (case_name)
     custom_instruction(cmd, case_name)
 
+@allure.story('models')
+@pytest.mark.parametrize('cmd', get_case_list('pgl_models.txt'))
+def test_pgl_api(cmd):
+    custom_instruction(cmd)
