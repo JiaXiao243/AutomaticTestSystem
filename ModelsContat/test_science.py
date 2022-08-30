@@ -43,7 +43,7 @@ def setup_module():
     """
     """
     RepoInit(repo='PaddleScience')
-    cmd = '''cd PaddleScience; export PYTHONPATH=$PWD:$PYTHONPATH >> ~/.bashrc; source ~/.bashrc'''
+    cmd = '''cd PaddleScience; export PYTHONPATH=$PWD:$PYTHONPATH'''
     os.system(cmd)
     
 
@@ -62,11 +62,12 @@ def test_science_api():
 @allure.story('API')
 @pytest.mark.parametrize('case_name', get_case_list('science_api.txt'))
 def test_science_api(case_name):
-    cmd='cd PaddleScience/tests/test_api; python -m pytest -sv %s' % (case_name)
+    cmd='cd PaddleScience; export PYTHONPATH=$PWD:$PYTHONPATH; cd tests/test_api; python -m pytest -sv %s' % (case_name)
     custom_instruction(cmd, case_name)
 
 @allure.story('modles')
+@pytest.mark.skip(reason="release not supported")
 @pytest.mark.parametrize('case_name', get_case_list('science_models.txt'))
 def test_science_models(case_name):
-    cmd='cd PaddleScience/tests/test_models; python -m pytest -sv %s' % (case_name)
+    cmd='cd PaddleScience; export PYTHONPATH=$PWD:$PYTHONPATH; cd tests/test_models; python -m pytest -sv %s' % (case_name)
     custom_instruction(cmd, case_name)

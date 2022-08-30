@@ -24,9 +24,6 @@ def get_model_list():
       for line in lines:
          r = re.search('/(.*)/', line)
          result.append(line.strip('\n'))
-    ci_flag=os.environ.get('ci_flag',0)
-    if ci_flag=='1':
-       result = random.sample(result, 2)
     return result
 
 def get_category(yml_name):
@@ -46,6 +43,7 @@ def setup_module():
     """
     RepoInit3D(repo='Paddle3D')
     RepoDataset3D()
+    ci_flag=os.environ.get('ci_flag',0)
     if ci_flag=='1':
        test_num=1
     else:
