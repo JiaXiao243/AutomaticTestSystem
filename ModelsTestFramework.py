@@ -436,7 +436,7 @@ class TestOcrModelFunction():
               cmd=self.testcase_yml['cmd'][self.category]['eval'] % (self.yaml, use_gpu, self.model) 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
-          cmd=cmd.replace('_udml.yaml','.yaml')
+          cmd=cmd.replace('_udml.yml','.yml')
           print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
@@ -481,7 +481,7 @@ class TestOcrModelFunction():
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
-             cmd=cmd.replace('_udml.yaml','.yaml')
+          cmd=cmd.replace('_udml.yml','.yml')
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          
@@ -501,7 +501,7 @@ class TestOcrModelFunction():
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           else:
               cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (self.yaml, use_gpu, self.model, self.model) 
-          cmd=cmd.replace('_udml.yaml','.yaml')
+          cmd=cmd.replace('_udml.yml','.yml')
           print(cmd)
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
