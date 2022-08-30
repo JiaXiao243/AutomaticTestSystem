@@ -10,3 +10,5 @@ pyyaml
 paddleclas
 paddlenlp
 h5py
+attrdict
+pgl

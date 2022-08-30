@@ -3,6 +3,7 @@ import numpy as np
 import subprocess
 import re
 import allure
+import os
 
 from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
@@ -42,6 +43,9 @@ def setup_module():
     """
     """
     RepoInit(repo='PaddleScience')
+    cmd = '''cd PaddleScience; export PYTHONPATH=$PWD:$PYTHONPATH >> ~/.bashrc; source ~/.bashrc'''
+    os.system(cmd)
+    
 
 
 def teardown_module():
