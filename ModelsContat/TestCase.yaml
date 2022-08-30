@@ -73,6 +73,13 @@ det_r50_db++_td_tr:
     det_algorithm:  DB++
     dataset: td_tr
 
+ch_PP-OCRv3_det_cml:
+    model_yaml: configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
+    eval_hmean: 0.895
+    det_algorithm:  Distillation
+    dataset: icdar2015
+
 rec_vitstr_none_ce:
     model_yaml: configs/rec/rec_vitstr_none_ce.yml
     paddle_train_acc: 0.8089 
@@ -101,6 +108,13 @@ rec_r45_visionlan:
     rec_algorithm: VisionLAN
     rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
     dataset: data_lmdb_release
+
+ch_PP-OCRv3_rec_distillation:
+    model_yaml: configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
+    eval_hmean: 0.895
+    det_algorithm:  Distillation
+    dataset: SimpleDataSet
 
 sr_tsrn_transformer_strock:
     model_yaml: configs/sr/sr_tsrn_transformer_strock.yml
