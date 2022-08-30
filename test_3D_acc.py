@@ -118,8 +118,6 @@ def test_3D_accuracy_predict_python(yml_name, use_gpu):
     allure.dynamic.description('预测库python预测')
 
     category=get_category(yml_name)
-    if (category=='squeezesegv3'):
-        pytest.skip("not supoorted for python predict")
     model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
     model.test_3D_predict_python(use_gpu, False)
 
