@@ -37,10 +37,12 @@ def setup_module():
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/coco.py;
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/voc.py;
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/widerface.py;
+                     sed -ie '/records = records\[:10\]/d'  ppdet/data/source/keypoint_coco.py;
                      sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/coco.py;
                      sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/voc.py;
-                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/widerface.py;''')
-
+                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/widerface.py
+                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/keypoint_coco.py''')
+                      
     
 def teardown_module():
     """
@@ -55,5 +57,7 @@ def test_detection_funtion_train(yml_name):
     hardware='_GPU'
     allure.dynamic.title(model_name+hardware+'_train')
     allure.dynamic.description('训练')
+    if (model_name=='tinypose_128x96') or (model_name=='fairmot_dla34_30e_1088x608'):
+        pytest.skip("skip, run time too long")
     model = TestDetectionDygraphModel(model=model_name, yaml=yml_name)
     model.test_detection_train()
