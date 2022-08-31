@@ -1,9 +1,9 @@
-ppcls/configs/ImageNet/PPLCNet_x1_0
-ppcls/configs/ImageNet/ResNet50_vd
-ppcls/configs/ImageNet/MobileNetV3_large_x1_0
-ppcls/configs/ImageNet/ResNet50
-ppcls/configs/ImageNet/MobileNetV1
-ppcls/configs/ImageNet/HRNet_W18_C
+ppcls/configs/ImageNet/PPLCNet/PPLCNet_x1_0.yaml
+ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
+ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
+ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
 ppcls/configs/ImageNet/VGG/VGG16.yaml
 ppcls/configs/ImageNet/PPLCNetV2/PPLCNetV2_base.yaml
 ppcls/configs/ImageNet/PPHGNet/PPHGNet_tiny.yaml
