@@ -33,7 +33,7 @@ def setup_module():
     """
     """
     RepoInit(repo='PaddleSeg')
-    RepoDataset(cmd='''cd PaddleSeg; mkdir data; cd data; rm -rf cityscapes; ln -s /ssd2/ce_data/PaddleSeg/cityscape cityscapes; cd ..''') 
+    RepoDataset(cmd='''cd PaddleSeg; mkdir data; cd data; rm -rf cityscapes; ln -s /ssd2/ce_data/PaddleSeg/cityscape cityscapes; ln -s /ssd2/ce_data/PaddleSeg/mini_supervisely mini_supervisely''') 
 
 
 def teardown_module():
