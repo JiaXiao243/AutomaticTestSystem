@@ -66,6 +66,8 @@ def teardown_module():
 @allure.story('API')
 @pytest.mark.parametrize('case_name', get_case_list('pgl_api.txt'))
 def test_pgl_api(case_name):
+    if (case_name=='test_dist_graph.py') or (case_name=='test_static_graph.py'):
+        pytest.skip("not supoorted")
     cmd='cd PGL/tests; python -m pytest -sv %s' % (case_name)
     custom_instruction(cmd, case_name)
 
