@@ -355,7 +355,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'cli')
 
       def test_ocr_train(self, use_gpu):
-          if self.category=='rec':
+          if self.category=='rec' or 'rec/PP-OCRv3':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, use_gpu, self.model)
           elif self.category=='picodet/legacy_model/application/layout_analysis':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (use_gpu)

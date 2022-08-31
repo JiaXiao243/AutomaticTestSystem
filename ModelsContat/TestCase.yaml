@@ -162,3 +162,10 @@ picodet_lcnet_x2_5_layout:
    eval_pretrained_model: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
    eval_acc: 0.795999998408
    dataset: pubtabnet
+
+e2e_r50_vd_pg:
+   model_yaml: configs/e2e/e2e_r50_vd_pg.yml
+   eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar
+   eval_acc: 0.795999998408
+   dataset: total_text
+
