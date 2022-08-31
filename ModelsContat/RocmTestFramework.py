@@ -124,6 +124,8 @@ class TestClassModel():
 
       def test_class_train(self):
           cmd='cd PaddleClas; export CUDA_VISIBLE_DEVICES=0,1,2,3; python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s -o DataLoader.Train.dataset.cls_label_path="./dataset/flowers102/train_list.txt" -o DataLoader.Train.dataset.image_root="./dataset/flowers102/" -o DataLoader.Eval.dataset.cls_label_path="./dataset/flowers102/val_list.txt" -o DataLoader.Eval.dataset.image_root="./dataset/flowers102/" -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32' % self.yaml
+          if self.model==PPLCNetV2_base:
+             cmd=cmd.replace('DataLoader.Train.sampler.batch_size','DataLoader.Train.sampler.first_bs=32')            
           clas_result = subprocess.getstatusoutput(cmd)
           exit_code = clas_result[0]
           output = clas_result[1]
