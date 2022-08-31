@@ -134,7 +134,7 @@ class TestClassModel():
           """
           get pretrained model
           """
-          legendary_models = ['ResNet50', 'ResNet50_vd', 'ResNet101', 'MobileNetV3_large_x1_0', 'VGG16']
+          legendary_models = ['ResNet50', 'ResNet50_vd', 'ResNet101', 'MobileNetV3_large_x1_0', 'VGG16', 'PPLCNet_x1_0', 'PPLCNetV2_base', 'PPHGNet_tiny']
           if self.model in legendary_models:
              cmd='cd PaddleClas;wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams' % self.model
           else:
