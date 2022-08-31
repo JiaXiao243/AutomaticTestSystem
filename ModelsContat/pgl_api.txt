@@ -8,8 +8,6 @@ test_graph.py
 test_hetergraph.py
 test_math.py
 test_partition.py
-test_pool.py
 test_sample.py
 test_shared_embedding.py
 test_static_graph.py
-test_transform.py

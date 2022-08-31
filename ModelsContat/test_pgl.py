@@ -17,7 +17,6 @@ class RepoInitTag():
          exit_code=repo_result[0]
          output=repo_result[1]
          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
-         logging.info("git clone"+self.repo+"sucessfuly!" )
 
 def allure_step(cmd, output):
     with allure.step("运行指令：{}".format(cmd)):
@@ -66,6 +65,8 @@ def teardown_module():
 @allure.story('API')
 @pytest.mark.parametrize('case_name', get_case_list('pgl_api.txt'))
 def test_pgl_api(case_name):
+    if (case_name=='test_dist_graph.py') or (case_name=='test_static_graph.py'):
+        pytest.skip("not supoorted")
     cmd='cd PGL/tests; python -m pytest -sv %s' % (case_name)
     custom_instruction(cmd, case_name)
 

@@ -19,4 +19,3 @@ python train.py --conf config/transformer.yaml --dataset citeseer --epoch 2
 python train.py --conf config/ssgc.yaml --dataset cora --epoch 2
 python train.py --conf config/ssgc.yaml --dataset pubmed --epoch 2
 python train.py --conf config/ssgc.yaml --dataset citeseer --epoch 2
-

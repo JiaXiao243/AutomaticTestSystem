@@ -54,11 +54,6 @@ def teardown_module():
     RepoRemove(repo='PaddleScience')
 
 
-def test_science_api():
-    cmd='''PaddleScience/tests/test_api/; 
-    model.test_nlp_train(cmd=cmd)'''
-
-
 @allure.story('API')
 @pytest.mark.parametrize('case_name', get_case_list('science_api.txt'))
 def test_science_api(case_name):
