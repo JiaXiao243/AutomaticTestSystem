@@ -50,7 +50,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt; cd ..; python -m pip install paddleocr; python -m pip install paddleclas; git clone -b develop https://github.com/paddlepaddle/PaddleDetection.git --depth 1; cd PaddleDetection; python -m pip install -r requirements.txt; cd ..;''' % (self.repo, self.repo)
+         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt;''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -355,7 +355,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'cli')
 
       def test_ocr_train(self, use_gpu):
-          if self.category=='rec' or 'rec/PP-OCRv3':
+          if self.category=='rec' or self.category=='rec/PP-OCRv3':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (self.yaml, self.yaml, use_gpu, self.model)
           elif self.category=='picodet/legacy_model/application/layout_analysis':
              cmd=self.testcase_yml['cmd'][self.category]['train'] % (use_gpu)
