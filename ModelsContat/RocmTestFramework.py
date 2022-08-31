@@ -282,6 +282,7 @@ class TestDetectionDygraphModel():
 
       def test_detection_train(self):
           cmd='cd PaddleDetection; export CUDA_VISIBLE_DEVICES=0,1,2,3; python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s tools/train.py -c %s -o TrainReader.batch_size=1 epoch=3' % (self.model, self.yaml)
+          print(cmd)
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
           output = detection_result[1]
