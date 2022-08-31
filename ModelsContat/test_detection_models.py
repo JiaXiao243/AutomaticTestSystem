@@ -37,10 +37,12 @@ def setup_module():
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/coco.py;
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/voc.py;
                      sed -ie '/records = records\[:10\]/d'  ppdet/data/source/widerface.py;
+                     sed -ie '/records = records\[:10\]/d'  ppdet/data/source/keypoint_coco.py;
                      sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/coco.py;
                      sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/voc.py;
-                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/widerface.py;''')
-
+                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/widerface.py
+                     sed -i '/samples in file/i\        records = records[:10]'  ppdet/data/source/keypoint_coco.py''')
+                      
     
 def teardown_module():
     """
