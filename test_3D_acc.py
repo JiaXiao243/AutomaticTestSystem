@@ -49,7 +49,7 @@ def setup_module():
     else:
        test_num=8
     cmd='shuf -n %s models_list_3D_all.yaml >> models_list_3D.yaml' % test_num
-    os.sysytem(cmd)
+    os.system(cmd)
 
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
