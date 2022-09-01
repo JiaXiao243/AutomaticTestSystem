@@ -511,7 +511,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'export_model')
 
       def test_ocr_rec_predict(self, use_gpu, use_tensorrt, enable_mkldnn):
-          if self.category=='rec':
+          if self.category=='rec/PP-OCRv3':
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
              rec_image_shape=rec_image_shape_dict[algorithm]
@@ -520,11 +520,11 @@ class TestOcrModelFunction():
              print(rec_image_shape)
           # cmd='cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;' % (self.model, rec_image_shape, rec_algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
-          elif self.category=='det':
+          elif self.category=='det/ch_PP-OCRv3':
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
-          elif self.category=='table':
+          elif self.category=='table': or self.category=='e2e'
               cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='sr':
              sr_image_shape=self.testcase_yml[self.model]['sr_image_shape']
