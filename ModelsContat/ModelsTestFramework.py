@@ -524,7 +524,7 @@ class TestOcrModelFunction():
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
              cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
-          elif self.category=='table': or self.category=='e2e'
+          elif self.category=='table' or self.category=='e2e':
               cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='sr':
              sr_image_shape=self.testcase_yml[self.model]['sr_image_shape']
