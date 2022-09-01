@@ -49,5 +49,7 @@ def test_seg_funtion_train(yml_name):
     hardware='_GPU'
     allure.dynamic.title(model_name+hardware+'_train')
     allure.dynamic.description('训练')
+    if (model_name=='pp_humanseg_lite_mini_supervisely'):
+        pytest.skip("skip, run time too long")
     model = TestSegModel(model=model_name, yaml=yml_name)
     model.test_seg_train()
