@@ -19,7 +19,7 @@ from ModelsTestFramework import Test3DModelFunction
 def get_model_list():
     import sys
     result = []
-    with open('models_list_3D.yaml') as f:
+    with open('models_list_3D_all.yaml') as f:
       lines = f.readlines()
       for line in lines:
          r = re.search('/(.*)/', line)
@@ -41,7 +41,7 @@ def get_hardware():
 def setup_module():
     """
     """
-#    RepoInit3D(repo='Paddle3D')
+    RepoInit3D(repo='Paddle3D')
     RepoDataset3D()
     print('setup')
     ci_flag=os.environ.get('ci_flag',0)
