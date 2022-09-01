@@ -19,7 +19,14 @@ from ModelsTestFramework import Test3DModelFunction
 def get_model_list():
     import sys
     result = []
-    with open('models_list_3D_all.yaml') as f:
+    ci_flag=os.environ.get('ci_flag',0)
+    if ci_flag=='1':
+       filename='models_list_3D_CI.yaml'
+       print('ci_flag=1')
+    else:
+       filename='models_list_3D_CE.yaml'
+       print('ci_flag=0')
+    with open(filename) as f:
       lines = f.readlines()
       for line in lines:
          r = re.search('/(.*)/', line)
@@ -43,16 +50,6 @@ def setup_module():
     """
     RepoInit3D(repo='Paddle3D')
     RepoDataset3D()
-    print('setup')
-    ci_flag=os.environ.get('ci_flag',0)
-    if ci_flag=='1':
-       test_num=1
-       print('ci_flag=1')
-    else:
-       test_num=8
-    cmd='shuf -n %s models_list_3D_all.yaml >> models_list_3D.yaml' % test_num
-    print(cmd)
-    os.system(cmd)
 
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
