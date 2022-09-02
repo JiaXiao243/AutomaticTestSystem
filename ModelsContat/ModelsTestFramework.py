@@ -17,7 +17,7 @@ import chardet
 import paddle
 
 
-rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224', 'VisionLAN':'3,64,256' }
+rec_image_shape_dict={'CRNN':'3,32,100', 'ABINet':'3,32,128', 'ViTSTR':'1,224,224', 'VisionLAN':'3,64,256', 'Distillation':'3,32,100'}
 
 def metricExtraction(keyword, output):
     for line in output.split('\n'):
