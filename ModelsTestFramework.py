@@ -66,7 +66,7 @@ class RepoInit3D():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip uninstall -y paddle3d; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; git log -5; python -m pip install -r requirements.txt; python -m pip uninstall -y paddle3d; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
