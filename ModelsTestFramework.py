@@ -679,7 +679,7 @@ class Test3DModelFunction():
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.category, self.model, self.model, infer_image)
           elif self.model=='squeezesegv3_rangenet21_semantickitti' or self.model=='squeezesegv3_rangenet53_semantickitti':
-             cmd='cd Paddle3D; python deploy/%s/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/squeezesegv3.pdiparams --lidar_file %s --img_mean 12.12,10.88,0.23,-1.04,0.21 --img_std 12.32,11.47,6.91,0.86,0.16' % (self.category, self.model, self.model, infer_image)
+             cmd='cd Paddle3D; python deploy/%s/python/infer.py --model_file exported_model/%s/squeezesegv3.pdmodel --params_file exported_model/%s/squeezesegv3.pdiparams --lidar_file %s --img_mean 12.12,10.88,0.23,-1.04,0.21 --img_std 12.32,11.47,6.91,0.86,0.16' % (self.category, self.model, self.model, infer_image)
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/squeezesegv3.pdmodel --params_file exported_model/%s/squeezesegv3.pdiparams --lidar_file %s --img_mean 12.12,10.88,0.23,-1.04,0.21 --img_std 12.32,11.47,6.91,0.86,0.16' % (self.category, self.model, self.model, infer_image)
 
