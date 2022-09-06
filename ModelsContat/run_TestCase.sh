@@ -1,9 +1,9 @@
 # rm -rf PaddleOCR/rec_*
 # curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 # ubuntu
-# apt-get update
-# apt-get install -y nodejs
-# apt install -y openjdk-8-jdk
+apt-get update
+apt-get install -y nodejs
+apt install -y openjdk-8-jdk
 
 # centos
 yum update -y > /dev/null
