@@ -6,7 +6,7 @@ do
 echo $repo
 git clone http://github.com/PaddlePaddle/$repo.git
 cd  $repo
-if [$repo!='PaddleSpeech'];then
+if [ "$repo"! = "PaddleSpeech" ];then
 python -m pip install -r requirements.txt
 fi
 python -m pip install .
