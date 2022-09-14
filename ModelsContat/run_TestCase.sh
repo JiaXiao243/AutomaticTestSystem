@@ -7,15 +7,15 @@ ln -s /usr/bin/nodejs /usr/bin/node
 apt install -y openjdk-8-jdk
 
 # centos
-# yum update -y > /dev/null
-# yum install -y nodejs > /dev/null
-# yum install -y java-1.8.0-openjdk.x86_6 > /dev/null
-# yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
-# export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.342.b07-1.el7_9.x86_64
-# export JRE_HOME=$JAVA_HOME/jre
-# export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
-# export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
-# export PATH=/usr/bin/allure:$PATH
+yum update -y > /dev/null
+yum install -y nodejs > /dev/null
+yum install -y java-1.8.0-openjdk.x86_6 > /dev/null
+yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.342.b07-1.el7_9.x86_64
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
+export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+export PATH=/usr/bin/allure:$PATH
 rm -rf /usr/bin/allure
 ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install -r requirements.txt
