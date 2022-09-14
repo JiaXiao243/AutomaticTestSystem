@@ -54,7 +54,7 @@ cmd:
        predict: 'cd PaddleDetection; python deploy/python/infer.py --model_dir=output_inference/picodet_lcnet_x1_0_layout/ --image_file=docs/images/layout.jpg --device=%s'
        slim: '--slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
     e2e:
-        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
+       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_e2e.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_en/img_10.jpg";'
@@ -113,6 +113,24 @@ rec_r45_visionlan:
     eval_acc: 0.90
     rec_image_shape: '3,64,256'
     rec_algorithm: VisionLAN
+    rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
+    dataset: data_lmdb_release
+
+rec_mv3_tps_bilstm_att:
+    model_yaml: configs/rec/rec_mv3_tps_bilstm_att.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_tps_bilstm_att_v2.0_train.tar
+    eval_acc: 0.90
+    rec_image_shape: '3,64,256'
+    rec_algorithm: RARE
+    rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
+    dataset: data_lmdb_release
+
+rec_resnet_stn_bilstm_att:
+    model_yaml: configs/rec/rec_resnet_stn_bilstm_att.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/dygraph_v2.1/rec/rec_resnet_stn_bilstm_att.tar
+    eval_acc: 0.90
+    rec_image_shape: '3,64,256'
+    rec_algorithm: RARE
     rec_char_dict_path: ./ppocr/utils/ic15_dict.txt
     dataset: data_lmdb_release
 
