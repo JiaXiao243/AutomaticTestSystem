@@ -1,8 +1,9 @@
 # rm -rf PaddleOCR/rec_*
 # curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-# ubuntu
+ubuntu
 # apt-get update
 # apt-get install -y nodejs
+# ln -s /usr/bin/nodejs /usr/bin/node
 # apt install -y openjdk-8-jdk
 
 # centos
@@ -16,17 +17,24 @@ export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
 rm -rf /usr/bin/allure
-ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
+ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install --ignore-installed --user -r requirements.txt
 
 # export CUDA_VISIBLE_DEVICES=0,1
 which allure
 
-python -m pytest -sv $1  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
+ python -m pytest -sv $1  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 exit_code=$?
 echo 'exit_code:'$exit_code
 cp environment/environment.properties_linux ./result 
 mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
+set +x;
+export REPORT_SERVER="https://xly.bce.baidu.com/ipipe/ipipe-report"
+export REPORT_SERVER_USERNAME=$1
+export REPORT_SERVER_PASSWORD=$2
+curl -s ${REPORT_SERVER}/report/upload.sh | bash -s report_test $3 result
+echo "report uploaded"
+
 exit $exit_code
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
