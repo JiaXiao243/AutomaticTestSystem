@@ -118,3 +118,4 @@ zho
 h5py
 attrdict
 paddleclas
+pgl

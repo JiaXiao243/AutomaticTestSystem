@@ -19,8 +19,8 @@ export PATH=/usr/bin/allure:$PATH
 rm -rf /usr/bin/allure
 ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install -r requirements.txt
-
-# export CUDA_VISIBLE_DEVICES=0,1
+python -m pip install -r models_requirements.txt
+xport CUDA_VISIBLE_DEVICES=0,1
 which allure
 python -m pytest -sv $1  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 echo 'exit_code:'$?
