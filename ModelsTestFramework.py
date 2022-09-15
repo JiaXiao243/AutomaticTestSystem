@@ -181,7 +181,7 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=''):
        allure.attach(output, 'output.log', allure.attachment_type.TEXT)
     assert exit_code == 0, " %s  model pretrained failed!   log information:%s" % (mode, output)
     assert 'Error' not in output, "%s  model failed!   log information:%s" % (mode, output)
-    assert 'nan' not in output, "%s  model failed!   log information:%s" % (mode, output)
+#    assert 'nan' not in output, "%s  model failed!   log information:%s" % (mode, output)
     if 'ABORT!!!' in output:
          log_dir=os.path.abspath(log_dir)
          all_files=os.listdir(log_dir)
