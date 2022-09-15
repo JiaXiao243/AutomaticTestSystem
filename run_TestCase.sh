@@ -31,9 +31,9 @@ mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
 set +x;
 export REPORT_SERVER="https://xly.bce.baidu.com/ipipe/ipipe-report"
-export REPORT_SERVER_USERNAME=$1
-export REPORT_SERVER_PASSWORD=$2
-curl -s ${REPORT_SERVER}/report/upload.sh | bash -s report_test $3 result
+export REPORT_SERVER_USERNAME=$2
+export REPORT_SERVER_PASSWORD=$3
+curl -s ${REPORT_SERVER}/report/upload.sh | bash -s report_test $4 result
 echo "report uploaded"
 
 exit $exit_code
