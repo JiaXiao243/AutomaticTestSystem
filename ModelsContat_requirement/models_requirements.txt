@@ -26,7 +26,7 @@ grpcio>=1.27.2
 h5py
 imgaug==0.4.0
 inflect
-Jetpack >=4.5, <=4.6.1
+# Jetpack >=4.5, <=4.6.1
 jieba
 jsonlines
 kaldiio
@@ -97,7 +97,7 @@ soxbindings
 sympy>=1.10.1
 tb-nightly==1.15.0a20190801
 tensorboardX==1.8
-TensorRT>=7.2, <=8.0
+# TensorRT>=7.2, <=8.0
 termcolor>=1.1.0
 terminaltables
 textgrid
@@ -114,7 +114,7 @@ websocket
 wget
 yacs~=0.1.8
 yq
-zho
+# zho
 h5py
 attrdict
 paddleclas
