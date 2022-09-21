@@ -8,3 +8,11 @@ cd result
 ren environment.properties_win environment.properties
 cd ..
 allure generate ./result/ -o ./report_test/ --clean
+
+@echo off
+set REPORT_SERVER=https://xly.bce.baidu.com/ipipe/ipipe-report
+set REPORT_SERVER_USERNAME=%2
+set REPORT_SERVER_PASSWORD=%3
+curl -s %REPORT_SERVER%/report/upload.sh | bash -s report_test %4 result
+echo "report uploaded"
+
