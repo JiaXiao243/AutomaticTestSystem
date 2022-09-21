@@ -8,7 +8,7 @@ data_path:
 
 cmd:
     det:
-       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; python -m paddle.distributed.launch  tools/train.py -c %s  -o Train.loader.batch_size_per_card=2 Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir=output/%s'
+       train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet18_vd_pretrained.pdparams;  python -m paddle.distributed.launch  tools/train.py -c %s  -o Train.loader.batch_size_per_card=2 Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir=output/%s'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
        infer: 'cd PaddleOCR; python tools/infer_det.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_en/img_10.jpg" Global.test_batch_size_per_card=1'
