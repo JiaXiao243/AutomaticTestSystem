@@ -145,7 +145,7 @@ class RepoDataset():
             print(data_path)
             mv="ren"
             rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s; cd .. &  cd PaddleDetection & rd /s /q dataset & mklink /j dataset %s''' % (data_path, data_path)
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s &cd .. &  cd PaddleDetection & rd /s /q dataset & mklink /j dataset %s''' % (data_path, data_path)
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
