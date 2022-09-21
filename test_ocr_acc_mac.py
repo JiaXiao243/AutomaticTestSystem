@@ -14,7 +14,7 @@ from ModelsTestFramework import TestOcrModelFunction
 
 
 
-def get_model_list(filename='models_list.yaml'):
+def get_model_list(filename='models_list_ocr_test.yaml'):
     import sys
     result = []
     with open(filename) as f:
@@ -30,16 +30,6 @@ def setup_module():
     """
     RepoInit(repo='PaddleOCR')
     RepoDataset()
-
-@allure.story('paddle_ocr_cli')
-@pytest.mark.parametrize('cmd', get_model_list('ocr_cli_list.txt'))
-def test_Speech_accuracy_cli(cmd):
-    allure.dynamic.title('paddle_ocr_cli')
-    allure.dynamic.description('paddle_ocr_cli')
-
-    model = TestOcrModelFunction()
-    print(cmd)
-    model.test_ocr_cli(cmd)
 
 @allure.story('get_pretrained_model')
 @pytest.mark.parametrize('yml_name', get_model_list())
