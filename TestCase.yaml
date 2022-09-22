@@ -11,9 +11,9 @@ cmd:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet18_vd_pretrained.pdparams;  python -m paddle.distributed.launch  tools/train.py -c %s  -o Train.loader.batch_size_per_card=2 Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir=output/%s'
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;'
        eval: 'cd PaddleOCR; python tools/eval.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy'
-       infer: 'cd PaddleOCR; python tools/infer_det.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img="./doc/imgs_en/img_10.jpg" Global.test_batch_size_per_card=1'
+       infer: 'cd PaddleOCR; python tools/infer_det.py -c %s  -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.infer_img=%s Global.test_batch_size_per_card=1'
        export_model: 'cd PaddleOCR; python tools/export_model.py -c %s -o Global.use_gpu=%s Global.pretrained_model=./%s/best_accuracy Global.save_inference_dir=./models_inference/%s;'
-       predict: 'cd PaddleOCR; python tools/infer/predict_det.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"%s --det_algorithm=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
+       predict: 'cd PaddleOCR; python tools/infer/predict_det.py --image_dir=%s --det_model_dir="./models_inference/"%s --det_algorithm=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s'
     rec:
        train: 'cd PaddleOCR; export CUDA_VISIBLE_DEVICES=0; sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; python -m paddle.distributed.launch tools/train.py -c %s -o Global.use_gpu=%s Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 Global.print_batch_step=1;' 
        get_pretrained_model: 'cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s_train %s;' 
@@ -68,6 +68,8 @@ det_r18_vd_ct:
     eval_hmean: 0.8505
     det_algorithm:  CT
     dataset: total_text
+    infer_img: ./doc/imgs_en/img_10.jpg
+    
 
 det_r50_db++_icdar15:
     model_yaml: configs/det/det_r50_db++_icdar15.yml
@@ -75,6 +77,7 @@ det_r50_db++_icdar15:
     eval_hmean: 0.865
     det_algorithm:  DB++
     dataset: icdar15
+    infer_img: ./doc/imgs_en/img623.jpg
 
 det_r50_db++_td_tr:
     model_yaml: configs/det/det_r50_db++_td_tr.yml 
@@ -82,6 +85,7 @@ det_r50_db++_td_tr:
     eval_hmean: 0.895
     det_algorithm:  DB++
     dataset: td_tr
+    infer_img: ./doc/imgs_en/img_10.jpg
 
 ch_PP-OCRv3_det_cml:
     model_yaml: configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml
@@ -89,6 +93,7 @@ ch_PP-OCRv3_det_cml:
     eval_hmean: 0.895
     det_algorithm:  Distillation
     dataset: icdar2015
+    infer_img: ./doc/imgs_en/img_10.jpg
 
 rec_vitstr_none_ce:
     model_yaml: configs/rec/rec_vitstr_none_ce.yml

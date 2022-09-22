@@ -217,7 +217,8 @@ def readfile(filename):
          text = f.readline()
     return text
 
-def  check_infer_metric(category, output, dataset):
+def  check_infer_metric(category, output, dataset, infer_img='./doc/imgs_en/img_10.jpg'):
+     infer_img=os.path.basename(infer_img)
      if category=='rec':
         metric=metricExtraction('result', output)
         rec_docs=metric.strip().split('\t')[0]
@@ -239,10 +240,10 @@ def  check_infer_metric(category, output, dataset):
         print("*************************************************************************")
      elif category=='det':
         if 'det_ct' in output:     
-           allure_attach("PaddleOCR/output/det_ct/det_results/img_10.jpg", 'output/det_ct/det_results/img_10.jpg', allure.attachment_type.JPG)
+           allure_attach("PaddleOCR/output/det_ct/det_results/"+infer_img, 'output/det_ct/det_results/'+infer_img, allure.attachment_type.JPG)
            allure_attach("PaddleOCR/output/det_ct/predicts_ct.txt", 'output/det_ct/predicts_ct.txt', allure.attachment_type.TEXT)
         else:
-           allure_attach("PaddleOCR/checkpoints/det_db/det_results/img_10.jpg", 'checkpoints/det_db/det_results/img_10.jpg', allure.attachment_type.JPG)
+           allure_attach("PaddleOCR/checkpoints/det_db/det_results/"+infer_img, 'checkpoints/det_db/det_results/'+infer_img, allure.attachment_type.JPG)
            allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", 'checkpoints/det_db/predicts_db.txt', allure.attachment_type.TEXT)
  
         # allure_attach("./metric/predicts_db_"+dataset+".txt", "./metric/predicts_db_"+dataset+".txt", allure.attachment_type.TEXT)
@@ -278,7 +279,8 @@ def  check_infer_metric(category, output, dataset):
      else:
            pass
 
-def check_predict_metric(category, output, dataset):
+def check_predict_metric(category, output, dataset, infer_img='./doc/imgs_en/img_10.jpg'):
+    infer_img=os.path.basename(infer_img)
     if category=='rec':
           for line in output.split('\n'):
                   if 'Predicts of' in  line:
@@ -301,10 +303,10 @@ def check_predict_metric(category, output, dataset):
                             expect rec_scores is: %s" % (rec_scores, expect_rec_scores)
           print("*************************************************************************")
     elif category =='det':
-          allure_attach("PaddleOCR/inference_results/det_res_img_10.jpg", 'inference_results/det_res_img_10.jpg', allure.attachment_type.JPG)
+          allure_attach("PaddleOCR/inference_results/det_res_"+infer_img, 'inference_results/det_res_'+infer_img, allure.attachment_type.JPG)
           allure_attach("PaddleOCR/inference_results/det_results.txt", 'inference_results/det_results.txt', allure.attachment_type.TEXT)
           for line in output.split('\n'):
-                  if 'img_10.jpg' in  line:
+                  if infer_img in  line:
                       output_det=line
                       print(output_det)
                       break
@@ -483,7 +485,7 @@ class TestOcrModelFunction():
               if self.model=='picodet_lcnet_x2_5_layout':
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           else:
-              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model, self.testcase_yml[self.model]['infer_img'])
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
@@ -497,8 +499,10 @@ class TestOcrModelFunction():
           output = detection_result[1]
           allure_step(cmd, output)
           exit_check_fucntion(exit_code, output, 'infer')
-          check_infer_metric(self.category, output, self.dataset)          
-
+          if self.category=='det':
+             check_infer_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img']) 
+          else:
+             check_infer_metric(self.category, output, self.dataset)
 
       def test_ocr_export_model(self, use_gpu):
           if self.category=='picodet/legacy_model/application/layout_analysis':
@@ -530,7 +534,7 @@ class TestOcrModelFunction():
           elif self.category=='det':
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
-             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.testcase_yml[self.model]['infer_img'], self.model, algorithm, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='table':
               cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='sr':
@@ -558,7 +562,10 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'predict')
           # acc
           # metricExtraction('Predicts', output)
-          check_predict_metric(self.category, output, self.dataset)
+          if self.category=='det':
+             check_predict_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img'])
+          else:
+             check_predict_metric(self.category, output, self.dataset)
       
       def test_ocr_predict_recovery(self, use_gpu):
           cmd='cd PaddleOCR; python -m pip install -r ppstructure/recovery/requirements.txt; mkdir inference && cd inference; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar && tar xf en_PP-OCRv3_det_infer.tar; wget https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar && tar xf en_PP-OCRv3_rec_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar && tar xf en_ppstructure_mobile_v2.0_SLANet_infer.tar; wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_infer.tar && tar xf picodet_lcnet_x1_0_fgd_layout_infer.tar; cd ..; python ppstructure/predict_system.py --image_dir=./ppstructure/docs/table/1.png --det_model_dir=inference/en_PP-OCRv3_det_infer --rec_model_dir=inference/en_PP-OCRv3_rec_infer --rec_char_dict_path=./ppocr/utils/en_dict.txt --table_model_dir=inference/en_ppstructure_mobile_v2.0_SLANet_infer --table_char_dict_path=./ppocr/utils/dict/table_structure_dict.txt --layout_model_dir=inference/picodet_lcnet_x1_0_fgd_layout_infer --layout_dict_path=./ppocr/utils/dict/layout_dict/layout_publaynet_dict.txt --vis_font_path=./doc/fonts/simfang.ttf --recovery=True --save_pdf=False --output=./output/'
