@@ -68,7 +68,7 @@ det_r18_vd_ct:
     eval_hmean: 0.8505
     det_algorithm:  CT
     dataset: total_text
-    infer_img: ./doc/imgs_en/img_10.jpg
+    infer_img: ./doc/imgs_en/img623.jpg
     
 
 det_r50_db++_icdar15:
@@ -77,7 +77,7 @@ det_r50_db++_icdar15:
     eval_hmean: 0.865
     det_algorithm:  DB++
     dataset: icdar15
-    infer_img: ./doc/imgs_en/img623.jpg
+    infer_img: ./doc/imgs_en/img_10.jpg
 
 det_r50_db++_td_tr:
     model_yaml: configs/det/det_r50_db++_td_tr.yml 
