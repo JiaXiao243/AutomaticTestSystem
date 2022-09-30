@@ -104,7 +104,7 @@ class RepoInitSpeech():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b r1.1 https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b r1.2 https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -118,7 +118,7 @@ class RepoDatasetSpeech():
          sysstr = platform.system()
          if(sysstr =="Linux"):
             print ("config Linux data_path")
-            cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump; cd ../../../..; wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav; echo -e "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job'''
+            cmd='''cd PaddleSpeech/examples/zh_en_tts/tts3; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/zh_en_tts3/dump dump; cd ../../csmsc/vits; rm -rf dump; ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/vits/dump dump; cd ../../../..; wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav; echo "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job'''
          else:
             cmd='wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav; echo -e "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job'
          print(cmd)
