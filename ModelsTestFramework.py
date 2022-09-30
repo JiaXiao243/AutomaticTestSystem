@@ -122,6 +122,7 @@ class RepoDatasetSpeech():
          else:
             cmd='wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav; echo -e "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job'
          print(cmd)
+         cmd=platformAdapter(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
