@@ -1,23 +1,29 @@
-# rm -rf PaddleOCR/rec_*
-# curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 # ubuntu
-# apt-get update
-# apt-get install -y nodejs
-# ln -s /usr/bin/nodejs /usr/bin/node
-# apt install -y openjdk-8-jdk
-
+if [ -f "/etc/lsb-release" ];then
+cat /etc/lsb-release
+apt-get update
+apt-get install -y nodejs
+ln -s /usr/bin/nodejs /usr/bin/node
+apt install -y openjdk-8-jdk
+elif [ -f "/etc/redhat-release" ];then
+cat /etc/redhat-release
 # centos
 yum update -y > /dev/null
 yum install -y nodejs > /dev/null
-yum install -y java-1.8.0-openjdk.x86_6 > /dev/null
 yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.342.b07-1.el7_9.x86_64
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
-rm -rf /usr/bin/allure
-ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
+else
+# mac
+echo "mac_system"
+export HOMEBREW_BOTTLE_DOMAIN=''
+brew install allure
+fi
+# rm -rf /usr/bin/allure
+# ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install --ignore-installed --user -r requirements.txt
 
 # export CUDA_VISIBLE_DEVICES=0,1
