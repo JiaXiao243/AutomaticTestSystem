@@ -7,7 +7,7 @@ rem xcopy environment\environment.properties_win ./result /s /e /y /d
 rem cd result
 rem ren environment.properties_win environment.properties
 rem cd ..
-allure generate ./result/ -o ./report_test/ --clean
+call allure generate ./result/ -o ./report_test/ --clean
 echo start_report_uploaded
 set REPORT_SERVER=https://xly.bce.baidu.com/ipipe/ipipe-report
 set REPORT_SERVER_USERNAME=%2
