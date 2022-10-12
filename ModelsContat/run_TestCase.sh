@@ -14,6 +14,7 @@ cat /etc/redhat-release
 yum update -y > /dev/null
 yum install -y nodejs > /dev/null
 yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
+ln -s /usr/bin/nodejs /usr/bin/node
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
