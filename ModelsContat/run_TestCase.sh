@@ -2,6 +2,7 @@
 if [ -f "/etc/lsb-release" ];then
 cat /etc/lsb-release
 apt-get update
+apt-get install curl -y
 apt-get install -y nodejs
 ln -s /usr/bin/nodejs /usr/bin/node
 apt install -y openjdk-8-jdk
