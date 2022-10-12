@@ -5,6 +5,8 @@ apt-get update
 apt-get install -y nodejs
 ln -s /usr/bin/nodejs /usr/bin/node
 apt install -y openjdk-8-jdk
+export PATH=/usr/bin/allure:$PATH
+
 elif [ -f "/etc/redhat-release" ];then
 cat /etc/redhat-release
 # centos
@@ -16,6 +18,7 @@ export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
+
 else
 # mac
 echo "mac_system"

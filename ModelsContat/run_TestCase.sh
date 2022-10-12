@@ -5,6 +5,8 @@ apt-get update
 apt-get install -y nodejs
 ln -s /usr/bin/nodejs /usr/bin/node
 apt install -y openjdk-8-jdk
+export PATH=/usr/bin/allure:$PATH
+
 elif [ -f "/etc/redhat-release" ];then
 cat /etc/redhat-release
 # centos
@@ -16,12 +18,14 @@ export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
+
 else
 # mac
 echo "mac_system"
 export HOMEBREW_BOTTLE_DOMAIN=''
 brew install allure
 fi
+
 # rm -rf /usr/bin/allure
 # ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install --ignore-installed --user -r requirements.txt
@@ -44,3 +48,4 @@ echo "report uploaded"
 
 exit $exit_code
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
+
