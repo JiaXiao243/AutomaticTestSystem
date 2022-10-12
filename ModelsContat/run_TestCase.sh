@@ -37,8 +37,8 @@ which allure
  python -m pytest -sv $1  --alluredir=./result #--alluredir用于指定存储测试结果的路径)
 exit_code=$?
 echo 'exit_code:'$exit_code
-cp environment/environment.properties_linux ./result 
-mv ./result/environment.properties_linux ./result/environment.properties
+# cp environment/environment.properties_linux ./result 
+# mv ./result/environment.properties_linux ./result/environment.properties
 allure generate ./result/ -o ./report_test/ --clean
 set +x;
 export REPORT_SERVER="https://xly.bce.baidu.com/ipipe/ipipe-report"
