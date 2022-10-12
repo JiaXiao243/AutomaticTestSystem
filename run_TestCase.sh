@@ -25,8 +25,9 @@ echo "mac_system"
 export HOMEBREW_BOTTLE_DOMAIN=''
 brew install allure
 fi
-# rm -rf /usr/bin/allure
-# ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
+
+rm -rf /usr/bin/allure
+ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install --ignore-installed --user -r requirements.txt
 
 # export CUDA_VISIBLE_DEVICES=0,1
@@ -47,3 +48,4 @@ echo "report uploaded"
 
 exit $exit_code
 # python -m  pytest -sv test_ocr_acc.py --html=rec_report.html --capture=tee-sys
+
