@@ -1,0 +1,11 @@
+pytest
+pytest-assume
+pytest-html
+pytest-timeout
+pytest-repeat
+allure-pytest
+pyyaml
+paddleclas
+paddlenlp
+h5py
+attrdict
