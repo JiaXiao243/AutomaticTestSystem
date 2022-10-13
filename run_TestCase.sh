@@ -1,3 +1,6 @@
+# paddle
+echo "paddle_version:"
+python -c 'import paddle; print(paddle.__version__, paddle.version.commit)'
 # ubuntu
 if [ -f "/etc/lsb-release" ];then
 cat /etc/lsb-release

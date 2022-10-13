@@ -486,7 +486,7 @@ class TestOcrModelFunction():
               if self.model=='picodet_lcnet_x2_5_layout':
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           else:
-              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model, self.testcase_yml[self.model]['infer_img'])
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
@@ -526,7 +526,8 @@ class TestOcrModelFunction():
           if self.category=='rec':
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
-             rec_image_shape=rec_image_shape_dict[algorithm]
+             # rec_image_shape=rec_image_shape_dict[algorithm]
+             rec_image_shape=self.testcase_yml[self.model]['rec_image_shape']
              rec_char_dict_path=self.testcase_yml[self.model]['rec_char_dict_path']
 
              print(rec_image_shape)

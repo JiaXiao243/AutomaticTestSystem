@@ -144,7 +144,7 @@ rec_resnet_stn_bilstm_att:
 
 rec_resnet_rfl_visual:
     model_yaml: configs/rec/rec_resnet_rfl_visual.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl.tar
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_visual_train.tar  
     eval_acc: 0.934
     rec_image_shape: '1,32,100'
     rec_algorithm: RFL
@@ -153,7 +153,7 @@ rec_resnet_rfl_visual:
 
 rec_resnet_rfl_att:
     model_yaml: configs/rec/rec_resnet_rfl_att.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl.tar
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_att_train.tar
     eval_acc: 0.8863
     rec_image_shape: '1,32,100'
     rec_algorithm: RFL
