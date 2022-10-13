@@ -610,6 +610,8 @@ class Test3DModelFunction():
              cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_016voxel_kitti/model.pdparams'% (self.model, self.model)
           elif self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep':
              cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams' % (self.model, self.model)
+          elif self.model=='centerpoint_voxels_0075voxel_nuscenes_10sweep':
+             cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/centerpoint/centerpoint_voxels_0075voxel_nuscenes_10sweep/model.pdparams' % (self.model, self.model)
           elif self.model=='squeezesegv3_rangenet21_semantickitti' or self.model=='squeezesegv3_rangenet53_semantickitti': 
              cmd='cd Paddle3D; mkdir %s; cd %s; wget https://bj.bcebos.com/paddle3d/models/squeezesegv3/%s/model.pdparams' % (self.model, self.model, self.model)
           if(platform.system() == "Windows"):
@@ -628,7 +630,7 @@ class Test3DModelFunction():
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           print(cmd)
-          if (self.model=='smoke_dla34_no_dcn_kitti') or (self.model=='smoke_hrnet18_no_dcn_kitti') or (self.model=='centerpoint_pillars_016voxel_kitti') or (self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep'): 
+          if (self.model=='smoke_dla34_no_dcn_kitti') or (self.model=='smoke_hrnet18_no_dcn_kitti') or (self.model=='centerpoint_pillars_016voxel_kitti') or (self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep') or self.model=='centerpoint_voxels_0075voxel_nuscenes_10sweep': 
                cmd='echo "not supported for eval when bs >1"' 
           detection_result = subprocess.getstatusoutput(cmd)
           exit_code = detection_result[0]
@@ -687,7 +689,7 @@ class Test3DModelFunction():
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5 --voxel_size .16 .16 3 --max_points_in_voxel 100 --max_voxel_num 12000' % (self.category, self.model, self.model, infer_image)
 
-          elif self.model=='centerpoint_pillars_016voxel_kitti' or self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep':
+          elif self.model=='centerpoint_pillars_016voxel_kitti' or self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep' or self.model=='centerpoint_voxels_0075voxel_nuscenes_10sweep':
              cmd='cd Paddle3D; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.model, self.model, infer_image)
              if (paddle.is_compiled_with_cuda()==False):
                 cmd='cd Paddle3D; sed -i "/config.enable_use_gpu/d" deploy/%s/python/infer.py; python deploy/centerpoint/python/infer.py --model_file exported_model/%s/centerpoint.pdmodel --params_file exported_model/%s/centerpoint.pdiparams --lidar_file %s --num_point_dim 4' % (self.category, self.model, self.model, infer_image)
