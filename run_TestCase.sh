@@ -5,6 +5,7 @@ python -c 'import paddle; print(paddle.__version__, paddle.version.commit)'
 if [ -f "/etc/lsb-release" ];then
 cat /etc/lsb-release
 apt-get update
+apt-get install curl -y
 apt-get install -y nodejs
 ln -s /usr/bin/nodejs /usr/bin/node
 apt install -y openjdk-8-jdk
@@ -14,6 +15,7 @@ elif [ -f "/etc/redhat-release" ];then
 cat /etc/redhat-release
 # centos
 yum update -y > /dev/null
+yum install curl -y
 yum install -y nodejs > /dev/null
 yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
