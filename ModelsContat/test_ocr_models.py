@@ -32,7 +32,7 @@ def setup_module():
     RepoDataset(cmd='''cd PaddleOCR; ln -s /ssd2/ce_data/PaddleOCR/train_data train_data; 
                        wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
                        wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar; tar xf en_server_pgnetA.tar; mv en_server_pgnetA e2e_r50_vd_pg;
-                       mkdir output; mv e2e_r50_vd_pg output; mv output/e2e_r50_vd_pg/best_accuracy.pdparams output/e2e_r50_vd_pg/latest.pdparams; 
+                       mkdir output; rm -rf output/e2e_r50_vd_pg; mv e2e_r50_vd_pg output; mv output/e2e_r50_vd_pg/best_accuracy.pdparams output/e2e_r50_vd_pg/latest.pdparams; 
                        mv output/e2e_r50_vd_pg/best_accuracy.pdopt output/e2e_r50_vd_pg/latest.pdopt''') 
 
 def teardown_module():
