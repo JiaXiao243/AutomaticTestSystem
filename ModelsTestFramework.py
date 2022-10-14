@@ -161,7 +161,7 @@ class RepoDataset():
          output=repo_result[1]
          assert exit_code == 0, "configure failed!   log information:%s" % output
          logging.info("configure dataset sucessfuly!" )
-         cmd ='''cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams'''
+         cmd ='''cd PaddleOCR; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams; wget https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_visual_train.tar; tar xf rec_resnet_rfl_visual_train.tar; mv rec_resnet_rfl_visual_train  rec_resnet_rfl_visual; mv rec_resnet_rfl_visual pretrain_models;'''
          cmd=platformAdapter(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
@@ -502,7 +502,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'infer')
           if self.category=='det':
              check_infer_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img']) 
-          else:
+          elif self.model != 'rec_resnet_rfl_visual':
              check_infer_metric(self.category, output, self.dataset)
 
       def test_ocr_export_model(self, use_gpu):
@@ -566,7 +566,7 @@ class TestOcrModelFunction():
           # metricExtraction('Predicts', output)
           if self.category=='det':
              check_predict_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img'])
-          else:
+          elif self.model != 'rec_resnet_rfl_visual':
              check_predict_metric(self.category, output, self.dataset)
       
       def test_ocr_predict_recovery(self, use_gpu):
