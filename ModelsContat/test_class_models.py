@@ -30,7 +30,7 @@ from RocmTestFramework import get_model_list
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleClas')
+    RepoInit(repo='PaddleClas', branch='v2.4.0')
     RepoDataset(cmd='cd PaddleClas; rm -rf dataset; ln -s /ssd2/ce_data/PaddleClas dataset;')
 
 def teardown_module():

@@ -32,7 +32,7 @@ from RocmTestFramework import get_model_list
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleSeg')
+    RepoInit(repo='PaddleSeg', branch='v2.6.0')
     RepoDataset(cmd='''cd PaddleSeg; mkdir data; cd data; rm -rf cityscapes; ln -s /ssd2/ce_data/PaddleSeg/cityscape cityscapes; ln -s /ssd2/ce_data/PaddleSeg/mini_supervisely mini_supervisely''') 
 
 

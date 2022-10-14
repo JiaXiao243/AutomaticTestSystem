@@ -29,7 +29,7 @@ def get_model_list(filename='models_list_speech.yaml'):
 def setup_module():
     """
     """
-    RepoInitSpeech(repo='PaddleSpeech')
+    RepoInitSpeech(repo='PaddleSpeech', 'v1.2.0')
     RepoDatasetSpeech()
 
 @allure.story('paddle_speech_cli')

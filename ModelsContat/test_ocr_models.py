@@ -28,7 +28,7 @@ from RocmTestFramework import clean_process
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleOCR')
+    RepoInit(repo='PaddleOCR', branch='v2.6.0')
     RepoDataset(cmd='''cd PaddleOCR; ln -s /ssd2/ce_data/PaddleOCR/train_data train_data; 
                        wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
                        wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar; tar xf en_server_pgnetA.tar; mv en_server_pgnetA e2e_r50_vd_pg;

@@ -27,7 +27,7 @@ from RocmTestFramework import clean_process
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleNLP')
+    RepoInit(repo='PaddleNLP', branch='v2.4.0')
 
 
 def teardown_module():

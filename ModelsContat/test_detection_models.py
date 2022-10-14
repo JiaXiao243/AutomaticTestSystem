@@ -30,7 +30,7 @@ from RocmTestFramework import get_model_list
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleDetection')
+    RepoInit(repo='PaddleDetection', branch='v2.5.0')
     RepoDataset(cmd='''cd PaddleDetection;
                      rm -rf dataset; 
                      ln -s /ssd2/ce_data/PaddleDetection/data/ dataset; 
