@@ -4,9 +4,3 @@ pytest-html
 pytest-timeout
 pytest-repeat
 allure-pytest
-pyyaml
-paddleclas
-paddlenlp
-paddlehub
-h5py
-attrdict
