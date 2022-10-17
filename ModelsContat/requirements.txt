@@ -7,5 +7,6 @@ allure-pytest
 pyyaml
 paddleclas
 paddlenlp
+paddlehub
 h5py
 attrdict
