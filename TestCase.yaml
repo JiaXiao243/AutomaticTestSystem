@@ -3,7 +3,7 @@
 
 data_path:
     linux_data_path: /ssd2/ce_data/PaddleOCR/train_data
-    windows_data_path: E:\ce_data\PaddleOCR\train_data
+    windows_data_path: F:\PaddleOCR\train_data
     mac_data_path: /Users/paddle/PaddleTest/ce_data/PaddleOCR/train_data 
 
 cmd:
