@@ -485,6 +485,8 @@ class TestOcrModelFunction():
               cmd=self.testcase_yml['cmd'][self.category]['infer'] % (use_gpu)
               if self.model=='picodet_lcnet_x2_5_layout':
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
+          elif self.category=='det':
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model,self.testcase_yml[self.model]['infer_img'])
           else:
               cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
