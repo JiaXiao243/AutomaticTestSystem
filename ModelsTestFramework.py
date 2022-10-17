@@ -51,7 +51,7 @@ class RepoInit():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt; cd ..; python -m pip install paddleocr; python -m pip install paddleclas; git clone -b develop https://github.com/paddlepaddle/PaddleDetection.git --depth 1; cd PaddleDetection; python -m pip install -r requirements.txt; cd ..;''' % (self.repo, self.repo)
+         cmd='''git clone -b v2.6.0 https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt; cd ..; python -m pip install paddleocr; python -m pip install paddleclas; git clone -b v2.5.0 https://github.com/paddlepaddle/PaddleDetection.git --depth 1; cd PaddleDetection; python -m pip install -r requirements.txt; cd ..;''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -85,7 +85,7 @@ class RepoDataset3D():
 
          elif(sysstr == "Windows"):
             print ("config windows data_path")
-            cmd='''cd Paddle3D & rd /s /q datasets & mklink /j datasets E:\ce_data\Paddle3D'''
+            cmd='''cd Paddle3D & rd /s /q datasets & mklink /d datasets E:\ce_data\Paddle3D'''
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             cmd='''cd PaddleOCR; rm -rf datasets; ln -s /Users/paddle/PaddleTest/ce_data/Paddle3D datasets'''
@@ -146,7 +146,7 @@ class RepoDataset():
             print(data_path)
             mv="ren"
             rm="del"
-            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /j train_data %s &cd .. &  cd PaddleDetection & rd /s /q dataset & mklink /j dataset %s''' % (data_path, data_path)
+            cmd='''cd PaddleOCR & rd /s /q train_data & mklink /d train_data %s &cd .. &  cd PaddleDetection & rd /s /q dataset & mklink /d dataset %s''' % (data_path, data_path)
          elif(sysstr == "Darwin"):
             print ("config mac data_path")
             data_path=self.config["data_path"]["mac_data_path"]
