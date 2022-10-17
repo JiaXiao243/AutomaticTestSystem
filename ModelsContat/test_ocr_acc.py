@@ -27,7 +27,7 @@ def get_model_list(filename='ocr_model_list.yaml'):
 def setup_module():
     """
     """
-    RepoInit(repo='PaddleOCR')
+    RepoInit(repo='PaddleOCR', branch='v2.6.0')
     RepoDataset()
 
 

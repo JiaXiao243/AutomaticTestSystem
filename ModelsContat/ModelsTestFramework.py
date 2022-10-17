@@ -46,11 +46,12 @@ def platformAdapter(cmd):
 
 
 class RepoInit():
-      def __init__(self, repo):
+      def __init__(self, repo, branch):
          self.repo=repo
+         self.branch=branch
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b dygraph https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt;''' % (self.repo, self.repo)
+         cmd='''git clone -b %s https://github.com/paddlepaddle/%s.git --depth 1; cd %s; python -m pip install -r requirements.txt; python -m pip install -r ppstructure/kie/requirements.txt;''' % (self.branch, self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
@@ -99,11 +100,12 @@ class RepoDataset3D():
 
 
 class RepoInitSpeech():
-      def __init__(self, repo):
+      def __init__(self, repo, branch):
          self.repo=repo
+         self.branch=branch
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b r1.1 https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b %s https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.branch, self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
