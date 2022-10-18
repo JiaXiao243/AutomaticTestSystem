@@ -34,17 +34,17 @@ def get_case_list(filename='models_list.yaml'):
 @allure.story('hub_seg')
 @pytest.mark.parametrize('case_name', get_case_list('hub_seg_models_list.yaml'))
 def test_hub_seg(case_name):
-    cmd='python hub_seg_finetune.py --model_name %s' % (case_name)
+    cmd='python hub_seg_finetune.py --model_name %s --batch_size=8' % (case_name)
     custom_instruction(cmd, case_name)
 
 @allure.story('hub_class')
 @pytest.mark.parametrize('case_name', get_case_list('hub_class_models_list.yaml'))
 def test_hub_class(case_name):
-    cmd='python hub_class_finetune.py --model_name %s' % (case_name)
+    cmd='python hub_class_finetune.py --model_name %s --batch_size=8' % (case_name)
     custom_instruction(cmd, case_name)
 
 @allure.story('hub_nlp')
 @pytest.mark.parametrize('case_name', get_case_list('hub_nlp_models_list.yaml'))
 def test_hub_nlp(case_name):
-    cmd='python hub_nlp_finetune.py --model_name %s' % (case_name)
+    cmd='python hub_nlp_finetune.py --model_name %s --batch_size=8' % (case_name)
     custom_instruction(cmd, case_name)
