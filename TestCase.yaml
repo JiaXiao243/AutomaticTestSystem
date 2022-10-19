@@ -1,6 +1,4 @@
 
-
-
 data_path:
     linux_data_path: /ssd2/ce_data/PaddleOCR/train_data
     windows_data_path: F:\PaddleOCR\train_data
@@ -85,6 +83,14 @@ det_r50_db++_td_tr:
     eval_hmean: 0.895
     det_algorithm:  DB++
     dataset: td_tr
+    infer_img: ./doc/imgs_en/img_10.jpg
+
+det_r50_drrg_ctw:
+    model_yaml: det/det_r50_drrg_ctw.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw.tar
+    eval_hmean: 0.8518
+    det_algorithm:  DRRG
+    dataset: ctw1500
     infer_img: ./doc/imgs_en/img_10.jpg
 
 ch_PP-OCRv3_det_cml:
