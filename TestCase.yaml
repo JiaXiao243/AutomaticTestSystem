@@ -101,6 +101,19 @@ ch_PP-OCRv3_det_cml:
     dataset: icdar2015
     infer_img: ./doc/imgs_en/img_10.jpg
 
+
+rec_d28_can:
+    model_yaml: configs/rec/rec_d28_can.yml
+    paddle_train_acc: 0.8089
+    torch_train_acc: 79.912
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_d28_can_train.tar
+    eval_ExpRate: 0.5172
+    rec_image_shape: 1,224,224
+    rec_algorithm: CAN
+    rec_char_dict_path: ./ppocr/utils/dict/latex_symbol_dict.txt
+    dataset: CROHME
+
+
 rec_vitstr_none_ce:
     model_yaml: configs/rec/rec_vitstr_none_ce.yml
     paddle_train_acc: 0.8089 
