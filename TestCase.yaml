@@ -87,7 +87,7 @@ det_r50_db++_td_tr:
 
 det_r50_drrg_ctw:
     model_yaml: det/det_r50_drrg_ctw.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw.tar
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw_train.tar
     eval_hmean: 0.8518
     det_algorithm:  DRRG
     dataset: ctw1500
@@ -193,7 +193,17 @@ sr_tsrn_transformer_strock:
     eval_ssim_avg: 0.707989 
     sr_image_shape: 3,32,128
     sr_algorithm: Gestalt
-    dataset: LMDBDataSetSR
+    dataset: srdata
+
+sr_telescope:
+    model_yaml: configs/sr/sr_telescope.yml
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/sr_telescope_train.tar
+    eval_psnr_avg: 21.56
+    eval_ssim_avg: 0.7411
+    sr_image_shape: 3,32,128
+    sr_algorithm: Telescope
+    dataset: TextZoom
+
 
 ser_vi_layoutxlm_xfund_zh_udml:
     model_yaml: configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml
