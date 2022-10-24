@@ -107,7 +107,7 @@ rec_d28_can:
     paddle_train_acc: 0.8089
     torch_train_acc: 79.912
     eval_pretrained_model: https://paddleocr.bj.bcebos.com/contribution/rec_d28_can_train.tar
-    eval_ExpRate: 0.5172
+    eval_exp_rate: 0.5172
     rec_image_shape: 1,224,224
     rec_algorithm: CAN
     rec_char_dict_path: ./ppocr/utils/dict/latex_symbol_dict.txt

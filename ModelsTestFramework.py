@@ -496,6 +496,9 @@ class TestOcrModelFunction():
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
           cmd=cmd.replace('_udml.yml','.yml')
+          if (self.model=='rec_d28_can'):
+              cmd='cd PaddleOCR; python tools/infer_rec.py -c configs/rec/rec_d28_can.yml -o Architecture.Head.attdecoder.is_train=False Global.infer_img=./doc/datasets/crohme_demo/hme_00.jpg Global.pretrained_model=./rec_d28_can/best_accuracy'
+
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          
@@ -507,7 +510,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'infer')
           if self.category=='det':
              check_infer_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img']) 
-          elif self.model != 'rec_resnet_rfl_visual':
+          elif self.model != 'rec_resnet_rfl_visual' or self.model != 'rec_d28_can':
              check_infer_metric(self.category, output, self.dataset)
 
       def test_ocr_export_model(self, use_gpu):
@@ -558,7 +561,8 @@ class TestOcrModelFunction():
          
           if self.model=='SLANet':
               cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
-
+          if (self.model=='rec_d28_can'):
+              cmd='cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/datasets/crohme_demo/hme_00.jpg" --rec_algorithm="CAN" --rec_batch_num=1 --rec_model_dir="./models_inference/rec_d28_can/" --rec_char_dict_path="./ppocr/utils/dict/latex_symbol_dict.txt"'
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
@@ -571,7 +575,7 @@ class TestOcrModelFunction():
           # metricExtraction('Predicts', output)
           if self.category=='det':
              check_predict_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img'])
-          elif self.model != 'rec_resnet_rfl_visual':
+          elif self.model != 'rec_resnet_rfl_visual' or self.model != 'rec_d28_can':
              check_predict_metric(self.category, output, self.dataset)
       
       def test_ocr_predict_recovery(self, use_gpu):
