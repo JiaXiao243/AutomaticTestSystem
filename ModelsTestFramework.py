@@ -513,7 +513,7 @@ class TestOcrModelFunction():
           exit_check_fucntion(exit_code, output, 'infer')
           if self.category=='det':
              check_infer_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img']) 
-          elif self.model != 'rec_resnet_rfl_visual' or self.model != 'rec_d28_can':
+          elif self.model != 'rec_resnet_rfl_visual' and self.model != 'rec_d28_can':
              check_infer_metric(self.category, output, self.dataset)
 
       def test_ocr_export_model(self, use_gpu):
