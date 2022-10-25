@@ -246,6 +246,9 @@ def  check_infer_metric(category, output, dataset, infer_img='./doc/imgs_en/img_
         if 'det_ct' in output:     
            allure_attach("PaddleOCR/output/det_ct/det_results/"+infer_img, 'output/det_ct/det_results/'+infer_img, allure.attachment_type.JPG)
            allure_attach("PaddleOCR/output/det_ct/predicts_ct.txt", 'output/det_ct/predicts_ct.txt', allure.attachment_type.TEXT)
+        elif 'det_drrg' in output:
+           allure_attach("PaddleOCR/output/det_drrg/det_results/"+infer_img, 'output/det_drrg/det_results/'+infer_img, allure.attachment_type.JPG)
+           allure_attach("PaddleOCR/output/det_drrg/predicts_drrg.txt", 'output/det_drrg/predicts_drrg.txt', allure.attachment_type.TEXT)
         else:
            allure_attach("PaddleOCR/checkpoints/det_db/det_results/"+infer_img, 'checkpoints/det_db/det_results/'+infer_img, allure.attachment_type.JPG)
            allure_attach("PaddleOCR/checkpoints/det_db/predicts_db.txt", 'checkpoints/det_db/predicts_db.txt', allure.attachment_type.TEXT)
