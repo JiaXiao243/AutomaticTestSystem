@@ -578,7 +578,7 @@ class TestOcrModelFunction():
           # metricExtraction('Predicts', output)
           if self.category=='det':
              check_predict_metric(self.category, output, self.dataset, infer_img=self.testcase_yml[self.model]['infer_img'])
-          elif self.model != 'rec_resnet_rfl_visual' or self.model != 'rec_d28_can':
+          elif self.model != 'rec_resnet_rfl_visual' and self.model != 'rec_d28_can':
              check_predict_metric(self.category, output, self.dataset)
       
       def test_ocr_predict_recovery(self, use_gpu):
