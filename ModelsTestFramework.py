@@ -424,7 +424,7 @@ class TestOcrModelFunction():
       def test_ocr_get_pretrained_model(self):
           # cmd='cd PaddleOCR; wget %s; tar xf %s.tar; rm -rf *.tar; mv %s %s;' % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
           if  (self.model=='det_r50_db++_icdar15') or (self.model=='det_r50_db++_td_tr'):
-              cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model']['db++'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.model, self.model)
+              cmd=self.testcase_yml['cmd'][self.category]['db++'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.model, self.model)
           elif (self.category=='table') or (self.category=='kie/vi_layoutxlm') or (self.category=='e2e') or (self.category=='det'):
               cmd=self.testcase_yml['cmd'][self.category]['get_pretrained_model'] % (self.testcase_yml[self.model]['eval_pretrained_model'], self.tar_name, self.tar_name, self.model)
           elif self.category=='picodet/legacy_model/application/layout_analysis':
