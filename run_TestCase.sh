@@ -32,7 +32,7 @@ brew install allure
 fi
 
 rm -rf /usr/bin/allure
-ln -s /ssd2/jiaxiao01/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
+ln -s /workspace/AutomaticTestSystem/allure/bin/allure /usr/bin/allure
 python -m pip install --ignore-installed --user -r requirements.txt
 
 # export CUDA_VISIBLE_DEVICES=0,1
