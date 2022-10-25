@@ -525,6 +525,8 @@ class TestOcrModelFunction():
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           else:
               cmd=self.testcase_yml['cmd'][self.category]['export_model'] % (self.yaml, use_gpu, self.model, self.model) 
+              if self.model=='rec_d28_can':
+                 cmd=cmd+' Architecture.Head.attdecoder.is_train=False'
           cmd=cmd.replace('_udml.yml','.yml')
           print(cmd)
           if(platform.system() == "Windows"):
