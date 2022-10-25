@@ -164,7 +164,7 @@ class RepoDataset():
          if (sysstr == "Windows"):
             cmd="mklink /d  pretrain_models F:\PaddleOCR\pretrain_models"
          else:
-            cmd ='''cd PaddleOCR; rm -rf pretrain_models; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams; wget https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_visual_train.tar; tar xf rec_resnet_rfl_visual_train.tar; mv rec_resnet_rfl_visual_train  rec_resnet_rfl_visual; mv rec_resnet_rfl_visual pretrain_models;'''
+            cmd ='''cd PaddleOCR; rm -rf pretrain_models; wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet50_vd_ssld_pretrained.pdparams; wget -P pretrain_models https://paddle-qa.bj.bcebos.com/rocm/abinet_vl_pretrained.pdparams; wget -P pretrain_models https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_synthtext_pretrained.pdparams; wget https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_visual_train.tar; tar xf rec_resnet_rfl_visual_train.tar; mv rec_resnet_rfl_visual_train  rec_resnet_rfl_visual; mv rec_resnet_rfl_visual pretrain_models;'''
          cmd=platformAdapter(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
