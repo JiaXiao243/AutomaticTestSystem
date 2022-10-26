@@ -575,8 +575,6 @@ class TestOcrModelFunction():
          
           if self.model=='SLANet':
               cmd=self.testcase_yml['cmd'][self.category]['predict_SLANet'] % (self.model, use_gpu, use_tensorrt, enable_mkldnn)
-          if (self.model=='rec_d28_can'):
-              cmd='cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/datasets/crohme_demo/hme_00.jpg" --rec_algorithm="CAN" --rec_batch_num=1 --rec_model_dir="./models_inference/rec_d28_can/" --rec_char_dict_path="./ppocr/utils/dict/latex_symbol_dict.txt"'
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
           detection_result = subprocess.getstatusoutput(cmd)
