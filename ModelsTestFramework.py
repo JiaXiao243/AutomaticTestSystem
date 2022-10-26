@@ -495,14 +495,19 @@ class TestOcrModelFunction():
                  cmd=cmd+' --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml'
           elif self.category=='det':
               cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model,self.testcase_yml[self.model]['infer_img'])
+          elif self.category=='rec':
+              infer_img="./doc/imgs_words/en/word_1.png"
+              cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model,infer_img)
+              if (self.model=='rec_d28_can'):
+                 infer_img="./doc/datasets/crohme_demo/hme_00.jpg"
+                 cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model,infer_img)
+                 cmd=cmd+' Architecture.Head.attdecoder.is_train=False'
           else:
               cmd=self.testcase_yml['cmd'][self.category]['infer'] % (self.yaml, use_gpu, self.model)
           if (self.model=='re_vi_layoutxlm_xfund_zh'):
              cmd=cmd.replace('infer_kie_token_ser','infer_kie_token_ser_re')
              cmd =cmd+' -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=./ser_vi_layoutxlm_xfund_zh'
           cmd=cmd.replace('_udml.yml','.yml')
-          if (self.model=='rec_d28_can'):
-              cmd='cd PaddleOCR; python tools/infer_rec.py -c configs/rec/rec_d28_can.yml -o Architecture.Head.attdecoder.is_train=False Global.infer_img=./doc/datasets/crohme_demo/hme_00.jpg Global.pretrained_model=./rec_d28_can/best_accuracy'
 
           if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
@@ -547,7 +552,9 @@ class TestOcrModelFunction():
 
              print(rec_image_shape)
           # cmd='cd PaddleOCR; python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s --rec_image_shape=%s --rec_algorithm=%s --rec_char_dict_path=%s --use_gpu=%s --use_tensorrt=%s --enable_mkldnn=%s;' % (self.model, rec_image_shape, rec_algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
-             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
+             image_dir="./doc/datasets/crohme_demo/hme_00.jpg" if self.model=='rec_d28_can' else "./doc/imgs_words_en/word_336.png"
+
+             cmd=self.testcase_yml['cmd'][self.category]['predict'] % (image_dir,self.model, rec_image_shape, algorithm, rec_char_dict_path, use_gpu, use_tensorrt, enable_mkldnn)
           elif self.category=='det':
              model_config=yaml.load(open(os.path.join('PaddleOCR',self.yaml),'rb'), Loader=yaml.Loader)
              algorithm=model_config['Architecture']['algorithm']
