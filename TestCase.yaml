@@ -137,7 +137,7 @@ rec_r45_abinet:
 
 rec_r45_visionlan:
     model_yaml: configs/rec/rec_r45_visionlan.yml
-    eval_pretrained_model: https://paddleocr.bj.bcebos.com/rec_r45_visionlan_train.tar
+    eval_pretrained_model: https://paddleocr.bj.bcebos.com/VisionLAN/rec_r45_visionlan_train.tar
     eval_acc: 0.90
     rec_image_shape: '3,64,256'
     rec_algorithm: VisionLAN
