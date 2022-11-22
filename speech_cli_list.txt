@@ -52,3 +52,5 @@ paddlespeech stats --task cls
 paddlespeech stats --task text
 paddlespeech stats --task vector
 paddlespeech stats --task st
+paddlespeech whisper --task transcribe --input ./zh.wav
+paddlespeech whisper --task translate --input ./zh.wav
