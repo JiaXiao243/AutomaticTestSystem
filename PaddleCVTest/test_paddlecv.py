@@ -16,7 +16,7 @@ from PaddleCVTestFramwork import TestPaddleCVPredict
 def get_model_list(filename='paddlecv_list.txt'):
     import sys
     result = []
-    with open(filename) as f:
+    with open(filename, mode='r', encoding='utf-8') as f:
       lines = f.readlines()
       for line in lines:
          result.append(line.strip('\n'))
