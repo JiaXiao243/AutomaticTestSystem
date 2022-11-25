@@ -79,6 +79,7 @@ class RepoInit():
          print("This is Repo Init!")
          cmd='''git clone -b release/2.3 https://github.com/paddlepaddle/models.git --depth 1; cd models/paddlecv; python -m pip install -r requirements.txt; cd ..;'''
          cmd=platformAdapter(cmd)
+         print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
