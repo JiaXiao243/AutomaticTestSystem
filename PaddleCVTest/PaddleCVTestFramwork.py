@@ -25,6 +25,16 @@ def exit_check_fucntion(exit_code, output, output_vis, output_json, input_image)
     allure_attach(output_json)
     allure_attach(input_image)
 
+def platformAdapter(cmd):
+    if (platform.system() == "Windows"):
+            cmd=cmd.replace(';','&')
+            cmd=cmd.replace('sed','%sed%')
+            cmd=cmd.replace('rm -rf','rd /s /q')
+            cmd=cmd.replace('export','set')
+    if (platform.system() == "Darwin"):
+            cmd=cmd.replace('sed -i','sed -i ""')
+    return 
+
 def allure_step(cmd):
     with allure.step("运行指令：{}".format(cmd)):
            pass
@@ -89,6 +99,7 @@ class TestPaddleCVPredict():
 
       def test_cv_predict(self, run_mode='paddle', device='CPU'):
           cmd='cd models/paddlecv; rm -rf output; python -u tools/predict.py --config=%s --input=%s --run_mode=%s --device=%s' % (self.yml, self.input, run_mode, device)
+          cmd=platformAdapter(cmd)
           print(cmd)
           result = subprocess.getstatusoutput(cmd)
           exit_code = result[0]
