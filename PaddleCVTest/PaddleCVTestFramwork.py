@@ -40,23 +40,17 @@ def allure_step(cmd):
            pass
 
 def allure_attach(filepath):
-    
-    files=os.listdir("models/paddlecv/output")
-    for k in range(len(files)):
-    # 提取文件夹内所有文件的后缀
-      files[k]=os.path.splitext(files[k])[1]
-
-    if len(files) >0:
+    if os.path.exists("models/paddlecv/" + filepath)   
         postfix=os.path.splitext(filepath)[-1]   
-        if (postfix=='.png') and ('.png' in files):
+        if postfix=='.png':
             with open("models/paddlecv/" + filepath, mode='rb') as f:
                 file_content = f.read()
             allure.attach(file_content, filepath, allure.attachment_type.PNG)
-        elif (postfix=='.jpeg' or postfix=='.jpg') and ('.jpeg' in files or '.jpg' in files):
+        elif postfix=='.jpeg' or postfix=='.jpg':
             with open("models/paddlecv/" + filepath, mode='rb') as f:
                 file_content = f.read()
             allure.attach(file_content, filepath, allure.attachment_type.JPG)
-        elif (postfix=='.json' or postfix=='.txt') and ('.json' in files or '.txt' in files):
+        elif postfix=='.json' or postfix=='.txt':
             with open("models/paddlecv/" + filepath, mode='rb') as f:
                 file_content = f.read()
             allure.attach(file_content, filepath, allure.attachment_type.TEXT)
