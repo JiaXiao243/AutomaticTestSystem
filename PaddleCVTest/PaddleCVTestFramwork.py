@@ -66,6 +66,7 @@ def allure_attach(filepath):
 class RepoDataset():
       def __init__(self):
          cmd='cd models/paddlecv; wget -nc https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v1.0.tar && tar -xf drink_dataset_v1.0.tar; wget -nc https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v2.0.tar && tar -xf drink_dataset_v2.0.tar'
+         cmd=platformAdapter(cmd)
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
@@ -76,8 +77,8 @@ class RepoDataset():
 class RepoInit():
       def __init__(self):
          print("This is Repo Init!")
-         pid = os.getpid()
          cmd='''git clone -b release/2.3 https://github.com/paddlepaddle/models.git --depth 1; cd models/paddlecv; python -m pip install -r requirements.txt; cd ..;'''
+         cmd=platformAdapter(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
          output=repo_result[1]
