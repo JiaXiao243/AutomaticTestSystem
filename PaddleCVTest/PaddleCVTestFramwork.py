@@ -40,7 +40,7 @@ def allure_step(cmd):
            pass
 
 def allure_attach(filepath):
-    if os.path.exists("models/paddlecv/" + filepath)   
+    if os.path.exists("models/paddlecv/" + filepath): 
         postfix=os.path.splitext(filepath)[-1]   
         if postfix=='.png':
             with open("models/paddlecv/" + filepath, mode='rb') as f:
