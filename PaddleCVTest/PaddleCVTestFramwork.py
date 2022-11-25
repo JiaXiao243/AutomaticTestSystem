@@ -33,7 +33,7 @@ def platformAdapter(cmd):
             cmd=cmd.replace('export','set')
     if (platform.system() == "Darwin"):
             cmd=cmd.replace('sed -i','sed -i ""')
-    return 
+    return  cmd
 
 def allure_step(cmd):
     with allure.step("运行指令：{}".format(cmd)):
@@ -78,7 +78,7 @@ class RepoInit():
       def __init__(self):
          print("This is Repo Init!")
          cmd='''git clone -b release/2.3 https://github.com/paddlepaddle/models.git --depth 1; cd models/paddlecv; python -m pip install -r requirements.txt; cd ..;'''
-         cmd=platformAdapter(cmd)
+         # cmd=platformAdapter(cmd)
          print(cmd)
          repo_result=subprocess.getstatusoutput(cmd)
          exit_code=repo_result[0]
