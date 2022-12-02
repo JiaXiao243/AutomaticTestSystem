@@ -33,7 +33,7 @@ def setup_module():
     RepoDatasetSpeech()
 
 @allure.story('paddle_speech_cli')
-@pytest.mark.parametrize('cmd', get_model_list('speech_cli_list_test.txt'))
+@pytest.mark.parametrize('cmd', get_model_list('speech_cli_list.txt'))
 def test_Speech_accuracy_cli(cmd):
     allure.dynamic.title('paddle_speech_cli')
     allure.dynamic.description('paddle_speech_cli')
