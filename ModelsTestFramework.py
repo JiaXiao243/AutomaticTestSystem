@@ -695,11 +695,11 @@ class Test3DModelFunction():
  
           if self.model=='smoke_dla34_no_dcn_kitti' or self.model=='smoke_hrnet18_no_dcn_kitti':
              infer_image='datasets/KITTI/training/image_2/000000.png'
-             cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu' % (self.model, self.model, infer_image)
+             cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/smoke.pdmodel --params_file exported_model/%s/smoke.pdiparams --image %s --use_gpu' % (self.model, self.model, infer_image)
              if (use_trt==True):
-                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --collect_dynamic_shape_info --dynamic_shape_file %s/shape_info.txt; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu --use_trt --dynamic_shape_file %s/shape_info.txt;' % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)   
+                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/smoke.pdmodel --params_file exported_model/%s/smoke.pdiparams --image %s --collect_dynamic_shape_info --dynamic_shape_file %s/shape_info.txt; python deploy/smoke/python/infer.py --model_file exported_model/%s/smoke.pdmodel --params_file exported_model/%s/smoke.pdiparams --image %s --use_gpu --use_trt --dynamic_shape_file %s/shape_info.txt;' % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)   
              if (paddle.is_compiled_with_cuda()==False):
-                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel --params_file exported_model/%s/inference.pdiparams --image %s' % (self.model, self.model, infer_image)
+                cmd='cd Paddle3D; python deploy/smoke/python/infer.py --model_file exported_model/%s/smoke.pdmodel --params_file exported_model/%s/smoke.pdiparams --image %s' % (self.model, self.model, infer_image)
 
           elif self.model=='pointpillars_xyres16_kitti_car':
              cmd='cd Paddle3D; python deploy/pointpillars/python/infer.py --model_file exported_model/%s/pointpillars.pdmodel --params_file exported_model/%s/pointpillars.pdiparams --lidar_file %s --point_cloud_range 0 -39.68 -3 69.12 39.68 1 --voxel_size .16 .16 4 --max_points_in_voxel 32  --max_voxel_num 40000' % (self.model, self.model, infer_image)
