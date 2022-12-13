@@ -104,7 +104,7 @@ class RepoInitSpeech():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''git clone -b develop https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
+         cmd='''git clone -b r1.3 https://github.com/paddlepaddle/%s.git --depth 1; cd %s; yum update; yum install libsndfile -y;python -m pip uninstall -y paddlespeech; python -m pip install .''' % (self.repo, self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
