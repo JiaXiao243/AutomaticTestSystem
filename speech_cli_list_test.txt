@@ -1,0 +1,4 @@
+paddlespeech whisper --task transcribe --input ./zh.wav
+paddlespeech whisper --task translate --input ./zh.wav
+paddlespeech ssl --task asr --lang en --input ./en.wav
+paddlespeech ssl --task vector --lang en --input ./en.wav

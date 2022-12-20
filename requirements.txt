@@ -3,3 +3,9 @@ pytest-assume
 pytest-html
 pytest-timeout
 pytest-repeat
+allure-pytest
+matplotlib
+chardet
+pyyaml
+h5py
+numpy==2.23.5
