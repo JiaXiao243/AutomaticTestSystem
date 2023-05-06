@@ -66,7 +66,7 @@ class RepoInit3D():
          self.repo=repo
          print("This is Repo Init!")
          pid = os.getpid()
-         cmd='''cd %s; git log -5; python -m pip install -U urllib3==1.26.15; python -m pip install -r requirements.txt --ignore-installed; python -m pip install -U urllib3==1.26.15; python -m pip install .; python -m pip install -U urllib3==1.26.15;''' % (self.repo)
+         cmd='''cd %s; git log -5; python -m pip install -U urllib3==1.26.15; python -m pip install -r requirements.txt; python -m pip install -U urllib3==1.26.15; python -m pip install .; python -m pip install -U urllib3==1.26.15;''' % (self.repo)
          if(platform.system() == "Windows"):
                cmd=cmd.replace(';','&')
          repo_result=subprocess.getstatusoutput(cmd)
